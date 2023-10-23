@@ -11,8 +11,8 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <section className="flex flex-col bg-white dark:bg-black  items-center">
-      <div className="flex flex-row sm:p-12 p-6 ">
+    <section className="flex flex-col bg-white dark:bg-black  ">
+      <div className="flex flex-row sm:px-12 px-6 sm:py-8 py-4 ">
         <div className="flex flex-col lg:items-start items-center md:w-1/2">
           <h1 className="lg:text-left xl:text-5xl text-4xl lg:mt-12 text-center mt-2 lg:font-extrabold font-bold leading-[1.15] text-primary dark:text-whiten ">
             {" "}
@@ -24,10 +24,10 @@ export default function Home() {
             solution, enjoy a stress-free clearance process through our unified
             platform.
           </p>
-          <div className="md:mt-12 mt-8">
+          <div className="md:mt-12 lg:mt-12 mt-8">
             <Link
               href="/"
-              className="text-primary dark:text-white text-lg font-bold py-2 px-4 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
+              className="text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
             >
               Request Clearance
             </Link>
@@ -38,7 +38,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex">
+      <div className=" flex justify-center">
         <Announcement />
       </div>
     </section>
