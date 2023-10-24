@@ -71,12 +71,13 @@ const faq = [
 
 const Faq = () => {
     const cardStyle = {
-        maxWidth: "3000px",
-        borderColor: 'white',
+        maxWidth: "100vh",
+        borderColor: '#F5F7F8',
         borderWidth: '10px',
         borderStyle: 'solid',
         borderRadius: "15px",
-        marginRight: "15px"
+        marginRight: "15px",
+        backgroundColor: "#F5F7F8"
     };
     return (
         <div style={{ marginBottom: '80px' }}>

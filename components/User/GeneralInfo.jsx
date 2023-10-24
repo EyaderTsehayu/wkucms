@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions, Grid, Paper, styled } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 const genInfo = [
     {
@@ -47,60 +47,41 @@ const genInfo = [
 
 
 
-
-
-
 const GeneralInfo = () => {
     const cardStyle = {
-        maxWidth: "100vh",
-        borderColor: 'white',
+        borderColor: '#F5F7F8',
         borderWidth: '10px',
         borderStyle: 'solid',
-        borderRadius: "15px",
-        marginRight: "15px"
+        borderRadius: '15px',
+        marginRight: '15px',
+        backgroundColor: '#F5F7F8',
     };
 
     return (
-
-        <Grid container spacing={2} sx={{
-            marginTop: "20px", justifyContent: "center"
-        }}>
-            {genInfo.map(info => (
-                <Grid xs={6} md={4}>
-
-
+        <Grid container spacing={2} sx={{ marginTop: '20px', justifyContent: 'center' }}>
+            {genInfo.map((info, index) => (
+                <Grid key={info.title} xs={12} sm={6} md={4} item>
                     <Card className="dark:bg-body dark:border-body my-7" sx={cardStyle}>
                         <CardActionArea>
-                            <CardContent >
-                                <Typography className='dark:text-white' gutterBottom variant="h5" component="div">
+                            <CardContent>
+                                <Typography className="dark:text-white" gutterBottom variant="h5" component="div">
                                     {info.title}
                                 </Typography>
-                                <Typography className='dark:text-white' variant="body2" color="text.secondary">
+                                <Typography className="dark:text-white" variant="body2" color="text.secondary">
                                     {info.desc}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
-                        <CardActions>
-                            {/* <Button size="small" color="primary">
-                            Share
-                        </Button> */}
-                        </CardActions>
+                        {/* <CardActions>
+              <Button size="small" color="primary">
+                Share
+              </Button>
+            </CardActions> */}
                     </Card>
-
                 </Grid>
             ))}
-
-
-        </Grid >
-
-
-
-
-
-
-
-
+        </Grid>
     );
 }
 
-export default GeneralInfo
+export default GeneralInfo;

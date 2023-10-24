@@ -5,8 +5,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import GeneralInfo from '@/components/User/GeneralInfo';
-import Faq from '@/components/User/Faq';
+import History from '@/components/User/History';
+import Status from '@/components/User/Status';
 import { Card } from '@mui/material';
 
 function CustomTabPanel(props) {
@@ -51,7 +51,7 @@ export default function MyClearance() {
 
   return (
 
-    <Card className="dark:bg-black dark:border-black" sx={{ borderColor: 'white', borderWidth: '5px', borderStyle: 'solid', borderRadius: "15px", background: "white", height: '100vh', width: '100%' }}>
+    <Card className="dark:bg-black dark:border-black flex flex-col" sx={{ borderColor: 'white', borderWidth: '5px', borderStyle: 'solid', borderRadius: "15px", background: "white", height: '100vh', width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab className='dark:text-white' label="STATUS" {...a11yProps(0)} />
@@ -60,10 +60,10 @@ export default function MyClearance() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <GeneralInfo />
+        <History />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Faq />
+        <Status />
       </CustomTabPanel>
     </Card>
   );
