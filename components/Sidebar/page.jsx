@@ -145,7 +145,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 {/* <!-- Menu Item My clearance --> */}
                 <li>
                   <Link
-                    href="User\myClearance"
+                    href="/user/myclearance"
                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname == "/user/myclearance" &&
                       "bg-gray dark:bg-graydark  dark:text-bodydark2"
                       }`}

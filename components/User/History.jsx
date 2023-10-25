@@ -1,114 +1,80 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+// import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-}));
+const metadata = {
+    title: "Alerts Page | Next.js E-commerce Dashboard Template",
+    description: "This is Alerts page for TailAdmin Next.js",
+    // other metadata
+};
+
+const history = [
+    {
+        title: "Cafteria",
+        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..",
+    },
+    {
+        title: "Library",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+    },
+    {
+        title: "Cafteria",
+        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..",
+    },
+    {
+        title: "Library",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+    },
+    {
+        title: "Library",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+    },
+
+]
+
 
 const History = () => {
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
     return (
-        <Card sx={{ maxWidth: 345 }}>
-            <CardHeader
-                avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        R
-                    </Avatar>
-                }
-                action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
-                }
-                title="Shrimp and Chorizo Paella"
-                subheader="September 14, 2016"
-            />
-            <CardMedia
-                component="img"
-                height="194"
-                image="/static/images/cards/paella.jpg"
-                alt="Paella dish"
-            />
-            <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    This impressive paella is a perfect party dish and a fun meal to cook
-                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                    if you like.
-                </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                    <ShareIcon />
-                </IconButton>
-                <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon />
-                </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                    <Typography paragraph>Method:</Typography>
-                    <Typography paragraph>
-                        Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                        aside for 10 minutes.
-                    </Typography>
-                    <Typography paragraph>
-                        Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                        medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-                        occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-                        large plate and set aside, leaving chicken and chorizo in the pan. Add
-                        pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-                        stirring often until thickened and fragrant, about 10 minutes. Add
-                        saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-                    </Typography>
-                    <Typography paragraph>
-                        Add rice and stir very gently to distribute. Top with artichokes and
-                        peppers, and cook without stirring, until most of the liquid is absorbed,
-                        15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-                        mussels, tucking them down into the rice, and cook again without
-                        stirring, until mussels have opened and rice is just tender, 5 to 7
-                        minutes more. (Discard any mussels that don&apos;t open.)
-                    </Typography>
-                    <Typography>
-                        Set aside off of the heat to let rest for 10 minutes, and then serve.
-                    </Typography>
-                </CardContent>
-            </Collapse>
-        </Card>
-    );
-}
+        <>
+            {/* <Breadcrumb pageName="Alerts" /> */}
 
-export default History
+
+            {history.map((his) => (
+                <div className=" flex flex-col gap-7.5">
+                    {/* <!-- Alerts Item --> */}
+
+                    {/* <!-- Alerts Item --> */}
+                    <div className="my-7 flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark-bg-[#1B1B24] dark-bg-opacity-30 md-p-9">
+                        <div className="mr-5  flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
+                            <svg
+                                width="16"
+                                height="12"
+                                viewBox="0 0 16 12"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M15.2984 0.826822L15.2868 0.811827L15.2741 0.797751C14.9173 0.401867 14.3238 0.400754 13.9657 0.794406L5.91888 9.45376L2.05667 5.2868C1.69856 4.89287 1.10487 4.89389 0.747996 5.28987C0.417335 5.65675 0.417335 6.22337 0.747996 6.59026L0.747959 6.59029L0.752701 6.59541L4.86742 11.0348C5.14445 11.3405 5.52858 11.5 5.89581 11.5C6.29242 11.5 6.65178 11.3355 6.92401 11.035L15.2162 2.11161C15.5833 1.74452 15.576 1.18615 15.2984 0.826822Z"
+                                    fill="white"
+                                    stroke="white"
+                                ></path>
+                            </svg>
+                        </div>
+                        <div className="w-full">
+                            <h5 className="mb-3 text-lg font-semibold text-black dark-text-[#34D399] ">
+                                {his.title}
+                            </h5>
+                            <p className="text-base leading-relaxed text-body">
+                                {his.desc}
+                            </p>
+                        </div>
+
+                        {/* <!-- Alerts Item --> */}
+
+
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+};
+
+export default History;
