@@ -49,7 +49,7 @@ const genInfo = [
 
 const GeneralInfo = () => {
     const cardStyle = {
-        height: "300px",
+        height: "350px",
         borderColor: '#F5F7F8',
         borderWidth: '10px',
         borderStyle: 'solid',
@@ -69,16 +69,20 @@ const GeneralInfo = () => {
                                 <Typography className="dark:text-white text-lg font-semibold text-black dark-text-[#34D399]" gutterBottom variant="h5" component="div">
                                     {info.title}
                                 </Typography>
-                                <Typography className="dark:text-white text-base leading-relaxed text-body" variant="body2" >
+                                <Typography
+                                    style={{
+                                        fontSize: '18px', // Custom font size
+                                        fontWeight: 'bold', // Make the text bold
+                                        fontStyle: "italic",
+
+                                    }}
+                                    className="dark:text-white text-base leading-relaxed text-body"
+                                    variant="body2"
+                                >
                                     {info.desc}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
-                        {/* <CardActions>
-              <Button size="small" color="primary">
-                Share
-              </Button>
-            </CardActions> */}
                     </Card>
                 </Grid>
             ))}

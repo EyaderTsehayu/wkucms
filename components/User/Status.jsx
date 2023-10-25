@@ -11,7 +11,14 @@ import TableRow from '@mui/material/TableRow';
 
 const columns = [
     { id: 'office', label: 'Office Name', minWidth: 170 },
-    { id: 'date', label: 'Date', minWidth: 100 },
+    { id: 'issueDate', label: 'Issue Date', minWidth: 100 },
+    {
+        id: 'rejectionReason',
+        label: 'Rejection Reason',
+        minWidth: 170,
+        align: 'right',
+        format: (value) => value.toLocaleString('en-US'),
+    },
     {
         id: 'progress',
         label: 'Approval Progress',
@@ -19,23 +26,16 @@ const columns = [
         align: 'right',
         format: (value) => value.toLocaleString('en-US'),
     },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US'),
-    }
 ];
 
-const statusMap = {
-    pending: 'warning',
-    delivered: 'success',
-    refunded: 'error'
+const statusColor = {
+    pending: 'yellow',
+    approved: 'green',
+    disApproved: 'red'
 };
 
-function createData(office, date, size, progress) {
-    return { office, date, size, progress };
+function createData(office, issueDate, rejectionReason, progress) {
+    return { office, issueDate, rejectionReason, progress };
 }
 
 const dominantButtonStyle = {
@@ -115,7 +115,7 @@ export default function ColumnGroupingTable(props) {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell style={{ borderLeft: '2px solid #fff', }} colSpan={5}>Approval Information</TableCell>
+                                <TableCell style={{ borderLeft: '2px solid #fff', fontSize: "36px", marginBottom: "10px" }} colSpan={5}>Approval Information</TableCell>
                             </TableRow>
                             <TableRow className='text'>
                                 {columns.map((column) => (
