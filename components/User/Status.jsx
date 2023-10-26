@@ -51,11 +51,7 @@ const dominantButtonStyle = {
 const containerStyle = {
     border: '2px solid #fff',
     borderRadius: "20px"
-    // width: '70%', // Set the container width to 70%
-    // margin: '0 auto', // Center the container horizontally
-    // display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'center',
+
 };
 
 
@@ -84,10 +80,10 @@ const rows = [
 const headerCellStyle = {
     fontWeight: 'bold',
     backgroundColor: "#F0F0F0"
-    // Set the font weight to 'bold' for the header cells
+   
 };
 const rowBorderStyle = {
-    borderBottom: '2px solid #fff', // Change the border color here
+    borderBottom: '2px solid #fff', 
 };
 
 

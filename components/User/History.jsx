@@ -1,9 +1,7 @@
-// import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
 const metadata = {
     title: "Alerts Page | Next.js E-commerce Dashboard Template",
     description: "This is Alerts page for TailAdmin Next.js",
-    // other metadata
+    
 };
 
 const history = [
@@ -34,14 +32,8 @@ const history = [
 const History = () => {
     return (
         <>
-            {/* <Breadcrumb pageName="Alerts" /> */}
-
-
             {history.map((his) => (
                 <div className=" flex flex-col gap-7.5">
-                    {/* <!-- Alerts Item --> */}
-
-                    {/* <!-- Alerts Item --> */}
                     <div className="my-7 flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark-bg-[#1B1B24] dark-bg-opacity-30 md-p-9">
                         <div className="mr-5  flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
                             <svg
@@ -66,10 +58,6 @@ const History = () => {
                                 {his.desc}
                             </p>
                         </div>
-
-                        {/* <!-- Alerts Item --> */}
-
-
                     </div>
                 </div>
             ))}

@@ -109,10 +109,7 @@ const Faq = () => {
                             </AccordionDetails>
                         </Accordion>
 
-
                     </Grid>
-
-
 
                 ))}
             </Grid>
