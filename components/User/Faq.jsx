@@ -99,8 +99,8 @@ const Faq = () => {
                             <AccordionDetails>
                                 <Typography className='dark:text-white'
                                     style={{
-                                        fontSize: '18px', // Custom font size
-                                        fontStyle: "italic",
+                                        fontSize: '17px', // Custom font size
+                                        fontFamily: "serif"
 
                                     }}
                                 >

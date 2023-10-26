@@ -8,7 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-
 const columns = [
     { id: 'office', label: 'Office Name', minWidth: 170 },
     { id: 'issueDate', label: 'Issue Date', minWidth: 100 },
@@ -31,7 +30,7 @@ const columns = [
 const statusColor = {
     pending: 'yellow',
     approved: 'green',
-    disApproved: 'red'
+    disApproved: 'red',
 };
 
 function createData(office, issueDate, rejectionReason, progress) {
@@ -42,26 +41,15 @@ const dominantButtonStyle = {
     backgroundColor: '#6499E9',
     color: 'white',
     border: '2px solid #6499E9',
-    borderRadius: "45px",
+    borderRadius: '45px',
     padding: '5px 10px',
-
-
 };
 
 const containerStyle = {
-    border: '2px solid #fff',
-    borderRadius: "20px"
-
+    // border: '2px solid #fff',
+    // borderRadius: '7px',
 };
-
-
-const black = {
-    backgroundColor: "#132043"
-};
-
 const buttonJSX = <button style={dominantButtonStyle}>PENDING</button>;
-
-
 const rows = [
     createData('Cafteria', 'IN', 1324171354, buttonJSX),
     createData('Library', 'CN', 1403500365, buttonJSX),
@@ -79,14 +67,12 @@ const rows = [
 
 const headerCellStyle = {
     fontWeight: 'bold',
-    backgroundColor: "#F0F0F0"
-   
+    backgroundColor: '#F0F0F0 dark:bg-black',
 };
+
 const rowBorderStyle = {
-    borderBottom: '2px solid #fff', 
+    // borderBottom: '2px solid #fff',
 };
-
-
 
 export default function ColumnGroupingTable(props) {
     const [page, setPage] = React.useState(0);
@@ -105,66 +91,84 @@ export default function ColumnGroupingTable(props) {
     const isDarkMode = window.matchMedia('(prefers-color-scheme: black)').matches;
 
     return (
-        <div style={{ containerStyle }}>
-            <Paper sx={{ width: '100%' }} style={containerStyle}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ borderLeft: '2px solid #fff', fontSize: "36px", marginBottom: "10px" }} colSpan={5}>Approval Information</TableCell>
-                            </TableRow>
-                            <TableRow className='text'>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ top: 57, minWidth: column.minWidth, ...headerCellStyle }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            tabIndex={-1}
-                                            key={row.date}
-                                            style={{
-                                                ...rowBorderStyle
-                                            }}
-                                        >
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align} >
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
-        </div>
+
+        <Paper sx={{ width: '100%' }} style={containerStyle}>
+            <TableContainer sx={{ height: "100%" }} >
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell
+                                className={`dark:bg-black dark:text-white dark:border-body `}
+                                style={{
+                                    // borderLeft: '2px solid #fff',
+                                    fontSize: '36px',
+                                    marginBottom: '10px',
+                                }}
+                                colSpan={5}
+                            >
+                                Approval Information
+                            </TableCell>
+                        </TableRow>
+                        <TableRow className="text">
+                            {columns.map((column) => (
+                                <TableCell
+                                    className={`dark:bg-black dark:text-white dark:border-body }`}
+                                    key={column.id}
+                                    align={column.align}
+                                    style={{
+                                        top: 57,
+                                        minWidth: column.minWidth,
+                                        ...headerCellStyle,
+                                    }}
+                                >
+                                    {column.label}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                            return (
+                                <TableRow
+                                    hover
+                                    role="checkbox"
+                                    tabIndex={-1}
+                                    key={row.date}
+                                    style={{
+                                        ...rowBorderStyle,
+                                    }}
+                                >
+                                    {columns.map((column) => {
+                                        const value = row[column.id];
+                                        return (
+                                            <TableCell
+                                                className={`dark:bg-black dark:text-white dark:border-body `}
+                                                key={column.id}
+                                                align={column.align}
+                                            >
+                                                {column.format && typeof value === 'number'
+                                                    ? column.format(value)
+                                                    : value}
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                className={`dark:bg-black dark:text-white dark:border-body `}
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+        </Paper>
+
     );
 }

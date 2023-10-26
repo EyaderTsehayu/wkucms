@@ -71,12 +71,11 @@ const GeneralInfo = () => {
                                 </Typography>
                                 <Typography
                                     style={{
-                                        fontSize: '18px', // Custom font size
-                                        fontWeight: 'bold', // Make the text bold
-                                        fontStyle: "italic",
+                                        fontSize: '17px', // Custom font size
+                                        fontFamily: "serif"
 
                                     }}
-                                    className="dark:text-white text-base leading-relaxed text-body"
+                                    className="dark:text-white text-base font-sans leading-relaxed text-body "
                                     variant="body2"
                                 >
                                     {info.desc}
