@@ -1,9 +1,10 @@
-import Image from "next/image";
-
+import SignIn from "@/components/auth/SignIn";
 export default function Home() {
   return (
     <main>
-      <div>login page</div>
+      <div>
+        <SignIn />
+      </div>
     </main>
   );
 }
