@@ -97,16 +97,19 @@ const Faq = () => {
                                 <Typography className='dark:text-white'>{freq.q}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography className='dark:text-white'>
+                                <Typography className='dark:text-white'
+                                    style={{
+                                        fontSize: '18px', // Custom font size
+                                        fontStyle: "italic",
+
+                                    }}
+                                >
                                     {freq.ans}
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
 
-
                     </Grid>
-
-
 
                 ))}
             </Grid>
