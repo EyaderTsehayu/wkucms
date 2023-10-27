@@ -53,8 +53,8 @@ export default function Help() {
     <Card className="my-12 rounded-3xl dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab className="dark:text-white " label="Status" {...a11yProps(0)} />
-          <Tab className="dark:text-white " label="History" {...a11yProps(1)} />
+          <Tab sx={{ fontFamily: "satoshi" }} className="dark:text-white" label="Status" {...a11yProps(0)} />
+          <Tab sx={{ fontFamily: "satoshi" }} className="dark:text-white" label="History" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
