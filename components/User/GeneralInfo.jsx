@@ -1,18 +1,13 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardActionArea from '@mui/material/CardActionArea';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 
 const genInfo = [
     {
         title: "Cafteria",
-        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..",
+        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. ",
     },
     {
         title: "Library",
-        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds.",
     },
     {
         title: "Dormitory",
@@ -20,11 +15,11 @@ const genInfo = [
     },
     {
         title: "Cafteria",
-        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..",
+        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. ",
     },
     {
         title: "Library",
-        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds.",
     },
     {
         title: "Dormitory",
@@ -32,11 +27,11 @@ const genInfo = [
     },
     {
         title: "Cafteria",
-        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. They offer a convenient and efficient way for people to enjoy a meal or snack without the need for full table service..",
+        desc: "A cafeteria is a type of food service establishment that provides a variety of prepared dishes and beverages to customers. Cafeterias are commonly found in a wide range of settings, from schools and universities to workplaces, hospitals, and other public or private institutions. ",
     },
     {
         title: "Library",
-        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds. The significance of libraries in our world cannot be overstated, and they have been a fundamental part of human civilization for centuries.",
+        desc: "A library is a sanctuary of knowledge and imagination, a haven for the curious, and a cornerstone of any educated society. It is a place where books, information, and ideas come to life, providing a wealth of resources to people of all ages and backgrounds.",
     },
     {
         title: "Dormitory",
@@ -48,44 +43,24 @@ const genInfo = [
 
 
 const GeneralInfo = () => {
-    const cardStyle = {
-        height: "350px",
-        borderColor: '#F5F7F8',
-        borderWidth: '10px',
-        borderStyle: 'solid',
-        borderRadius: '15px',
-        marginRight: '15px',
-        backgroundColor: '#F5F7F8',
-        overflow: 'hidden',
-    };
-
     return (
-        <Grid container spacing={2} sx={{ marginTop: '20px', justifyContent: 'center' }}>
-            {genInfo.map((info, index) => (
-                <Grid key={info.title} xs={12} sm={6} md={4} item>
-                    <Card className="dark:bg-body dark:border-body my-7" sx={cardStyle}>
-                        <CardActionArea>
-                            <CardContent>
-                                <Typography className="dark:text-white text-lg font-semibold text-black dark-text-[#34D399]" gutterBottom variant="h5" component="div">
-                                    {info.title}
-                                </Typography>
-                                <Typography
-                                    style={{
-                                        fontSize: '17px', // Custom font size
-                                        fontFamily: "serif"
-
-                                    }}
-                                    className="dark:text-white text-base font-sans leading-relaxed text-body "
-                                    variant="body2"
-                                >
-                                    {info.desc}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
+        <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
+            {
+                genInfo.map((info, index) => (
+                    <div class="rounded-lg border border-stroke bg-white shadow  shadow-stroke dark:border-strokedark dark:bg-boxdark">
+                        <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark">
+                            <h4 class=" font-satoshi text-2xl font-bold text-primary dark:text-white">
+                                <a href="#">{info.title}</a>
+                            </h4>
+                        </div>
+                        <div class="px-7.5 pt-6 pb-9">
+                            <p class="font-satoshi text-body  text-lg dark:text-bodydark1 leading-7">
+                                {info.desc}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+        </div>
     );
 }
 

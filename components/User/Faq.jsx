@@ -77,7 +77,8 @@ const Faq = () => {
         borderStyle: 'solid',
         borderRadius: "15px",
         marginRight: "15px",
-        backgroundColor: "#F5F7F8"
+        backgroundColor: "#F5F7F8",
+
     };
     return (
         <div style={{ marginBottom: '80px' }}>
@@ -86,25 +87,26 @@ const Faq = () => {
                 marginTop: "20px"
             }}>
                 {faq.map(freq => (
-                    <Grid xs={6} md={4} >
+                    <Grid xs={6} md={4} className=''>
 
-                        <Accordion className="dark:bg-body dark:border-body my-12" sx={cardStyle}>
+                        <Accordion className="ml-7 dark:bg-strokedark dark:border-strokedark my-12 bg-white " sx={cardStyle}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography className='dark:text-white'>{freq.q}</Typography>
+                                <Typography className=''>
+                                    <h1 className='font-satoshi  text-2xl  text-body dark:text-white  font-light'>
+                                        {freq.q}
+                                    </h1>
+                                </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography className='dark:text-white'
-                                    style={{
-                                        fontSize: '17px', // Custom font size
-                                        fontFamily: "serif"
-
-                                    }}
+                                <Typography
                                 >
-                                    {freq.ans}
+                                    <p className='font-satoshi text-body  text-lg dark:text-bodydark1 leading-7'>
+                                        {freq.ans}
+                                    </p>
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>

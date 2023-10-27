@@ -70,10 +70,11 @@ const headerCellStyle = {
     backgroundColor: '#F0F0F0 dark:bg-black',
 };
 
-const rowBorderStyle = {
-    // borderBottom: '2px solid #fff',
-};
-
+const customFont = {
+    fontFamily: 'satoshi',
+    fontSize: "20px", /* Adjust the font size as needed */
+    fontWeight: "normal" /* Adjust the font weight as needed */
+}
 export default function ColumnGroupingTable(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -98,15 +99,11 @@ export default function ColumnGroupingTable(props) {
                     <TableHead>
                         <TableRow>
                             <TableCell
-                                className={`dark:bg-black dark:text-white dark:border-body `}
-                                style={{
-                                    // borderLeft: '2px solid #fff',
-                                    fontSize: '36px',
-                                    marginBottom: '10px',
-                                }}
+                                className="dark:border-body   dark:bg-black  "
+
                                 colSpan={5}
                             >
-                                Approval Information
+                                <h1 className='dark:text-white font-satoshi text-2xl font-bold text-primary'>Approval Information</h1>
                             </TableCell>
                         </TableRow>
                         <TableRow className="text">
@@ -121,7 +118,7 @@ export default function ColumnGroupingTable(props) {
                                         ...headerCellStyle,
                                     }}
                                 >
-                                    {column.label}
+                                    <h2 className=' text-lg dark:text-white font-satoshi  font-bold'>{column.label}</h2>
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -134,17 +131,18 @@ export default function ColumnGroupingTable(props) {
                                     role="checkbox"
                                     tabIndex={-1}
                                     key={row.date}
-                                    style={{
-                                        ...rowBorderStyle,
-                                    }}
+
+
                                 >
                                     {columns.map((column) => {
                                         const value = row[column.id];
                                         return (
                                             <TableCell
-                                                className={`dark:bg-black dark:text-white dark:border-body `}
+                                                className={`dark:bg-black dark:border-body dark:text-white `}
+
                                                 key={column.id}
                                                 align={column.align}
+                                                style={{ ...customFont }}
                                             >
                                                 {column.format && typeof value === 'number'
                                                     ? column.format(value)

@@ -50,7 +50,7 @@ export default function Help() {
   };
 
   return (
-    <Card className="dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
+    <Card className="my-10 rounded-2xl dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab className="dark:text-white my-tab" label="General Info" {...a11yProps(0)} />

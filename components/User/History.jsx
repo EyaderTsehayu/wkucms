@@ -34,7 +34,7 @@ const History = () => {
         <>
             {history.map((his) => (
                 <div className="flex flex-col gap-7.5">
-                    <div className="dark:bg-body my-7 flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark-bg-[#1B1B24] dark-bg-opacity-30 md-p-9">
+                    <div className="dark:border-strokedark dark:bg-strokedark my-7 flex w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark-bg-[#1B1B24] dark-bg-opacity-30 md-p-9">
                         <div className="mr-5 flex h-9 w-full max-w-[36px] items-center justify-center rounded-lg bg-[#34D399]">
                             <svg
                                 width="16"
@@ -51,10 +51,10 @@ const History = () => {
                             </svg>
                         </div>
                         <div className="w-full ">
-                            <h5 className="mb-3 text-lg font-semibold text-black dark-text-[#34D399] ">
+                            <h5 className="font-satoshi text-2xl font-bold text-primary dark:text-white ">
                                 {his.title}
                             </h5>
-                            <p className="dark:text-white text-base leading-relaxed text-body">
+                            <p className="font-satoshi text-body  text-lg dark:text-bodydark1 leading-7">
                                 {his.desc}
                             </p>
                         </div>
