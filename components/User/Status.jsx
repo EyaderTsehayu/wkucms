@@ -7,6 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Link from 'next/link';
+import { Button } from '@mui/material';
 
 const columns = [
     { id: 'office', label: 'Office Name', minWidth: 170 },
@@ -46,8 +48,10 @@ const dominantButtonStyle = {
 };
 
 const containerStyle = {
-    // border: '2px solid #fff',
-    // borderRadius: '7px',
+
+    // border: '5px solid #fff',
+    // borderRadius: '10px',
+    // boxShadow: '0 2px 2px -1px rgba(255, 255, 255, 1) inset',
 };
 const buttonJSX = <button style={dominantButtonStyle}>PENDING</button>;
 const rows = [
@@ -66,8 +70,8 @@ const rows = [
 ];
 
 const headerCellStyle = {
-    fontWeight: 'bold',
-    backgroundColor: '#F0F0F0 dark:bg-black',
+    // fontWeight: 'bold',
+
 };
 
 const customFont = {
@@ -93,9 +97,9 @@ export default function ColumnGroupingTable(props) {
 
     return (
 
-        <Paper sx={{ width: '100%' }} style={containerStyle}>
+        <Paper sx={{ width: '100%' }} className='mt-7 border border-bodydark1 dark:border-black shadow-white' style={containerStyle}>
             <TableContainer sx={{ height: "100%" }} >
-                <Table stickyHeader aria-label="sticky table">
+                <Table >
                     <TableHead>
                         <TableRow>
                             <TableCell
@@ -103,13 +107,20 @@ export default function ColumnGroupingTable(props) {
 
                                 colSpan={5}
                             >
-                                <h1 className='dark:text-white font-satoshi text-2xl font-bold text-primary'>Approval Information</h1>
+                                <div className='flex justify-between'>
+                                    <h1 className='dark:text-white font-satoshi text-2xl font-bold text-primary'>Approval Information</h1>
+                                    <div >
+
+
+                                    </div>
+
+                                </div>
                             </TableCell>
                         </TableRow>
-                        <TableRow className="text">
+                        <TableRow className=" ">
                             {columns.map((column) => (
                                 <TableCell
-                                    className={`dark:bg-black dark:text-white dark:border-body }`}
+                                    className={`dark:bg-black dark:text-white dark:border-body}`}
                                     key={column.id}
                                     align={column.align}
                                     style={{
@@ -118,7 +129,10 @@ export default function ColumnGroupingTable(props) {
                                         ...headerCellStyle,
                                     }}
                                 >
+
                                     <h2 className=' text-lg dark:text-white font-satoshi  font-bold'>{column.label}</h2>
+
+
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -166,7 +180,7 @@ export default function ColumnGroupingTable(props) {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </Paper>
+        </Paper >
 
     );
 }

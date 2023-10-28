@@ -13,6 +13,18 @@ const faq = [
         q: "Who serves as the chief of our dormitory?",
         ans: "A is a vital component of the college experience for many students. It serves as a temporary residence during their time at a college or university, providing not only a place to sleep but also an environment for learning, personal growth, and social interaction.",
     },
+    {
+        q: "Who serves as the chief of our dormitory?",
+        ans: "A is a vital component of the college experience for many students. It serves as a temporary residence during their time at a college or university, providing not only a place to sleep but also an environment for learning, personal growth, and social interaction.",
+    },
+    {
+        q: "Who serves as the chief of our dormitory?",
+        ans: "A is a vital component of the college experience for many students. It serves as a temporary residence during their time at a college or university, providing not only a place to sleep but also an environment for learning, personal growth, and social interaction.",
+    },
+    {
+        q: "Who serves as the chief of our dormitory?",
+        ans: "A is a vital component of the college experience for many students. It serves as a temporary residence during their time at a college or university, providing not only a place to sleep but also an environment for learning, personal growth, and social interaction.",
+    },
     // Add more FAQ items here
 ];
 
@@ -27,7 +39,7 @@ const Faq = () => {
 
     return (
         <div className="p-4 sm:p-6 xl:p-12.5">
-            <div className="grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-3 xl:gap-7.5">
+            <div className="grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-2 xl:gap-7.5">
                 {faq.map((f, index) => (
                     <div className="flex flex-col gap-6" key={index}>
                         <div
