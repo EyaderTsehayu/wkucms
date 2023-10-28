@@ -55,6 +55,7 @@ const Announcement = () => {
           <div key={post.id} className="mb-4">
             <div className="images">
               <Image
+                alt="announcement"
                 src={post.image}
                 className=" rounded-md"
                 width={400}
