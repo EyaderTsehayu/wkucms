@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 const genInfo = [
     {
@@ -40,28 +41,47 @@ const genInfo = [
 ];
 
 
-
-
 const GeneralInfo = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredInfo = genInfo.filter(info => info.title.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
-        <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
-            {
-                genInfo.map((info, index) => (
-                    <div class="rounded-lg border border-stroke bg-white shadow  shadow-stroke dark:border-strokedark dark:bg-boxdark">
-                        <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark">
-                            <h4 class=" font-satoshi text-2xl font-bold text-primary dark:text-white">
-                                <a href="#">{info.title}</a>
-                            </h4>
+        <div>
+            <input
+                type="text"
+                style={{ width: "390px" }}
+                placeholder="Search by title"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="px-4 py-2 mb-7 rounded-lg border border-stroke bg-white shadow shadow-stroke dark:text-white dark:border-strokedark dark:bg-boxdark focus:outline-none"
+            />
+
+            <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
+                {
+                    filteredInfo.map((info, index) => (
+                        <div class="rounded-lg border border-stroke bg-white shadow shadow-stroke dark:border-strokedark dark:bg-boxdark">
+                            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark">
+                                <h4 class=" font-satoshi text-2xl font-bold text-primary dark:text-white">
+                                    <a href="#">{info.title}</a>
+                                </h4>
+                            </div>
+                            <div class="px-7.5 pt-6 pb-9">
+                                <p class="font-satoshi text-body text-lg dark:text-bodydark1 leading-7">
+                                    {info.desc}
+                                </p>
+                            </div>
                         </div>
-                        <div class="px-7.5 pt-6 pb-9">
-                            <p class="font-satoshi text-body  text-lg dark:text-bodydark1 leading-7">
-                                {info.desc}
-                            </p>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+            </div>
         </div>
     );
 }
+
+
 
 export default GeneralInfo;

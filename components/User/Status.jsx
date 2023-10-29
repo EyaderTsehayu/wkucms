@@ -97,13 +97,13 @@ export default function ColumnGroupingTable(props) {
 
     return (
 
-        <Paper sx={{ width: '100%' }} className='mt-7 border border-bodydark1 dark:border-black shadow-white' style={containerStyle}>
+        <Paper sx={{ width: '100%' }} className='mt-7 dark:border-black shadow-white' style={containerStyle}>
             <TableContainer sx={{ height: "100%" }} >
                 <Table >
                     <TableHead>
                         <TableRow>
                             <TableCell
-                                className="dark:border-body   dark:bg-black  "
+                                className="dark:border-bod   dark:bg-boxdark  "
 
                                 colSpan={5}
                             >
@@ -120,7 +120,7 @@ export default function ColumnGroupingTable(props) {
                         <TableRow className=" ">
                             {columns.map((column) => (
                                 <TableCell
-                                    className={`dark:bg-black dark:text-white dark:border-body}`}
+                                    className={`dark:bg-boxdark dark:text-white dark:border-body}`}
                                     key={column.id}
                                     align={column.align}
                                     style={{
@@ -152,7 +152,7 @@ export default function ColumnGroupingTable(props) {
                                         const value = row[column.id];
                                         return (
                                             <TableCell
-                                                className={`dark:bg-black dark:border-body dark:text-white `}
+                                                className={`dark:bg-boxdark dark:border-body dark:text-white `}
 
                                                 key={column.id}
                                                 align={column.align}
@@ -171,7 +171,7 @@ export default function ColumnGroupingTable(props) {
                 </Table>
             </TableContainer>
             <TablePagination
-                className={`dark:bg-black dark:text-white dark:border-body `}
+                className={`dark:bg-boxdark dark:text-white dark:border-body `}
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
                 count={rows.length}

@@ -45,8 +45,8 @@ export default function Help() {
   };
 
   return (
-    <Card className="  my-12 mx-12 rounded-lg shadow shadow-white  dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Card className="py-14 px-14  my-12 mx-12 rounded-lg shadow shadow-white  dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="dark:border-bodydark1">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -55,6 +55,11 @@ export default function Help() {
             style: {
               display: 'none', // Hide the indicator line
             },
+          }}
+          sx={{
+            "& .Mui-selected": {
+              borderBottom: '2px solid #687EFF', // Add the bottom border for the selected tab
+            }
           }}
         >
           <Tab
