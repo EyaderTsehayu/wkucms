@@ -45,7 +45,7 @@ export default function Help() {
   };
 
   return (
-    <Card className="py-14 px-14  my-12 mx-12 rounded-lg shadow shadow-white  dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
+    <Card className="py-8 px-14  my-12 mx-12 rounded-lg shadow shadow-white  dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="dark:border-bodydark1">
         <Tabs
           value={value}
