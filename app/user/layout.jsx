@@ -57,6 +57,7 @@ export default function userLayout({ children }) {
                       theme="colored"
                     />
                   </div>
+
                 </main>
                 {/* <!-- ===== Main Content End ===== --> */}
               </div>
