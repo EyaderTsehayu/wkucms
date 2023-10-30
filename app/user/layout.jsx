@@ -1,13 +1,12 @@
 "use client";
 import "../globals.css";
-// import "./data-tables-css.css";
-// import "./satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "@/components/common/Loader";
 
 import Sidebar from "@/components/Sidebar/page";
 import Header from "@/components/Header/page";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function userLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -43,7 +42,22 @@ export default function userLayout({ children }) {
 
                 {/* <!-- ===== Main Content Start ===== --> */}
                 <main>
-                  <div className="mx-auto max-w-screen-2xl">{children}</div>
+                  <div className="mx-auto max-w-screen-2xl  ">
+                    {children}
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={2000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="colored"
+                    />
+                  </div>
+
                 </main>
                 {/* <!-- ===== Main Content End ===== --> */}
               </div>
@@ -51,7 +65,7 @@ export default function userLayout({ children }) {
             </div>
           )}
         </div>
-      </body>
+      </body>{" "}
     </html>
   );
 }

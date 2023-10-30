@@ -13,7 +13,7 @@ const OuterNav = () => {
   return (
     <nav className="bg-white p-4 lg:pl-12 lg:pr-48 pr-8 w-full items-center">
       {/* Logo on the left */}
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Image
             src="/images/logo/logo.png"
