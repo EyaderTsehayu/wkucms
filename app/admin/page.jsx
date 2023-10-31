@@ -1,16 +1,16 @@
-import ECommerce from "@/components/Dashboard/E-commerce";
+import Admin from "@/components/Dashboard/Admin";
 import { Metadata } from "next";
 
 export const metadata = {
-  title: "TailAdmin | Next.js E-commerce Dashboard Template",
-  description: "This is Home Blog page for TailAdmin Next.js",
+  title: "WKUCMS | Admin ",
+  description: "This is a clearance mangement system for wolkite university.",
   // other metadata
 };
 
 export default function Home() {
   return (
     <>
-      <ECommerce />
+      <Admin />
     </>
   );
 }
