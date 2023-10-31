@@ -1,118 +1,42 @@
 "use client"
+
 import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Card from '@mui/material/Card';
-import History from '@/components/User/History';
-import Status from '@/components/User/Status';
 import Box from '@mui/material/Box';
-import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
-import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
-import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
-import RequestClearance from '@/components/User/RequestClearance';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import PrintClearance from '@/components/User/PrintClearance';
+import Status from '@/components/User/Status';
+import RequestClearance from '@/components/User/RequestClearance';
+import History from '@/components/User/History';
 
-const iconStyle = {
-  marginRight: '8px', // Adjust the margin as needed
-};
-
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-export default function Help() {
-  const [value, setValue] = React.useState(0);
+export default function LabTabs() {
+  const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Card className="py-8 px-14  my-12 mx-12 rounded-lg shadow shadow-white  dark:bg-black dark:border-black my-card" sx={{ minHeight: "100vh" }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="dark:border-bodydark1">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-          TabIndicatorProps={{
-            style: {
-              display: 'none', // Hide the indicator line
-            },
-          }}
-          sx={{
-            "& .Mui-selected": {
-              borderBottom: '2px solid #687EFF', // Add the bottom border for the selected tab
-            }
-          }}
-        >
-          <Tab
-            value={0}
-            label={
-              <div className='dark:text-white font-bold '>
-                <RequestPageOutlinedIcon style={iconStyle} />
-                Request Clearance
-              </div>
-            }
-          />
-          <Tab
-            value={1}
-            label={
-              <div className='dark:text-white font-bold '>
-                <HistoryRoundedIcon style={iconStyle} />
-                History
-              </div>
-            }
-          />
-          <Tab
-            value={2}
-            label={
-              <div className='dark:text-white font-bold '>
-                <AutorenewOutlinedIcon style={iconStyle} />
-                Status
-              </div>
-            }
-          />
-          <Tab
-            value={3}
-            label={
-              <div className='dark:text-white font-bold '>
-                <LocalPrintshopOutlinedIcon style={iconStyle} />
-                Print Clearance
-              </div>
-            }
-          />
-        </Tabs>
+    <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
+      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">My Clearance</h1>
+      <Box sx={{ typography: 'body1', backgroundColor: "white", minHeight: "100vh" }} className="dark:border-black dark:bg-black" >
+        <TabContext value={value} >
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="pt-2 px-4 dark:border-body">
+            <TabList indicatorColor="primary" textColor='#AEB7C0' onChange={handleChange} aria-label="lab API tabs example">
+              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }} className=' dark:text-white  ' label="Request Clearance" value="1" />
+              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }} className=' dark:text-white  ' label="History" value="2" />
+              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }} className=' dark:text-white  ' label="Status" value="3" />
+              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }} className=' dark:text-white  ' label="Print Clearance" value="4" />
+            </TabList>
+          </Box>
+          <TabPanel value="1"><RequestClearance /></TabPanel>
+          <TabPanel value="2"><History /></TabPanel>
+          <TabPanel value="3"><Status /></TabPanel>
+          <TabPanel value="4"><PrintClearance /></TabPanel>
+        </TabContext>
       </Box>
-
-      <CustomTabPanel value={value} index={0}>
-        <RequestClearance />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <History />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <Status />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <PrintClearance />
-      </CustomTabPanel>
-    </Card>
+    </div>
   );
 }

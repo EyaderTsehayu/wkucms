@@ -54,24 +54,23 @@ const GeneralInfo = () => {
         <div>
             <input
                 type="text"
-                style={{ width: "390px" }}
-                placeholder="Search by title"
+                placeholder="Search office requirement here"
                 value={searchTerm}
                 onChange={handleSearch}
-                className="px-4 py-2 mb-7 rounded-lg border border-stroke bg-white shadow shadow-stroke dark:text-white dark:border-strokedark dark:bg-boxdark focus:outline-none"
+                className=" mt-6 sm:w-1/3 w-full pt-4 pb-3 px-3 py-4 mb-7  focus:outline-none  shadow-stroke rounded-lg border border-stroke  shadow-lg  dark:border-strokedark dark:bg-boxdark dark:shadow-none "
             />
 
-            <div class="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
+            <div class="  grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
                 {
                     filteredInfo.map((info, index) => (
-                        <div class="rounded-lg border border-stroke bg-white shadow shadow-stroke dark:border-strokedark dark:bg-boxdark">
-                            <div class="border-b border-stroke p-5 px-7.5 dark:border-strokedark">
-                                <h4 class=" font-satoshi text-2xl font-bold text-primary dark:text-white">
+                        <div class=" sm:px-2 pt-1 shadow  shadow-stroke rounded-lg border border-stroke  shadow-9 dark:border-strokedark dark:bg-boxdark dark:shadow-none ">
+                            <div class="border-b border-stroke py-5 sm:px-7.5 px-2 dark:border-body ">
+                                <h4 className=" font-satoshi text-2xl font-bold text-primary dark:text-white">
                                     <a href="#">{info.title}</a>
                                 </h4>
                             </div>
                             <div class="px-7.5 pt-6 pb-9">
-                                <p class="font-satoshi text-body text-lg dark:text-bodydark1 leading-7">
+                                <p className="font-satoshi font-md text-body text-lg dark:text-bodydark1 leading-7 text-justify">
                                     {info.desc}
                                 </p>
                             </div>
