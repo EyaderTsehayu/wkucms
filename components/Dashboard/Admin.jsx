@@ -14,16 +14,11 @@ import CardDataStats from "../CardDataStats";
 //   ssr: false,
 // });
 
-const ECommerce = () => {
+const Admin = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats
-          title="Total views"
-          total="$3.456K"
-          rate="0.43%"
-          levelUp
-        >
+        <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -123,4 +118,4 @@ const ECommerce = () => {
   );
 };
 
-export default ECommerce;
+export default Admin;
