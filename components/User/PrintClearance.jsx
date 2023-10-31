@@ -1,11 +1,15 @@
 import * as React from 'react';
 
-export default function RequestClearance() {
+export default function PrintClearance() {
     return (
-        <div style={{ width: "100%", height: "70%" }} className="px-7 border border-bodydark1 flex justify-center align-middle mt-7 bg-white dark:bg-boxdark text-black dark:text-white p-10 rounded-lg shadow-md">
-            <p>
-                Failure to initiate the clearance form is the barrier preventing you from printing the clearance. Activate the form to unlock access to your clearance certificate. Don't overlook this crucial first step in the process. Obtain your clearance by triggering the required form.
-            </p>
+        <div className="md:mt-7 mt-4 md:py-7 py-4 lg:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
+
+            <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
+                You have not triggered a clearance process yet!!
+            </h5>
+
+
+
         </div>
     );
 }
