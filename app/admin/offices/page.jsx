@@ -5,10 +5,10 @@ import React from "react";
 import { useState } from "react";
 const columns = [
   { field: "id", headerName: "ID", width: "100" },
-  { field: "firstName", headerName: "First name", width: "160" },
-  { field: "lastName", headerName: "Last name", width: "160" },
-  { field: "officeName", headerName: "Office name", width: "160" },
-  { field: "department", headerName: "Department", width: "160" },
+  { field: "firstName", headerName: "First name", width: "240" },
+  { field: "lastName", headerName: "Last name", width: "240" },
+  { field: "officeName", headerName: "Office name", width: "240" },
+  { field: "department", headerName: "Department", width: "240" },
 
 
 ];
@@ -96,9 +96,11 @@ const ManageOffices = () => {
         placeholder="Search office requirement here"
         value={searchTerm}
         onChange={handleSearch}
-        className="sm:w-1/3 w-full pt-4 pb-3 px-3 py-4 mb-7  focus:outline-none  shadow-stroke rounded-lg border border-stroke  shadow-lg  dark:border-strokedark dark:bg-boxdark dark:shadow-none "
+        className="w-full sm:hidden pt-4 pb-3 px-3 py-4 mb-7  rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary "
       />
-      <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
+
+
+      <div className="grid grid-cols-12 ">
 
         <AdminContainer columns={columns} rows={filteredInfo} />
       </div>
