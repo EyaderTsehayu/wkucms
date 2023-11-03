@@ -16,14 +16,7 @@ const Table = ({ columns, rows }) => {
         checkboxSelection
         className="dark:bg-gray-800 dark:text-white"
       />
-      <style>
-        {`
-     
-      .MuiPaginationItem-root {
-        color: blue; 
-      }
-    `}
-      </style>
+
     </div>
   );
 };
