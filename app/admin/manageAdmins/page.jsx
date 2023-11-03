@@ -79,7 +79,7 @@ const rows = [
   },
 ];
 
-const ManageStaff = () => {
+const ManageAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const filteredInfo = rows.filter((info) =>
     info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -111,4 +111,5 @@ const ManageStaff = () => {
   );
 };
 
-export default ManageStaff;
+export default ManageAdmin;
+

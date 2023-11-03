@@ -9,6 +9,8 @@ const Table = ({ columns, rows }) => {
         "& .MuiDataGrid-footerContainer": {
           borderTop: "none",
           backgroundColor: "#34e1eb",
+
+
         },
         "& .MuiCheckbox-root": {
           color: "#64748B",
