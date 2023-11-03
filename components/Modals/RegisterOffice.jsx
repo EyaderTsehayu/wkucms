@@ -1,6 +1,6 @@
 import React from "react";
 
-const RegisterStudent = () => {
+const RegisterOffice = () => {
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
       <h3 class="pb-2 text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -27,5 +27,4 @@ const RegisterStudent = () => {
     </div>
   );
 };
-
-export default RegisterStudent;
+export default RegisterOffice;

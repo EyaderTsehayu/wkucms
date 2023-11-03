@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
 import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
 import { useState } from "react";
+import RegisterOffice from "@/components/Modals/RegisterOffice";
+
 const columns = [
   { field: "id", headerName: "ID", width: "100" },
   { field: "firstName", headerName: "First name", width: "240" },
   { field: "lastName", headerName: "Last name", width: "240" },
   { field: "officeName", headerName: "Office name", width: "240" },
   { field: "department", headerName: "Department", width: "240" },
-
-
 ];
 
 const rows = [
@@ -79,10 +79,11 @@ const rows = [
   },
 ];
 
-
 const ManageOffices = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const filteredInfo = rows.filter(info => info.officeName.toLowerCase().includes(searchTerm.toLowerCase()));
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredInfo = rows.filter((info) =>
+    info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
 
   const handleSearch = (event) => {
@@ -99,10 +100,12 @@ const ManageOffices = () => {
         className="w-full sm:hidden pt-4 pb-3 px-3 py-4 mb-7  rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary "
       />
 
-
       <div className="grid grid-cols-12 ">
-
-        <AdminContainer columns={columns} rows={filteredInfo} />
+        <AdminContainer
+          columns={columns}
+          rows={filteredInfo}
+          modal={RegisterOffice}
+        />
       </div>
     </>
   );
