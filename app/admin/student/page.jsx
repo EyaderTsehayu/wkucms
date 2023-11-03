@@ -2,6 +2,7 @@
 import Filter from "@/components/Admin/Filter";
 import AdminContainer from "@/components/Admin/AdminContainer";
 import { Metadata } from "next";
+import RegisterStudent from "@/components/Modals/RegisterStudent";
 // export const metadata = {
 //   title: "WKUCMS | Admin",
 //   description: "this a clearance management system for Wolkite University",
@@ -104,7 +105,7 @@ const ManageStudent = () => {
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
         <Filter officeData={officeData} collegeData={collegeData} />
 
-        <AdminContainer columns={columns} rows={rows} />
+        <AdminContainer columns={columns} rows={rows} modal={RegisterStudent} />
       </div>
     </>
   );
