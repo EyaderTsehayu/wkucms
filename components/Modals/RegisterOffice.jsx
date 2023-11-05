@@ -1,6 +1,6 @@
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { personalInfoSchema } from "@/validations/userValidation";
+import { registerOfficeSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -10,7 +10,7 @@ const RegisterOffice = () => {
     register,
     formState: { errors },
     reset,
-  } = useForm({ resolver: yupResolver(personalInfoSchema) });
+  } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
   const onSubmit = (data) => {
     console.log(data);
@@ -42,7 +42,7 @@ const RegisterOffice = () => {
               {...register("officeName")}
             />
           </div>
-          <p>{errors.location?.message}</p>
+          <p>{errors.officeName?.message}</p>
         </div>
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
           <div className="w-full sm:w-1/2">
@@ -60,6 +60,7 @@ const RegisterOffice = () => {
               placeholder="Office id"
               {...register("officeId")}
             />
+            <p>{errors.officeId?.message}</p>
           </div>
 
           <div className="w-full sm:w-1/2">
@@ -96,35 +97,27 @@ const RegisterOffice = () => {
             placeholder="Write items to be checked here ..."
             cols={40}
             rows={4}
-            TextFields
             {...register("items")}
           />
         </div>
 
-        {/* <img
-                  src="https://cdn-icons-png.flaticon.com/512/1721/1721936.png "
-                  width={24}
-                  height={24}
-                  className="img-small fill-primary text-primary"
-                /> */}
+        <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
+          <div class="w-full px-3 2xsm:w-1/2">
+            <button
+              type="submit"
+              class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+            >
+              Save
+            </button>
+          </div>
+
+          <div class="w-full px-3 2xsm:w-1/2">
+            <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+              Cancel
+            </button>
+          </div>
+        </div>
       </form>
-
-      <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
-        <div class="w-full px-3 2xsm:w-1/2">
-          <button
-            type="submit"
-            class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
-          >
-            Save
-          </button>
-        </div>
-
-        <div class="w-full px-3 2xsm:w-1/2">
-          <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
-            Cancel
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
