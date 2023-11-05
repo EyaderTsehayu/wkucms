@@ -14,7 +14,7 @@ const RegisterOffice = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    toast.success("Email updated Successfully!");
+    toast.success("Office registered Successfully!");
     reset();
   };
 
@@ -109,11 +109,6 @@ const RegisterOffice = () => {
                 /> */}
       </form>
 
-      {/* <p class="mb-10">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since
-      </p> */}
       <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
         <div class="w-full px-3 2xsm:w-1/2">
           <button
