@@ -11,6 +11,8 @@ import RegisterStudent from "../Modals/RegisterStudent";
 import { usePathname } from "next/navigation";
 
 const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
+  const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -33,21 +35,19 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-  let sp = 12;
-  const pathname = usePathname();
-  if (pathname.includes("/student")) {
-    sp = 9;
-  }
+
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 col-span-${sp}`}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 ${
+        pathname.includes("student") && "col-span-9"
+      } col-span-12`}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
         <div className="flex w-1/3 ">
           <input
             type="text"
-            placeholder="Search office requirement here"
+            placeholder="Search here ..."
             value={searchTerm}
             onChange={handleSearch}
             className=" w-full hidden sm:block px-4 py-2 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
@@ -79,7 +79,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       >
         <div
           onClick={handleOverlayClick}
-          class="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/90 px-4 py-5 "
+          class="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
           <OpenedModal />
         </div>
