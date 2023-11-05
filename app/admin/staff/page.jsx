@@ -3,7 +3,7 @@
 import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
 import { useState } from "react";
-import RegisterOffice from "@/components/Modals/RegisterOffice";
+import RegisterStaff from "@/components/Modals/RegisterStaff";
 
 const columns = [
   { field: "id", headerName: "ID", width: "100" },
@@ -104,7 +104,7 @@ const ManageStaff = () => {
         <AdminContainer
           columns={columns}
           rows={filteredInfo}
-          modal={RegisterOffice}
+          modal={RegisterStaff}
         />
       </div>
     </>

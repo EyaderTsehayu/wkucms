@@ -1,0 +1,148 @@
+"use client";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { personalInfoSchema } from "@/validations/userValidation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+const RegisterAdmin = () => {
+
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+        reset,
+    } = useForm({ resolver: yupResolver(personalInfoSchema) });
+
+    const onSubmit = (data) => {
+        console.log(data);
+        toast.success("Staff registered Successfully!");
+
+        reset();
+    };
+
+    return (
+        <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+            <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
+                Register Admins
+            </h3>
+            <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="phoneNumber"
+                        >
+                            First Name
+                        </label>
+                        <input
+                            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="firstName"
+                            id="firstName"
+                            placeholder="Your name"
+                            {...register("firstName")}
+                        />
+                    </div>
+
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="fullName"
+                        >
+                            Middle Name
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                                type="text"
+                                name="middlename"
+                                id="middlename"
+                                placeholder="Father's name"
+                                {...register("middlename")}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="phoneNumber"
+                        >
+                            Last Name
+                        </label>
+                        <input
+                            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="lastName"
+                            id="lastName"
+                            placeholder="Grand father's Name"
+                            {...register("lastName")}
+                        />
+                    </div>
+
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="phoneNumber"
+                        >
+                            Admin Id
+                        </label>
+                        <input
+                            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="studentId"
+                            id="studentId"
+                            placeholder="staff id"
+                            {...register("studentId")}
+                        />
+                    </div>
+                </div>
+                <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+                    <div className="w-full sm:w-1/2">
+                        <label
+                            className="mb-3 block text-sm font-medium text-black dark:text-white"
+                            htmlFor="phoneNumber"
+                        >
+                            Office
+                        </label>
+                        <input
+                            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="text"
+                            name="OfficeName"
+                            id="OfficeName"
+                            placeholder="Office Name"
+                            {...register("OfficeName")}
+                        />
+                    </div>
+
+
+
+                </div>
+
+
+            </form>
+
+            <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
+                <div class="w-full px-3 2xsm:w-1/2">
+                    <button
+                        type="submit"
+                        class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                    >
+                        Save
+                    </button>
+                </div>
+
+                <div class="w-full px-3 2xsm:w-1/2">
+                    <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+export default RegisterAdmin;
