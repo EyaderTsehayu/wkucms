@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterStaffSchema } from "@/validations/userValidation";
+import { registerStaffSchema } from "@/validations/registrationValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useForm } from "react-hook-form";
@@ -13,7 +13,7 @@ const RegisterStaff = () => {
         register,
         formState: { errors },
         reset,
-    } = useForm();
+    } = useForm({ resolver: yupResolver(registerStaffSchema) });
 
     const onSubmit = (data) => {
         console.log(data);
@@ -44,12 +44,13 @@ const RegisterStaff = () => {
                             placeholder="Your name"
                             {...register("firstName")}
                         />
+                        <p>{errors.firstName?.message}</p>
                     </div>
 
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="middlename"
+                            htmlFor="middleName"
                         >
                             Middle Name
                         </label>
@@ -57,11 +58,12 @@ const RegisterStaff = () => {
                             <input
                                 className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                 type="text"
-                                name="middlename"
-                                id="middlename"
+                                name="middleName"
+                                id="middleName"
                                 placeholder="Father's name"
-                                {...register("middlename")}
+                                {...register("middleName")}
                             />
+                            <p>{errors.middleName?.message}</p>
                         </div>
                     </div>
                 </div>
@@ -81,6 +83,7 @@ const RegisterStaff = () => {
                             placeholder="Grand father's Name"
                             {...register("lastName")}
                         />
+                        <p>{errors.lastName?.message}</p>
                     </div>
 
                     <div className="w-full sm:w-1/2">
@@ -98,6 +101,7 @@ const RegisterStaff = () => {
                             placeholder="staff id"
                             {...register("staffId")}
                         />
+                        <p>{errors.staffId?.message}</p>
                     </div>
                 </div>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
@@ -105,18 +109,19 @@ const RegisterStaff = () => {
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="OfficeName"
+                            htmlFor="officeName"
                         >
                             Office
                         </label>
                         <input
                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
-                            name="OfficeName"
-                            id="OfficeName"
+                            name="officeName"
+                            id="officeName"
                             placeholder="Office Name"
-                            {...register("OfficeName")}
+                            {...register("officeName")}
                         />
+                        <p>{errors.officeName?.message}</p>
                     </div>
 
 

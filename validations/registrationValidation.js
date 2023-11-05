@@ -15,6 +15,22 @@ export const registerOfficeSchema = yup.object({
   officeName: yup.string().required("Office name is required"),
   officeId: yup.string().required("office id is required"),
 });
+export const registerAdminSchema = yup.object({
+  firstName: yup.string().required("First name is required"),
+  middleName: yup.string().required("Middle middle name is required"),
+  lastName: yup.string().required("Last name is required"),
+  adminId: yup.string().required("Admin id is required"),
+  officeName: yup.string().required("Office Name is required"),
+});
+
+export const registerStaffSchema = yup.object({
+  firstName: yup.string().required("First name is required"),
+  middleName: yup.string().required("Middle middle name is required"),
+  lastName: yup.string().required("Last name is required"),
+  staffId: yup.string().required("Students id is required"),
+  officeName: yup.string().required("Office Name is required"),
+});
+
 export const personalInfoSchema = yup.object({
   email: yup.string().email().required("email is required"),
 });

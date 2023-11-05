@@ -1,9 +1,9 @@
 "use client";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { personalInfoSchema } from "@/validations/userValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { registerAdminSchema } from "@/validations/registrationValidation";
 
 const RegisterAdmin = () => {
 
@@ -12,7 +12,7 @@ const RegisterAdmin = () => {
         register,
         formState: { errors },
         reset,
-    } = useForm({ resolver: yupResolver(personalInfoSchema) });
+    } = useForm({ resolver: yupResolver(registerAdminSchema) });
 
     const onSubmit = (data) => {
         console.log(data);
@@ -32,7 +32,7 @@ const RegisterAdmin = () => {
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="phoneNumber"
+                            htmlFor="firstName"
                         >
                             First Name
                         </label>
@@ -44,12 +44,13 @@ const RegisterAdmin = () => {
                             placeholder="Your name"
                             {...register("firstName")}
                         />
+                        <p>{errors.firstName?.message}</p>
                     </div>
 
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="fullName"
+                            htmlFor="middleName"
                         >
                             Middle Name
                         </label>
@@ -57,11 +58,12 @@ const RegisterAdmin = () => {
                             <input
                                 className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                 type="text"
-                                name="middlename"
-                                id="middlename"
+                                name="middleName"
+                                id="middleName"
                                 placeholder="Father's name"
-                                {...register("middlename")}
+                                {...register("middleName")}
                             />
+                            <p>{errors.middleName?.message}</p>
                         </div>
                     </div>
                 </div>
@@ -69,7 +71,7 @@ const RegisterAdmin = () => {
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="phoneNumber"
+                            htmlFor="lastName"
                         >
                             Last Name
                         </label>
@@ -81,23 +83,25 @@ const RegisterAdmin = () => {
                             placeholder="Grand father's Name"
                             {...register("lastName")}
                         />
+                        <p>{errors.lastName?.message}</p>
                     </div>
 
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="phoneNumber"
+                            htmlFor="adminId"
                         >
                             Admin Id
                         </label>
                         <input
                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
-                            name="studentId"
-                            id="studentId"
-                            placeholder="staff id"
-                            {...register("studentId")}
+                            name="adminId"
+                            id="adminId"
+                            placeholder="Admin id"
+                            {...register("adminId")}
                         />
+                        <p>{errors.adminId?.message}</p>
                     </div>
                 </div>
                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
@@ -105,43 +109,44 @@ const RegisterAdmin = () => {
                     <div className="w-full sm:w-1/2">
                         <label
                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-                            htmlFor="phoneNumber"
+                            htmlFor="officeName"
                         >
                             Office
                         </label>
                         <input
                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                             type="text"
-                            name="OfficeName"
-                            id="OfficeName"
+                            name="officeName"
+                            id="officeName"
                             placeholder="Office Name"
-                            {...register("OfficeName")}
+                            {...register("officeName")}
                         />
+                        <p>{errors.officeName?.message}</p>
                     </div>
 
 
 
                 </div>
 
+                <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
+                    <div class="w-full px-3 2xsm:w-1/2">
+                        <button
+                            type="submit"
+                            class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                        >
+                            Save
+                        </button>
+                    </div>
+
+                    <div class="w-full px-3 2xsm:w-1/2">
+                        <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
 
             </form>
 
-            <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
-                <div class="w-full px-3 2xsm:w-1/2">
-                    <button
-                        type="submit"
-                        class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
-                    >
-                        Save
-                    </button>
-                </div>
-
-                <div class="w-full px-3 2xsm:w-1/2">
-                    <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
-                        Cancel
-                    </button>
-                </div>
-            </div>
         </div>
     );
 };
