@@ -1,26 +1,127 @@
 import React from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { personalInfoSchema } from "@/validations/userValidation";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const RegisterOffice = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({ resolver: yupResolver(personalInfoSchema) });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    toast.success("Office registered Successfully!");
+    reset();
+  };
+
   return (
-    <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5">
-      <h3 class="pb-2 text-lg font-bold text-black dark:text-white sm:text-2xl">
-        Your Message Sent Successfully
+    <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
+        Register Office
       </h3>
       <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
-      <p class="mb-10">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since
-      </p>
-      <div class="-mx-3 flex flex-wrap gap-y-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-5.5">
+          <label
+            className="mb-3 block text-sm font-medium text-black dark:text-white"
+            htmlFor="emailAddress"
+          >
+            Office Name
+          </label>
+          <div className="relative">
+            <input
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              type="text"
+              name="officeName"
+              id="officeName"
+              placeholder="Office name"
+              {...register("officeName")}
+            />
+          </div>
+          <p>{errors.location?.message}</p>
+        </div>
+        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+          <div className="w-full sm:w-1/2">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="phoneNumber"
+            >
+              Office ID
+            </label>
+            <input
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              type="text"
+              name="officeId"
+              id="officeId"
+              placeholder="Office id"
+              {...register("officeId")}
+            />
+          </div>
+
+          <div className="w-full sm:w-1/2">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="fullName"
+            >
+              Location
+            </label>
+            <div className="relative">
+              <input
+                className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                type="text"
+                name="location"
+                id="location"
+                placeholder="B-00"
+                {...register("location")}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-5.5">
+          <label
+            className="mb-3 block text-sm font-medium text-black dark:text-white"
+            htmlFor="Username"
+          >
+            Items to be checked
+          </label>
+          <textarea
+            className="w-full cols rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            type="text"
+            name="items"
+            id="items"
+            placeholder="Write items to be checked here ..."
+            cols={40}
+            rows={4}
+            TextFields
+            {...register("items")}
+          />
+        </div>
+
+        {/* <img
+                  src="https://cdn-icons-png.flaticon.com/512/1721/1721936.png "
+                  width={24}
+                  height={24}
+                  className="img-small fill-primary text-primary"
+                /> */}
+      </form>
+
+      <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
+        <div class="w-full px-3 2xsm:w-1/2">
+          <button
+            type="submit"
+            class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+          >
+            Save
+          </button>
+        </div>
+
         <div class="w-full px-3 2xsm:w-1/2">
           <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
             Cancel
-          </button>
-        </div>
-        <div class="w-full px-3 2xsm:w-1/2">
-          <button class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90">
-            View Details
           </button>
         </div>
       </div>
