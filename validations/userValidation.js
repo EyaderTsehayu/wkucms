@@ -6,6 +6,11 @@ export const loginSchema = yup.object({
   password: yup.string().min(8).max(20).required(),
 });
 
+export const RegisterStaffSchema = yup.object({
+  firstName: yup.string().required("firstName is required"),
+  staffId: yup.string().required("staffId is required"),
+});
+
 export const personalInfoSchema = yup.object({
   email: yup.string().email().required("email is required"),
 });
