@@ -14,6 +14,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const trigger = useRef(null);
   const sidebar = useRef(null);
 
+
   let storedSidebarExpanded = "true";
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
@@ -54,10 +55,80 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     }
   }, [sidebarExpanded]);
 
+  // staff approval dropdown
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const dropdownRef = useRef(null); // Create a ref for the dropdown element
+
+
+
+  const handleDropdownItemClick = (page) => {
+    // Navigate to the selected page here
+    // You can use React Router, window.location.href, or any other navigation method
+    // For example, if you are using React Router, you can use history.push('/your-page')
+  };
+
+  const handleMouseEnter = () => {
+    setShowDropdown(true);
+  };
+
+  // const handleMouseLeave = () => {
+  //   if (dropdownRef.current) {
+  //     // Check if the dropdown element exists
+  //     const dropdownRect = dropdownRef.current.getBoundingClientRect();
+  //     if (
+  //       dropdownRect.top > 0 &&
+  //       dropdownRect.bottom < window.innerHeight
+  //     ) {
+  //       // If the dropdown is still visible on hover leave, don't close it
+  //       return;
+  //     }
+  //   }
+  //   setShowDropdown(false);
+  // };
+
+  const handleMouseLeave = () => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      // Close the dropdown if the click is outside the dropdown
+      setShowDropdown(false);
+    } else if (!dropdownRef.current.contains(event.relatedTarget)) {
+      // Close the dropdown if the mouse leaves the dropdown and doesn't hover over the dropdown button
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        // Close the dropdown if the click is outside the dropdown
+        setShowDropdown(false);
+      }
+    };
+
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+  //  staff aproval end
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute  left-0 top-0 z-9999 flex h-screen w-60 flex-col overflow-y-hidden  bg-white drop-shadow-2 duration-300 ease-linear dark:bg-boxdark dark:drop-shadow-none lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={` absolute  left-0 top-0 z-9999 flex h-screen w-60 flex-col overflow-y-hidden  bg-white drop-shadow-2 duration-300 ease-linear dark:bg-boxdark dark:drop-shadow-none lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } ${pathname == "/user" || pathname.includes("/user") ? "lg:hidden " : ""
         }`}
     >
@@ -204,6 +275,98 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </svg>
                     Help
                   </Link>
+                </li>
+
+                <li>
+                  <div className="relative h-40 ">
+                    <Link
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname == "/user/myclearance" &&
+                        "bg-gray dark:bg-graydark  dark:text-bodydark2"
+                        }`}
+                      href="/user/studentApproval"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                          stroke="#000000"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      Approve
+                    </Link>
+                    {showDropdown && (
+                      <div
+                        ref={dropdownRef} // Assign the ref to the dropdown element
+                        className="absolute top-10 right-10 z-10 bg-white p-2 dark:bg-boxdark"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <ul className="text-sm  dark:text-white text-graydark pr-9 ">
+                          <li className="pb-2 flex">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M7.48334 5.25942C6.33891 5.38732 5.42286 6.29057 5.29045 7.42268C4.93476 10.4638 4.93476 13.5361 5.29045 16.5772C5.42286 17.7093 6.33891 18.6126 7.48334 18.7405C10.4602 19.0732 13.5398 19.0732 16.5166 18.7405C17.6611 18.6126 18.5771 17.7093 18.7095 16.5772C18.9651 14.3921 19.037 12.1909 18.9253 9.99668C18.9224 9.94002 18.9436 9.88475 18.9837 9.84463L20.0225 8.80585C20.1427 8.68562 20.3482 8.7608 20.3609 8.93036C20.557 11.5353 20.5031 14.1543 20.1994 16.7515C19.9845 18.5884 18.5096 20.0271 16.6832 20.2312C13.5957 20.5763 10.4043 20.5763 7.31673 20.2312C5.49035 20.0271 4.01545 18.5884 3.8006 16.7515C3.43137 13.5945 3.43137 10.4053 3.8006 7.24843C4.01545 5.41146 5.49035 3.97282 7.31673 3.7687C10.4043 3.42362 13.5957 3.42362 16.6832 3.7687C17.3265 3.84059 17.9261 4.06562 18.4425 4.40725C18.5441 4.47448 18.5542 4.61732 18.468 4.70346L17.6652 5.50635C17.5995 5.57202 17.4976 5.58307 17.4158 5.5392C17.1423 5.39271 16.8385 5.29539 16.5166 5.25942C13.5398 4.92671 10.4602 4.92671 7.48334 5.25942Z"
+                                fill="#000000"
+                              />
+                              <path
+                                d="M21.0303 6.03028C21.3232 5.73738 21.3232 5.26251 21.0303 4.96962C20.7374 4.67672 20.2625 4.67672 19.9696 4.96962L11.5 13.4393L9.0303 10.9696C8.73741 10.6767 8.26253 10.6767 7.96964 10.9696C7.67675 11.2625 7.67675 11.7374 7.96964 12.0303L10.9696 15.0303C11.2625 15.3232 11.7374 15.3232 12.0303 15.0303L21.0303 6.03028Z"
+                                fill="#000000"
+                              />
+                            </svg>
+                            <Link
+                              href="/user/studentApproval"
+                              onClick={() => handleDropdownItemClick("/student")}
+                              className="pl-1 dark:text-bodydark2"
+                            >
+                              Student
+                            </Link>
+                          </li>
+                          <li className="flex">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M7.48334 5.25942C6.33891 5.38732 5.42286 6.29057 5.29045 7.42268C4.93476 10.4638 4.93476 13.5361 5.29045 16.5772C5.42286 17.7093 6.33891 18.6126 7.48334 18.7405C10.4602 19.0732 13.5398 19.0732 16.5166 18.7405C17.6611 18.6126 18.5771 17.7093 18.7095 16.5772C18.9651 14.3921 19.037 12.1909 18.9253 9.99668C18.9224 9.94002 18.9436 9.88475 18.9837 9.84463L20.0225 8.80585C20.1427 8.68562 20.3482 8.7608 20.3609 8.93036C20.557 11.5353 20.5031 14.1543 20.1994 16.7515C19.9845 18.5884 18.5096 20.0271 16.6832 20.2312C13.5957 20.5763 10.4043 20.5763 7.31673 20.2312C5.49035 20.0271 4.01545 18.5884 3.8006 16.7515C3.43137 13.5945 3.43137 10.4053 3.8006 7.24843C4.01545 5.41146 5.49035 3.97282 7.31673 3.7687C10.4043 3.42362 13.5957 3.42362 16.6832 3.7687C17.3265 3.84059 17.9261 4.06562 18.4425 4.40725C18.5441 4.47448 18.5542 4.61732 18.468 4.70346L17.6652 5.50635C17.5995 5.57202 17.4976 5.58307 17.4158 5.5392C17.1423 5.39271 16.8385 5.29539 16.5166 5.25942C13.5398 4.92671 10.4602 4.92671 7.48334 5.25942Z"
+                                fill="#000000"
+                              />
+                              <path
+                                d="M21.0303 6.03028C21.3232 5.73738 21.3232 5.26251 21.0303 4.96962C20.7374 4.67672 20.2625 4.67672 19.9696 4.96962L11.5 13.4393L9.0303 10.9696C8.73741 10.6767 8.26253 10.6767 7.96964 10.9696C7.67675 11.2625 7.67675 11.7374 7.96964 12.0303L10.9696 15.0303C11.2625 15.3232 11.7374 15.3232 12.0303 15.0303L21.0303 6.03028Z"
+                                fill="#000000"
+                              />
+                            </svg>
+                            <Link
+                              className="pl-1 dark:text-bodydark2"
+                              href="/user/staffApproval"
+                              onClick={() => handleDropdownItemClick("/staff")}
+                            >
+                              Staff
+                            </Link>
+                          </li>
+
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </li>
                 {/* <!-- Menu Item Help --> */}
               </ul>
