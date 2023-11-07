@@ -179,7 +179,7 @@ const Header = (props) => {
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                       >
-                        <ul className="text-sm  dark:text-white text-primary px-4">
+                        <ul className="text-sm border border-whiten rounded-lg dark:border-boxdark dark:text-white text-primary px-4">
                           <li className="pb-4">
 
                             <Link
