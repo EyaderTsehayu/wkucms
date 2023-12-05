@@ -8,6 +8,7 @@ export const POST = async (req) => {
     middleName,
     lastName,
     officeName,
+    password,
     role,
   } = await req.json();
   try {
@@ -18,6 +19,7 @@ export const POST = async (req) => {
         middleName,
         lastName,
         officeName,
+        password,
         role,
     });
 
@@ -27,6 +29,7 @@ export const POST = async (req) => {
         middleName,
         lastName,
         officeName,
+        password,
         role,
     );
     await newAdmin.save();

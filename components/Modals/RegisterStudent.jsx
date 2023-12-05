@@ -119,6 +119,12 @@ const RegisterStudent = () => {
   };
 
   const onSubmit = async (data) => {
+    const fromFirstName=data.firstName.toLowerCase();
+    const fromMiddleName =data.middleName.charAt(0).toLowerCase();
+
+    // Generate a random number between 100 and 999
+   
+    const password=`${fromFirstName}@${fromMiddleName}`;
     console.log(data);
     try {
       const response = await fetch("/api/user/new", {
@@ -128,6 +134,7 @@ const RegisterStudent = () => {
           firstname: data.firstName,
           middlename: data.middleName,
           lastname: data.lastName,
+          password:password,
           collegeId: data.collegeId,
           departmentId: data.departmentId,
           year: data.year,
