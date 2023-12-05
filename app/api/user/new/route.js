@@ -9,6 +9,8 @@ export const POST = async (req) => {
     lastname,
     collegeId,
     departmentId,
+    staffId,
+    officeName,
     year,
     role,
   } = await req.json();
@@ -23,6 +25,8 @@ export const POST = async (req) => {
       departmentId,
       role,
       year,
+      staffId,
+      officeName,
     });
 
     console.log(
@@ -33,6 +37,8 @@ export const POST = async (req) => {
       role,
       collegeId,
       departmentId,
+      staffId,
+      officeName,
       year,
       role
     );
