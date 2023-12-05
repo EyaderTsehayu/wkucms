@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {ROLES } from "@/utils/constants";
 
 const RegisterStaff = () => {
 
@@ -15,11 +16,42 @@ const RegisterStaff = () => {
         reset,
     } = useForm({ resolver: yupResolver(registerStaffSchema) });
 
-    const onSubmit = (data) => {
+    // const onSubmit = (data) => {
+    //     console.log(data);
+    //     toast.success("Staff registered Successfully!");
+    //     reset();
+    // };
+
+    const onSubmit = async (data) => {
         console.log(data);
-        toast.success("Staff registered Successfully!");
+        try {
+          const response = await fetch("/api/user/new", {
+            method: "POST",
+            body: JSON.stringify({
+             userId: data.staffId,
+              firstname: data.firstName,
+              middlename: data.middleName,
+              lastname: data.lastName,
+              staffId:data.staffId,
+            //   collegeId: data.collegeId,
+            //   departmentId: data.departmentId,
+            //   year: data.year,
+            officeName:data.officeName,
+              role: ROLES.STAFF,
+            }),
+          });
+    
+          if (response.ok) {
+            toast.success("Staff registered Successfully!");
+          }
+        } catch (error) {
+        toast.error("Staff Not registered Successfully!");
+          console.log(error);
+        }
+      
+      
         reset();
-    };
+      };
 
     return (
         <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">

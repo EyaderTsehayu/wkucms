@@ -4,6 +4,7 @@ import { registerOfficeSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
+
 const RegisterOffice = () => {
   const {
     handleSubmit,
@@ -12,12 +13,36 @@ const RegisterOffice = () => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    toast.success("Office registered Successfully!");
+    try {
+      const response = await fetch("/api/office", {
+        method: "POST",
+        body: JSON.stringify({
+          officeId: data.officeId,
+          officeName: data.officeName,
+          location: data.location,
+          items: data.items,
+          // staffId:data.staffId,
+        //   collegeId: data.collegeId,
+        //   departmentId: data.departmentId,
+        //   year: data.year,
+        
+          // role: ROLES,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Office registered Successfully!");
+      }
+    } catch (error) {
+    toast.error("Office Not registered Successfully!");
+      console.log(error);
+    }
+  
+  
     reset();
   };
-
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
