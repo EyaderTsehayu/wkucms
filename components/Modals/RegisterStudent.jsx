@@ -4,21 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerStudentSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
+import * as XLSX from "xlsx";
 
-const officeData = [
-  { id: 1, name: "Office 1" },
-  { id: 2, name: "Office 2" },
-  { id: 3, name: "Office 3" },
-  // Add more office data here
-];
-const collegeData = [
-  { id: 1, name: "College of Computing and Informatics" },
-  { id: 2, name: "Engineering" },
-  { id: 3, name: "Social sciences and Humanities" },
-  { id: 4, name: "College of behavioral science" },
-
-  // Add more office data here
-];
 const RegisterStudent = () => {
   const {
     handleSubmit,
@@ -30,6 +18,9 @@ const RegisterStudent = () => {
 
   const Items = [1, 2, 3, 4, 5, 6, 7];
   const programs = ["Regular", "Weekend"];
+
+  const [selectedCollege, setSelectedCollege] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCollege, setSearchCollege] = useState("");
@@ -43,8 +34,8 @@ const RegisterStudent = () => {
   const dropdownRef = useRef(null);
   const collegeDropdownRef = useRef(null); // Add a new ref for the college dropdown
 
-  const initialDropdownItems = officeData.slice(0, 1);
-  const initialDropdownColleges = collegeData.slice(0, 1);
+  const initialDropdownItems = DepartmentData.slice(0, 1);
+  const initialDropdownColleges = CollegeData.slice(0, 1);
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -64,25 +55,25 @@ const RegisterStudent = () => {
   };
   useEffect(() => {
     if (searchCollege) {
-      const filteredResults = collegeData.filter((college) =>
+      const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
       setFilteredColleges(filteredResults);
     } else {
       setFilteredColleges(initialDropdownColleges);
     }
-  }, [searchCollege, collegeData]);
+  }, [searchCollege, CollegeData]);
 
   useEffect(() => {
     if (searchTerm) {
-      const filteredResults = officeData.filter((office) =>
+      const filteredResults = DepartmentData.filter((office) =>
         office.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredOffices(filteredResults);
     } else {
       setFilteredOffices(initialDropdownItems);
     }
-  }, [searchTerm, officeData]);
+  }, [searchTerm, DepartmentData]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -106,10 +97,12 @@ const RegisterStudent = () => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
   };
-  const handleDropdownItemClick = (officeName) => {
-    setValue("departmentName", officeName);
+  const handleDropdownItemClick = (office) => {
+    setValue("departmentName", office.name);
+    setValue("departmentId", office.id);
+    setSelectedCollege(office);
 
-    setSearchTerm(officeName);
+    setSearchTerm(office.name);
     setShowDropdown(false);
   };
   const handleSearchCollegeChange = (event) => {
@@ -117,25 +110,124 @@ const RegisterStudent = () => {
     setShowCollegeDropdown(true);
   };
 
-  const handleDropdownCollegeClick = (collegeName) => {
-    setValue("collegeName", collegeName);
-
-    setSearchCollege(collegeName);
+  const handleDropdownCollegeClick = (college) => {
+    setValue("collegeName", college.name);
+    setValue("collegeId", college.id);
+    setSelectedCollege(college);
+    setSearchCollege(college.name);
     setShowCollegeDropdown(false);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    toast.success("Office registered Successfully!");
+    try {
+      const response = await fetch("/api/user/new", {
+        method: "POST",
+        body: JSON.stringify({
+          userId: data.studentId,
+          firstname: data.firstName,
+          middlename: data.middleName,
+          lastname: data.lastName,
+          collegeId: data.collegeId,
+          departmentId: data.departmentId,
+          year: data.year,
+          role: ROLES.STUDENT,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Student registered Successfully!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setSearchTerm("");
+    setSearchCollege("");
     reset();
+  };
+
+  // Import many students once from excel
+
+  const handleFileUpload = (e) => {
+    const reader = new FileReader();
+    reader.readAsBinaryString(e.target.files[0]);
+    reader.onload = async (e) => {
+      const data = e.target.result;
+      const workbook = XLSX.read(data, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const parsedData = XLSX.utils.sheet_to_json(sheet);
+      const da = JSON.stringify(parsedData);
+      console.log("data stringified", da);
+      try {
+        const response = await fetch("/api/user/import", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other headers if needed
+          },
+          body: JSON.stringify(parsedData),
+        });
+
+        if (response.ok) {
+          const responseData = await response.text();
+          // Handle the response data from the server if needed
+          toast.success(responseData);
+          //console.log("Data sent successfully!", responseData);
+        } else {
+          // Handle error cases
+          toast.error("Failed to send data");
+
+          //          console.error();
+        }
+      } catch (error) {
+        console.error("Error sending data:", error);
+      }
+    };
   };
 
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
-      <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-        Register Student
-      </h3>
-      <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+      <div className="flex flex-row place-content-between">
+        <div>
+          <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
+            Register Student
+          </h3>
+          <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+        </div>
+
+        <div class=" px-3 ">
+          <div className="flex flex-row gap-3">
+            <label
+              htmlFor="file-upload"
+              className="flex flex-row gap-3 rounded border border-primary bg-primary px-6 py-2 text-center font-medium text-white transition hover:bg-opacity-90"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fff"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+              </svg>
+              Import
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleFileUpload}
+              accept=".xlsx , .xls"
+            />
+          </div>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
           <div className="w-full sm:w-1/2">
@@ -229,6 +321,13 @@ const RegisterStudent = () => {
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               //   {...register("collegeName")}
             />
+            <input
+              type="hidden"
+              name="collegeId"
+              id="collegeId"
+              value={selectedCollege ? selectedCollege.id : ""}
+            />
+
             <p>{errors.collegeName?.message}</p>
 
             {showCollegeDropdown && (
@@ -239,7 +338,7 @@ const RegisterStudent = () => {
                 {filteredColleges.map((college) => (
                   <div
                     key={college.id}
-                    onClick={() => handleDropdownCollegeClick(college.name)}
+                    onClick={() => handleDropdownCollegeClick(college)}
                     className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
                   >
                     {college.name}
@@ -267,6 +366,13 @@ const RegisterStudent = () => {
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               //  {...register("departmentName")}
             />
+            <input
+              type="hidden"
+              name="departmentId"
+              id="departmentId"
+              value={selectedDepartment ? selectedDepartment.id : ""}
+            />
+
             <p>{errors.departmentName?.message}</p>
 
             {showDropdown && (
@@ -277,7 +383,7 @@ const RegisterStudent = () => {
                 {filteredOffices.map((office) => (
                   <div
                     key={office.id}
-                    onClick={() => handleDropdownItemClick(office.name)}
+                    onClick={() => handleDropdownItemClick(office)}
                     className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
                   >
                     {office.name}
@@ -327,6 +433,7 @@ const RegisterStudent = () => {
                     type="radio"
                     name="program"
                     id={`program${item}`}
+                    value={item}
                     {...register("program")}
                   />
                 </span>
