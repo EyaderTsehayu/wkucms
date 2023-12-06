@@ -17,6 +17,7 @@ const RegisterAdmin = () => {
 
     const onSubmit = async (data) => {
         console.log(data);
+
         const fromFirstName=data.firstName.toLowerCase();
         const fromMiddleName =data.middleName.charAt(0).toLowerCase();
 
@@ -32,7 +33,8 @@ const RegisterAdmin = () => {
               firstName: data.firstName,
               middleName: data.middleName,
               lastName: data.lastName,
-              password:password,
+
+
             //   staffId:data.staffId,
             //   collegeId: data.collegeId,
             //   departmentId: data.departmentId,
@@ -43,10 +45,17 @@ const RegisterAdmin = () => {
           });
     
           if (response.ok) {
+
             toast.success("Admin registered Successfully!");
           }
         } catch (error) {
         toast.error("Admin Not registered Successfully!");
+
+            toast.success("Staff registered Successfully!");
+          }
+        } catch (error) {
+        toast.error("Staff Not registered Successfully!");
+
           console.log(error);
         }
       

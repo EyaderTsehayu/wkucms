@@ -18,10 +18,12 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "lastname is required"],
   },
+
   password:{
     type:String,
     
   },
+
   collegeId: {
     type: String,
   },

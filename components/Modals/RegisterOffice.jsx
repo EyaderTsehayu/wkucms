@@ -14,12 +14,14 @@ const RegisterOffice = () => {
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
   const onSubmit = async (data) => {
+
     const fromFirstName=data.officeName.toLowerCase();
    
 
     // Generate a random number between 100 and 999
    
     const password=`${fromFirstName}@office`;
+
     console.log(data);
     try {
       const response = await fetch("/api/office", {
@@ -27,7 +29,9 @@ const RegisterOffice = () => {
         body: JSON.stringify({
           officeId: data.officeId,
           officeName: data.officeName,
+
           password:password,
+
           location: data.location,
           items: data.items,
           // staffId:data.staffId,
