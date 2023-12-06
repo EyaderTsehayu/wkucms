@@ -15,7 +15,7 @@ export const POST = async (req) => {
   } = await req.json();
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  
+
   try {
     await connectToDB();
     const newOffice = new Office({

@@ -57,7 +57,7 @@ const RegisterStudent = () => {
     if (searchCollege) {
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
-      );<<<<<<< cms
+      );
       setFilteredColleges(filteredResults);
     } else {
       setFilteredColleges(initialDropdownColleges);
