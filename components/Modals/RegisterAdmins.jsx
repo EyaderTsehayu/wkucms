@@ -22,7 +22,7 @@ const RegisterAdmin = () => {
 
         // Generate a random number between 100 and 999
        
-        const password=`${fromFirstName}@${fromMiddleName}`;
+        const password=`${fromFirstName}@${fromMiddleName}1234`;
 
         try {
           const response = await fetch("/api/admin", {

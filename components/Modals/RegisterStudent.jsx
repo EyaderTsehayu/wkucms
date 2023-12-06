@@ -124,7 +124,7 @@ const RegisterStudent = () => {
 
     // Generate a random number between 100 and 999
    
-    const password=`${fromFirstName}@${fromMiddleName}`;
+    const password=`${fromFirstName}@${fromMiddleName}1234`;
     console.log(data);
     try {
       const response = await fetch("/api/user/new", {
