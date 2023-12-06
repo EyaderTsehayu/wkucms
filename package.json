@@ -16,6 +16,7 @@
     "@mui/lab": "^5.0.0-alpha.150",
     "@mui/material": "^5.14.14",
     "@mui/x-data-grid": "^6.17.0",
+    "bcryptjs": "^2.4.3",
     "mongoose": "^8.0.0",
     "multer": "^1.4.5-lts.1",
     "next": "13.5.4",
