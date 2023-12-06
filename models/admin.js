@@ -18,6 +18,11 @@ const AdminSchema = new Schema({
     type: String,
     required: [true, "lastname is required"],
   },
+
+  password: {
+    type: String,
+  },
+
   officename: {
     type: String,
   },

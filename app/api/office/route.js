@@ -5,6 +5,9 @@ export const POST = async (req) => {
   const {
     officeId,
     officeName,
+
+    password,
+
     location,
     items
    
@@ -14,6 +17,7 @@ export const POST = async (req) => {
     const newOffice = new Office({
         officeId,
         officeName,
+        password,
         location,
         items
     });
@@ -21,6 +25,7 @@ export const POST = async (req) => {
     console.log(
         officeId,
         officeName,
+        password,
         location,
         items
     );

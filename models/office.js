@@ -10,6 +10,11 @@ const OfficeSchema = new Schema({
     type: String,
     required: [true, "officeName is required"],
   },
+
+  password:{
+    type:String,
+  },
+
   location: {
     type: String,
     required: [true, "location is required"],

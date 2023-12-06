@@ -17,6 +17,14 @@ const RegisterAdmin = () => {
 
     const onSubmit = async (data) => {
         console.log(data);
+
+        const fromFirstName=data.firstName.toLowerCase();
+        const fromMiddleName =data.middleName.charAt(0).toLowerCase();
+
+        // Generate a random number between 100 and 999
+       
+        const password=`${fromFirstName}@${fromMiddleName}1234`;
+
         try {
           const response = await fetch("/api/admin", {
             method: "POST",
@@ -25,6 +33,8 @@ const RegisterAdmin = () => {
               firstName: data.firstName,
               middleName: data.middleName,
               lastName: data.lastName,
+
+
             //   staffId:data.staffId,
             //   collegeId: data.collegeId,
             //   departmentId: data.departmentId,
@@ -35,10 +45,17 @@ const RegisterAdmin = () => {
           });
     
           if (response.ok) {
+
+            toast.success("Admin registered Successfully!");
+          }
+        } catch (error) {
+        toast.error("Admin Not registered Successfully!");
+
             toast.success("Staff registered Successfully!");
           }
         } catch (error) {
         toast.error("Staff Not registered Successfully!");
+
           console.log(error);
         }
       

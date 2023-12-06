@@ -7,6 +7,9 @@ export const POST = async (req) => {
     firstname,
     middlename,
     lastname,
+
+    password,
+
     collegeId,
     departmentId,
     staffId,
@@ -21,6 +24,9 @@ export const POST = async (req) => {
       firstname,
       middlename,
       lastname,
+
+      password,
+
       collegeId,
       departmentId,
       role,
@@ -34,6 +40,9 @@ export const POST = async (req) => {
       firstname,
       middlename,
       lastname,
+
+      password,
+
       role,
       collegeId,
       departmentId,
