@@ -1,5 +1,6 @@
 import { connectToDB } from "@/utils/database";
 import Office from "@/models/office";
+import bcrypt from "bcryptjs";
 
 export const POST = async (req) => {
   const {
@@ -12,12 +13,15 @@ export const POST = async (req) => {
     items
    
   } = await req.json();
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
   try {
     await connectToDB();
     const newOffice = new Office({
         officeId,
         officeName,
-        password,
+        password: hashedPassword ,
         location,
         items
     });
@@ -25,7 +29,7 @@ export const POST = async (req) => {
     console.log(
         officeId,
         officeName,
-        password,
+        hashedPassword,
         location,
         items
     );
