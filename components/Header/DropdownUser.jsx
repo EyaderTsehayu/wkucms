@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DarkModeSwitcher from "./DarkModeSwitcher";
+import { signOut, useSession } from "next-auth/react";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  const { data: session } = useSession();
 
   // close on click outside
   useEffect(() => {
@@ -45,9 +47,10 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {session?.user?.firstname}
+            {console.log("session user from dropdown", session?.user)}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs"> {session?.user?.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -118,7 +121,10 @@ const DropdownUser = () => {
           </li>
         </ul>
 
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={() => signOut()}
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"

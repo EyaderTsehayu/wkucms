@@ -4,12 +4,7 @@ const UserSchema = new Schema({
   userId: {
     type: String,
     unique: [true, "ID already exists!"],
-    // required: [true, "Id is required!"],
-  },
-  adminId: {
-    type: String,
-    unique: [true, "ID already exists!"],
-    // required: [true, "Id is required!"],
+    required: [true, "Id is required!"],
   },
   firstname: {
     type: String,
@@ -24,9 +19,8 @@ const UserSchema = new Schema({
     required: [true, "lastname is required"],
   },
 
-  password:{
-    type:String,
-    
+  password: {
+    type: String,
   },
 
   collegeId: {

@@ -57,7 +57,7 @@ const RegisterStudent = () => {
     if (searchCollege) {
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
-      );<<<<<<< cms
+      );
       setFilteredColleges(filteredResults);
     } else {
       setFilteredColleges(initialDropdownColleges);
@@ -119,14 +119,12 @@ const RegisterStudent = () => {
   };
 
   const onSubmit = async (data) => {
-
-    const fromFirstName=data.firstName.toLowerCase();
-    const fromMiddleName =data.middleName.charAt(0).toLowerCase();
+    const fromFirstName = data.firstName.toLowerCase();
+    const fromMiddleName = data.middleName.charAt(0).toLowerCase();
 
     // Generate a random number between 100 and 999
-   
-    const password=`${fromFirstName}@${fromMiddleName}1234`;
 
+    const password = `${fromFirstName}@${fromMiddleName}1234`;
     console.log(data);
     try {
       const response = await fetch("/api/user/new", {
@@ -137,7 +135,7 @@ const RegisterStudent = () => {
           middlename: data.middleName,
           lastname: data.lastName,
 
-          password:password,
+          password: password,
 
           collegeId: data.collegeId,
           departmentId: data.departmentId,

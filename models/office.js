@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const OfficeSchema = new Schema({
- officeId: {
+  officeId: {
     type: String,
     unique: [true, "ID already exists!"],
     required: [true, "Id is required!"],
@@ -11,8 +11,8 @@ const OfficeSchema = new Schema({
     required: [true, "officeName is required"],
   },
 
-  password:{
-    type:String,
+  password: {
+    type: String,
   },
 
   location: {
@@ -23,7 +23,6 @@ const OfficeSchema = new Schema({
     type: String,
     required: [true, "items is required"],
   },
-  
 });
 
 const Office = models.Office || model("Offices", OfficeSchema);
