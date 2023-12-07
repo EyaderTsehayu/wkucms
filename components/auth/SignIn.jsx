@@ -11,6 +11,7 @@ export const metadata = {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { getSession, signIn } from "next-auth/react";
 
 const SignIn = () => {
   const router = useRouter();
@@ -24,12 +25,33 @@ const SignIn = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmitHandler = (data) => {
+  const onSubmitHandler = async (data) => {
     console.log("Form Data:", data);
-    toast.success("Login Successful!");
-    reset();
-    router.push("/user");
+    const userId = data.id;
+    const password = data.password;
+
+    try {
+      const res = await signIn("credentials", {
+        userId,
+        password,
+        redirect: false,
+      });
+
+      if (res.error) {
+        toast.error("invalid credentials");
+        return;
+      } else {
+        toast.success("Login Successful!");
+        router.push("/user");
+      }
+      //   const session = await getSession(); // Get the updated session after sign-in
+      // console.log("Hello Role -- ", session?.user?.role);
+      // router.replace(`dashboard/${session?.user?.role}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <div className=" rounded-lg border border-stroke shadow-meta-5  shadow-lg bg-white  dark:border-strokedark dark:bg-boxdark">
       <div className="w-full border-stroke dark:border-strokedark ">
