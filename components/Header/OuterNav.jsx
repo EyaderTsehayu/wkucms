@@ -45,6 +45,12 @@ const OuterNav = () => {
             >
               Contact Us
             </Link>
+            <Link
+              href="/signIn"
+              className="rounded-lg justify-center bg-primary py-2 px-6 font-medium text-white hover:bg-opacity-95"
+            >
+              Sign In
+            </Link>
           </div>
         </div>
         <div className="lg:hidden">
