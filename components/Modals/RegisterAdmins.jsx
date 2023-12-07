@@ -32,6 +32,7 @@ const RegisterAdmin = () => {
           firstName: data.firstName,
           middleName: data.middleName,
           lastName: data.lastName,
+          password: password,
 
           //   staffId:data.staffId,
           //   collegeId: data.collegeId,
@@ -53,6 +54,7 @@ const RegisterAdmin = () => {
 
     reset();
   };
+
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
