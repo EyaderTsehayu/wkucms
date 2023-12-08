@@ -25,70 +25,7 @@ const columns = [
  
 // ];
 
-const rows = [
-  {
-    id:1,
-    officeId: 1,
-    location: "Jon",
-    items: "Seng",
-    officeName: "Library",
-  },
-  {
-    id:2,
-    officeId: 2,
-    
-    location: "Cersei",
-    items: "Seng",
-    officeName: "Cafteria",
-  },
-  {
-    id:3,
-    officeId: 3,
-   
-    location: "Jaime",
-    items: "Seng",
-    officeName: "dpt Head office",
-  },
-  {
-    id:4,
-    officeId: 4,
-    location: "Arya",
-    items: "Seng",
-    officeName: "Collage dean",
-  },
-  {
-    id:5,
-    officeId: 5,
-    
-    location: "Daenerys",
-    items: "Seng",
-    officeName: "Dormitory",
-  },
-  {
-  id:6,
-    officeId: 6,
-    
-    location: "Drunk",
-    items: "Seng",
-    officeName: "Sport and Recreational",
-  },
-  {
-    id:7,
-    officeId: 7,
-   
-    location: "Ferrara",
-    items: "Seng",
-    officeName: "CCI",
-  },
-  {
-    id:8,
-    officeId: 8,
-    location: "Rossini",
-    items: "Seng",
-    officeName: "CCI",
-  },
- 
-];
+
 
 const ManageOffices = () => {
   

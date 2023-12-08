@@ -8,9 +8,7 @@ export const POST = async (req) => {
     firstname,
     middlename,
     lastname,
-
     password,
-
     collegeId,
     departmentId,
     staffId,

@@ -5,7 +5,7 @@ import React from "react";
 import { useState } from "react";
 import RegisterStaff from "@/components/Modals/RegisterStaff";
 import { useEffect } from "react";
-
+import useSWR from 'swr';
 const columns = [
   { field: "userId", headerName: "ID", width: "100" },
   { field: "firstname", headerName: "First name", width: "240" },
@@ -14,6 +14,7 @@ const columns = [
   { field: "role", headerName: "Role", width: "240" },
 ];
 
+const rows=[];
 // const rows = [
 //   {
 //     id: 1,
@@ -80,52 +81,86 @@ const columns = [
 //   },
 // ];
 
+// const ManageStaff = () => {
+//   const [searchTerm, setSearchTerm] = useState("");
+
+//   const [userData, setUserData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         // Fetch data from your API
+//         const response = await fetch('http://localhost:3000/api/user/new/staff'); // Update with your actual API endpoint
+//         const data = await response.json();
+//         const updatedData = data.map(user => ({ ...user, id: user._id }));
+//         // Update state with the fetched data
+//         setUserData(updatedData);
+//         setLoading(false);
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//         setError('Failed to fetch data');
+//         setLoading(false);
+//       }
+//     };
+
+//     // Call the fetchData function when the component mounts
+//     fetchData();
+//   }, []); // The empty dependency array ensures that useEffect runs only once, similar to componentDidMount
+
+//   if (loading) {
+//     return <p>Loading...</p>;
+//   }
+
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+
+
+//   const filteredInfo = userData.filter((info) =>
+//     info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+//   //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
+
+//   const handleSearch = (event) => {
+//     setSearchTerm(event.target.value);
+//   };
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id })); // Add id and roleId based on _id
+  return updatedData;
+};
 const ManageStaff = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const [userData, setUserData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Use SWR to fetch and cache data
+  const { data: userData, error } = useSWR('http://localhost:3000/api/user/new/staff', fetcher, {
+    initialData: rows, // Provide initial data (can be an empty array)
+    revalidateOnFocus: false, // Disable automatic revalidation on focus
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch data from your API
-        const response = await fetch('http://localhost:3000/api/user/new/staff'); // Update with your actual API endpoint
-        const data = await response.json();
-        const updatedData = data.map(user => ({ ...user, id: user._id }));
-        // Update state with the fetched data
-        setUserData(updatedData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Failed to fetch data');
-        setLoading(false);
-      }
-    };
-
-    // Call the fetchData function when the component mounts
-    fetchData();
-  }, []); // The empty dependency array ensures that useEffect runs only once, similar to componentDidMount
-
-  if (loading) {
+  // Handle loading and fetch errors
+  if (!userData && !error) {
     return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    console.error('Error fetching data:', error);
+    return <p>Failed to fetch data</p>;
   }
 
-
-
   const filteredInfo = userData.filter((info) =>
-    info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
+    info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    info.roleId.toString().includes(searchTerm) // Include roleId in filtering
   );
-  //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+
 
   return (
     <>
