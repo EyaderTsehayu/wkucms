@@ -28,15 +28,11 @@ const RegisterAdmin = () => {
       const response = await fetch("/api/admin", {
         method: "POST",
         body: JSON.stringify({
-          adminId: data.adminId,
-          firstName: data.firstName,
-          middleName: data.middleName,
-          lastName: data.lastName,
-
-          //   staffId:data.staffId,
-          //   collegeId: data.collegeId,
-          //   departmentId: data.departmentId,
-          //   year: data.year,
+          userId: data.adminId,
+          firstname: data.firstName,
+          middlename: data.middleName,
+          lastname: data.lastName,
+          password: password,
           officeName: data.officeName,
           role: ROLES.ADMIN,
         }),
@@ -48,11 +44,12 @@ const RegisterAdmin = () => {
     } catch (error) {
       toast.error("Admin Not registered Successfully!");
 
-      toast.success("Staff registered Successfully!");
+     
     }
 
     reset();
   };
+
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
