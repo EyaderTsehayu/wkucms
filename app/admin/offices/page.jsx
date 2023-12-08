@@ -6,13 +6,24 @@ import { useState } from "react";
 import RegisterOffice from "@/components/Modals/RegisterOffice";
 import { useEffect } from "react";
 
+
+
 const columns = [
   { field: "officeId", headerName: "officeId", width: "100" },
   { field: "officeName", headerName: "officeName", width: "240" },
   { field: "location", headerName: "location", width: "240" },
   { field: "items", headerName: "Items", width: "240" },
- 
+  
 ];
+
+
+// const columns = [
+//   { field: "officeId", headerName: "officeId", width: "100" },
+//   { field: "officeName", headerName: "officeName", width: "240" },
+//   { field: "location", headerName: "location", width: "240" },
+//   { field: "items", headerName: "Items", width: "240" },
+ 
+// ];
 
 const rows = [
   {
@@ -80,44 +91,52 @@ const rows = [
 ];
 
 const ManageOffices = () => {
+  
   const [searchTerm, setSearchTerm] = useState("");
 
 
-  // const [officeData, setOfficeData] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const [officeData, setOfficeData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [lastModified, setLastModified] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // Fetch data from your API
-  //       const response = await fetch('http://localhost:3000/api/office'); // Update with your actual API endpoint
-  //       const data = await response.json();
-  //       const updatedData = data.map(office => ({ ...office, id: office._id }));
-  //       // Update state with the fetched data
-  //       setOfficeData(updatedData);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //       setError('Failed to fetch data');
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data from your API
+        const response = await fetch('http://localhost:3000/api/office'); // Update with your actual API endpoint
+        const data = await response.json();
+        const updatedData = data.map(office => ({ ...office, id: office._id }));
 
-  //   // Call the fetchData function when the component mounts
-  //   fetchData();
-  // }, []); // The empty dependency array ensures that useEffect runs only once, similar to componentDidMount
+        // Compare the last modified timestamp or any other indicator
+        if (lastModified !== data.lastModified) {
+          // Update state with the fetched data
+          setOfficeData(updatedData);
+          setLastModified(data.lastModified); // Update the lastModified timestamp
+        }
 
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to fetch data');
+        setLoading(false);
+      }
+    };
 
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, [lastModified]); // Include lastModified in the dependency array
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
 
-  const filteredInfo = rows.filter((info) =>
+  const filteredInfo = officeData.filter((info) =>
     info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
