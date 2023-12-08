@@ -25,7 +25,7 @@ const RegisterAdmin = () => {
     const password = `${fromFirstName}@${fromMiddleName}1234`;
 
     try {
-      const response = await fetch("/api/admin", {
+      const response = await fetch("/api/user/new", {
         method: "POST",
         body: JSON.stringify({
           userId: data.adminId,

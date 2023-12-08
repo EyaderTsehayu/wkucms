@@ -9,7 +9,7 @@ import useSWR from 'swr';
 
 
 const columns=[
-  { field: "userIusersd", headerName: "ID", width: "100" },
+  { field: "userId", headerName: "ID", width: "100" },
   { field: "firstname", headerName: "First name", width: "240" },
   { field: "middlename", headerName: "Middle name", width: "240" },
   { field: "lastname", headerName: "Last name", width: "240" },
