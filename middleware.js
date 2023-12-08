@@ -24,13 +24,13 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/admin",
+    // "/admin",
     "/user",
     "/user/myclearance",
     "/user/settings",
     "/user/staffApproval",
     "/user/studentApproval",
-    "/admin/student",
-    "/admin/manageAdmins",
+    // "/admin/student",
+    // "/admin/manageAdmins",
   ],
 };
