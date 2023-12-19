@@ -25,6 +25,7 @@ const RegisterAdmin = () => {
     const password = `${fromFirstName}@${fromMiddleName}1234`;
 
     try {
+
       const response = await fetch("/api/user/new", {
         method: "POST",
         body: JSON.stringify({
@@ -33,6 +34,7 @@ const RegisterAdmin = () => {
           middlename: data.middleName,
           lastname: data.lastName,
           password: password,
+
           officeName: data.officeName,
           role: ROLES.ADMIN,
         }),
@@ -44,7 +46,7 @@ const RegisterAdmin = () => {
     } catch (error) {
       toast.error("Admin Not registered Successfully!");
 
-     
+
     }
 
     reset();
