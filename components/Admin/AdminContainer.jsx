@@ -24,13 +24,13 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   // search
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredInfo = rows.filter((info) =>
-    info.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredInfo = rows.filter((info) =>
+  //   info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
   //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
-  if (filteredInfo) {
-    rows = filteredInfo;
-  }
+  // if (filteredInfo) {
+  //   rows = filteredInfo;
+  // }
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);

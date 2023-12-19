@@ -4,84 +4,76 @@ import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
 import { useState } from "react";
 import RegisterOffice from "@/components/Modals/RegisterOffice";
+import { useEffect } from "react";
+
+
 
 const columns = [
-  { field: "id", headerName: "ID", width: "100" },
-  { field: "firstName", headerName: "First name", width: "240" },
-  { field: "lastName", headerName: "Last name", width: "240" },
-  { field: "officeName", headerName: "Office name", width: "240" },
-  { field: "department", headerName: "Department", width: "240" },
+  { field: "officeId", headerName: "officeId", width: "100" },
+  { field: "officeName", headerName: "officeName", width: "240" },
+  { field: "location", headerName: "location", width: "240" },
+  { field: "items", headerName: "Items", width: "240" },
+  
 ];
 
-const rows = [
-  {
-    id: 1,
-    lastName: "Snow",
-    firstName: "Jon",
-    department: "Seng",
-    officeName: "Library",
-  },
-  {
-    id: 2,
-    lastName: "Lannister",
-    firstName: "Cersei",
-    department: "Seng",
-    officeName: "Cafteria",
-  },
-  {
-    id: 3,
-    lastName: "Lannister",
-    firstName: "Jaime",
-    department: "Seng",
-    officeName: "dpt Head office",
-  },
-  {
-    id: 4,
-    lastName: "Stark",
-    firstName: "Arya",
-    department: "Seng",
-    officeName: "Collage dean",
-  },
-  {
-    id: 5,
-    lastName: "Targaryen",
-    firstName: "Daenerys",
-    department: "Seng",
-    officeName: "Dormitory",
-  },
-  {
-    id: 6,
-    lastName: "Melisandre",
-    firstName: "Drunk",
-    department: "Seng",
-    officeName: "Sport and Recreational",
-  },
-  {
-    id: 7,
-    lastName: "Clifford",
-    firstName: "Ferrara",
-    department: "Seng",
-    officeName: "CCI",
-  },
-  {
-    id: 8,
-    lastName: "Frances",
-    firstName: "Rossini",
-    department: "Seng",
-    officeName: "CCI",
-  },
-  {
-    id: 9,
-    lastName: "Roxie",
-    firstName: "Harvey",
-    department: "Seng",
-    officeName: "CCI",
-  },
-];
+
+// const columns = [
+//   { field: "officeId", headerName: "officeId", width: "100" },
+//   { field: "officeName", headerName: "officeName", width: "240" },
+//   { field: "location", headerName: "location", width: "240" },
+//   { field: "items", headerName: "Items", width: "240" },
+ 
+// ];
+
+
 
 const ManageOffices = () => {
+  
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredInfo = rows.filter((info) =>
+
+
+  const [officeData, setOfficeData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [lastModified, setLastModified] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data from your API
+        const response = await fetch('http://localhost:3000/api/office'); // Update with your actual API endpoint
+        const data = await response.json();
+        const updatedData = data.map(office => ({ ...office, id: office._id }));
+
+        // Compare the last modified timestamp or any other indicator
+        if (lastModified !== data.lastModified) {
+          // Update state with the fetched data
+          setOfficeData(updatedData);
+          setLastModified(data.lastModified); // Update the lastModified timestamp
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to fetch data');
+        setLoading(false);
+      }
+    };
+
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, [lastModified]); // Include lastModified in the dependency array
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+
+  const filteredInfo = officeData.filter((info) =>
     info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
   );
   //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));

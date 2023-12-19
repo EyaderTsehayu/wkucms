@@ -25,19 +25,16 @@ const RegisterAdmin = () => {
     const password = `${fromFirstName}@${fromMiddleName}1234`;
 
     try {
-      const response = await fetch("/api/admin", {
+
+      const response = await fetch("/api/user/new", {
         method: "POST",
         body: JSON.stringify({
-          adminId: data.adminId,
-          firstName: data.firstName,
-          middleName: data.middleName,
-          lastName: data.lastName,
+          userId: data.adminId,
+          firstname: data.firstName,
+          middlename: data.middleName,
+          lastname: data.lastName,
           password: password,
 
-          //   staffId:data.staffId,
-          //   collegeId: data.collegeId,
-          //   departmentId: data.departmentId,
-          //   year: data.year,
           officeName: data.officeName,
           role: ROLES.ADMIN,
         }),
@@ -49,7 +46,7 @@ const RegisterAdmin = () => {
     } catch (error) {
       toast.error("Admin Not registered Successfully!");
 
-      toast.success("Staff registered Successfully!");
+
     }
 
     reset();

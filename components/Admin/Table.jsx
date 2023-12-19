@@ -19,6 +19,7 @@ const Table = ({ columns, rows }) => {
       className="dark:bg-boxdark-2"
     >
       <DataGrid
+     
         rows={rows}
         columns={columns}
         initialState={{

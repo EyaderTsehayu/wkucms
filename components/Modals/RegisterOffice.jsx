@@ -29,17 +29,9 @@ const RegisterOffice = () => {
         body: JSON.stringify({
           officeId: data.officeId,
           officeName: data.officeName,
-
           password:password,
-
           location: data.location,
           items: data.items,
-          // staffId:data.staffId,
-        //   collegeId: data.collegeId,
-        //   departmentId: data.departmentId,
-        //   year: data.year,
-        
-          // role: ROLES,
         }),
       });
 

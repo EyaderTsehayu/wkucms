@@ -11,6 +11,7 @@ export const POST = async (req) => {
 
     password,
 
+
     collegeId,
     departmentId,
     staffId,
@@ -55,4 +56,6 @@ export const POST = async (req) => {
     console.log(error);
     return new Response("Faild to create a new user", { status: 500 });
   }
+
 };
+
