@@ -11,6 +11,20 @@ export default withAuth(
     ) {
       return new NextResponse("You are not authorized!");
     }
+    if (
+      req.nextUrl.pathname.includes("studentApproval") ||
+      (req.nextUrl.pathname.includes("staffApproval") &&
+        req.nextauth.token?.role !== "OFFICER")
+    ) {
+      return new NextResponse("You are not authorized!");
+    }
+    if (
+      req.nextUrl.pathname.includes("/user") &&
+      (req.nextauth.token?.role !== "STUDENT" ||
+        req.nextauth.token?.role !== "STAFF")
+    ) {
+      return new NextResponse("You are not authorized!");
+    }
   },
   {
     callbacks: {
@@ -24,15 +38,14 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    // "/admin",
+    "/admin",
     "/user",
     "/user/myclearance",
     "/user/settings",
     "/user/staffApproval",
     "/user/studentApproval",
 
-    // "/admin/student",
-    // "/admin/manageAdmins",
-
+    "/admin/student",
+    "/admin/manageAdmins",
   ],
 };
