@@ -44,9 +44,16 @@ const SignIn = () => {
         toast.success("Login Successful!");
         router.push("/user");
       }
-      //   const session = await getSession(); // Get the updated session after sign-in
-      // console.log("Hello Role -- ", session?.user?.role);
-      // router.replace(`dashboard/${session?.user?.role}`);
+      const session = await getSession(); // Get the updated session after sign-in
+      console.log("Hello Role -- ", session?.user?.role);
+      const role = session.user?.role;
+      if (role == "ADMIN") {
+        router.replace("/admin");
+      } else if (role == "STUDENT") {
+        router.replace("/user");
+      } else if (role == "OFFICER") {
+        router.replace("/user/studentApproval");
+      }
     } catch (error) {
       console.log(error);
     }
