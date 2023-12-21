@@ -20,8 +20,7 @@ export default withAuth(
     }
     if (
       req.nextUrl.pathname.includes("/user") &&
-      (req.nextauth.token?.role !== "STUDENT" ||
-        req.nextauth.token?.role !== "STAFF")
+      req.nextauth.token?.role !== "STUDENT"
     ) {
       return new NextResponse("You are not authorized!");
     }
