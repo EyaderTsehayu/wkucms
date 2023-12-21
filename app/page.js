@@ -7,7 +7,15 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  if (session) redirect("/user");
+  //console.log("user session when there is session", session);
+  if (session) {
+    const role = session?.user?.role;
+    if (role == "ADMIN") {
+      redirect("/admin");
+    } else if (role == "STUDENT" || role == "STAFF") {
+      redirect("/user");
+    }
+  }
   return (
     <main>
       <div className="flex flex-col bg-white h-screen">
