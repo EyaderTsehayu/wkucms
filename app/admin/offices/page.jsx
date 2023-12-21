@@ -4,79 +4,70 @@ import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
 import { useState } from "react";
 import RegisterOffice from "@/components/Modals/RegisterOffice";
-import { useEffect } from "react";
-
-
+import useSWR from 'swr';
 
 const columns = [
   { field: "officeId", headerName: "officeId", width: "100" },
   { field: "officeName", headerName: "officeName", width: "240" },
   { field: "location", headerName: "location", width: "240" },
   { field: "items", headerName: "Items", width: "240" },
-  
 ];
 
-
-// const columns = [
-//   { field: "officeId", headerName: "officeId", width: "100" },
-//   { field: "officeName", headerName: "officeName", width: "240" },
-//   { field: "location", headerName: "location", width: "240" },
-//   { field: "items", headerName: "Items", width: "240" },
- 
-// ];
-
-
+const row = [
+  {
+    officeId: "100",
+    officeName: "eyob",
+    location: "dejen",
+    items: "qwer",
+  },
+  {
+    officeId: "101",
+    officeName: "eyob",
+    location: "dejen",
+    items: "qwer",
+  },
+  {
+    officeId: "102",
+    officeName: "eyob",
+    location: "dejen",
+    items: "qwer",
+  },
+];
 
 const ManageOffices = () => {
-  
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Use useSWR to fetch data
+  const { data: officeData, error } = useSWR(
+    'http://localhost:3000/api/office',
+    async (url) => {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.map(office => ({ ...office, id: office._id }));
+    },
+    {
+      initialData: row, // Provide initial data (can be an empty array)
+      revalidateOnFocus: false,
+      refreshInterval: 2000,
+    }
+  );
 
-  const [officeData, setOfficeData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [lastModified, setLastModified] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch data from your API
-        const response = await fetch('http://localhost:3000/api/office'); // Update with your actual API endpoint
-        const data = await response.json();
-        const updatedData = data.map(office => ({ ...office, id: office._id }));
-
-        // Compare the last modified timestamp or any other indicator
-        if (lastModified !== data.lastModified) {
-          // Update state with the fetched data
-          setOfficeData(updatedData);
-          setLastModified(data.lastModified); // Update the lastModified timestamp
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError('Failed to fetch data');
-        setLoading(false);
-      }
-    };
-
-    // Call the fetchData function when the component mounts
-    fetchData();
-  }, [lastModified]); // Include lastModified in the dependency array
-
-  if (loading) {
+  // Handle loading state
+  if (!officeData) {
     return <p>Loading...</p>;
   }
 
+  // Handle error state
   if (error) {
-    return <p>{error}</p>;
+    console.error('Error fetching data:', error);
+    return <p>Failed to fetch data</p>;
   }
 
+  const getRowId = (row) => row.officeId;
 
   const filteredInfo = officeData.filter((info) =>
     info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -94,6 +85,7 @@ const ManageOffices = () => {
 
       <div className="grid grid-cols-12 ">
         <AdminContainer
+          getRowId={getRowId}
           columns={columns}
           rows={filteredInfo}
           modal={RegisterOffice}
