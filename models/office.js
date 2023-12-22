@@ -25,5 +25,5 @@ const OfficeSchema = new Schema({
   },
 });
 
-const Office = models.Office || model("Offices", OfficeSchema);
+const Office = models.Office || model("Office", OfficeSchema);
 export default Office;

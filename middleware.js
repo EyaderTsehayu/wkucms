@@ -5,6 +5,7 @@ export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
     console.log(req.nextauth);
+
     if (
       req.nextUrl.pathname.includes("/admin") &&
       req.nextauth.token?.role !== "ADMIN"
@@ -24,6 +25,7 @@ export default withAuth(
     ) {
       return new NextResponse("You are not authorized!");
     }
+
   },
   {
     callbacks: {
