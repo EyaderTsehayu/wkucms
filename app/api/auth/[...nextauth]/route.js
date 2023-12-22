@@ -45,7 +45,9 @@ export const authOptions = {
         return {
           ...token,
           id: user.id,
+          userId: user.userId,
           firstname: user.firstname,
+          lastname: user.lastname,
           role: user.role,
         };
       }
@@ -58,7 +60,9 @@ export const authOptions = {
         user: {
           ...session.user,
           id: token.id,
+          userId: token.userId,
           firstname: token.firstname,
+          lastname: token.lastname,
           role: token.role,
         },
       };
