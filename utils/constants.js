@@ -3,6 +3,7 @@ export const ROLES = {
   STUDENT: "STUDENT",
   STAFF: "STAFF",
   HEAD: "HEAD", // Additional privilege for some staff
+  OFFICER:"OFFICER"
 };
 
 export const CollegeData = [
@@ -17,4 +18,12 @@ export const DepartmentData = [
   { id: "2", name: "English" },
   { id: "3", name: "Psychology" },
   { id: "4", name: "Nursing" },
+];
+
+//for privilege
+export const privilegeData = [
+  { id: "1", name: "DEAN" },
+  { id: "2", name: "HEAD" },
+  { id: "3", name: "LIBRARIAN" },
+  { id: "4", name: "CAFTERIA" },
 ];

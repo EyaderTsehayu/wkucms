@@ -42,6 +42,9 @@ const UserSchema = new Schema({
   role: {
     type: String,
   },
+  privilege:{
+    type:String,
+  }
 });
 
 const User = models.User || model("User", UserSchema);
