@@ -13,6 +13,7 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "Status is required!"],
   },
+
   firstname:{
     type: String,
     required: [true, "Status is required!"],
@@ -21,6 +22,7 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "Status is required!"],
   }
+
 });
 
 const StudentClearnceReq =
