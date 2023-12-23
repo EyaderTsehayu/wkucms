@@ -1,8 +1,10 @@
 "use client";
 import Filter from "@/components/Admin/Filter";
-import AdminContainer from "@/components/Admin/AdminContainer";
+import UserContainer from "@/components/User/UserContainer/UserContainer";
 import { Metadata } from "next";
 import RegisterStudent from "@/components/Modals/RegisterStudent";
+import useSWR from 'swr';
+import { useState } from "react";
 // export const metadata = {
 //   title: "WKUCMS | Admin",
 //   description: "this a clearance management system for Wolkite University",
@@ -26,11 +28,11 @@ const collegeData = [
 ];
 
 const columns = [
-    { field: "id", headerName: "ID", width: "100" },
-    { field: "firstName", headerName: "First name", width: "160" },
-    { field: "lastName", headerName: "Last name", width: "160" },
-    { field: "college", headerName: "College", width: "160" },
-    { field: "department", headerName: "Department", width: "160" },
+    { field: "userId", headerName: "ID", width: "100" },
+    { field: "firstname", headerName: "First name", width: "160" },
+    { field: "middlename", headerName: "Last name", width: "160" },
+    { field: "reason", headerName: "Reason", width: "160" },
+    { field: "status", headerName: "Status", width: "160" },
 ];
 
 const rows = [
@@ -99,14 +101,44 @@ const rows = [
     },
 ];
 
+const fetcher = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id }));
+    return updatedData;
+  };
+
 const ApproveStudent = () => {
+   
+  
+    // Use useSWR to fetch data
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Use SWR to fetch and cache data with automatic refresh every 10 seconds
+    const { data: userData, error } = useSWR('http://localhost:3000/api/studentApproval', fetcher, {
+      initialData: rows,
+      revalidateOnFocus: false,
+      refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+    });
+    console.log("session from approval ad ",userData)
+    // Handle loading and fetch errors
+    if (!userData && !error) {
+      return <p>Loading...</p>;
+    }
+  
+    if (error) {
+      console.error('Error fetching data:', error);
+      return <p>Failed to fetch data</p>;
+    }
+
+
     return (
         <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
             <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">Student Approval</h1>
             <div className="pt-2 px-4 grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
                 <Filter officeData={officeData} collegeData={collegeData} />
 
-                <AdminContainer columns={columns} rows={rows} modal={RegisterStudent} />
+                <UserContainer columns={columns} rows={userData} modal={RegisterStudent} />
             </div>
         </div>
     );

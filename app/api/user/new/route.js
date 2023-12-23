@@ -8,16 +8,14 @@ export const POST = async (req) => {
     firstname,
     middlename,
     lastname,
-
     password,
-
-
     collegeId,
     departmentId,
     staffId,
     officeName,
     year,
     role,
+    privilege
   } = await req.json();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -35,6 +33,7 @@ export const POST = async (req) => {
       officeName,
       year,
       role,
+      privilege
     });
 
     console.log(
@@ -48,7 +47,8 @@ export const POST = async (req) => {
       staffId,
       officeName,
       year,
-      role
+      role,
+      privilege
     );
     await newUser.save();
     return new Response(JSON.stringify(newUser), { status: 201 });

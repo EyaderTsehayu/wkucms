@@ -47,8 +47,10 @@ export const authOptions = {
           id: user.id,
           userId: user.userId,
           firstname: user.firstname,
+          middlename: user.middlename,
           lastname: user.lastname,
           role: user.role,
+          privilege:user.privilege
         };
       }
       return token;
@@ -62,8 +64,10 @@ export const authOptions = {
           id: token.id,
           userId: token.userId,
           firstname: token.firstname,
+          middlename: token.middlename,
           lastname: token.lastname,
           role: token.role,
+          privilege:token.privilege
         },
       };
 
