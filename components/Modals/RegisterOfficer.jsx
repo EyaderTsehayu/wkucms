@@ -90,7 +90,7 @@ const RegisterOfficer = () => {
           lastname: data.lastName,
           password: password,
           privilege: data.collegeName,
-          role: ROLES.OFFICER,
+          role: ROLES.STAFF,
         }),
       });
 

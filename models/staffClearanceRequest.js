@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const StudentRequestSchema = new Schema({
+const StaffRequestSchema = new Schema({
   userId: {
     type: String,
     required: [true, "Id is required!"],
@@ -23,8 +23,8 @@ const StudentRequestSchema = new Schema({
   }
 });
 
-const StudentClearnceReq =
-  models.StudentClearnceReq ||
-  model("StudentClearnceReq", StudentRequestSchema);
+const StaffClearnceReq =
+  models.StaffClearnceReq ||
+  model("StaffClearnceReq", StaffRequestSchema);
 
-export default StudentClearnceReq;
+export default StaffClearnceReq;

@@ -26,4 +26,5 @@ export const privilegeData = [
   { id: "2", name: "HEAD" },
   { id: "3", name: "LIBRARIAN" },
   { id: "4", name: "CAFTERIA" },
+  { id: "5", name: "HR" },
 ];

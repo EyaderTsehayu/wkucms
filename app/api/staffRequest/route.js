@@ -1,9 +1,9 @@
 import { connectToDB } from "@/utils/database";
-import StudentClearnceReq from "@/models/studentClearanceRequest";
+import StaffRequestSchema from "@/models/staffClearanceRequest";
 
 export const POST = async (req) => {
-  const { userId,firstname,middlename,reason, status ,} = await req.json();
-  const requests = await StudentClearnceReq.find({ userId: userId });
+  const { userId, reason, status,firstname,middlename } = await req.json();
+  const requests = await StaffRequestSchema.find({ userId: userId });
 
   if (requests.length > 0 && requests != null) {
     return new Response(
@@ -14,12 +14,12 @@ export const POST = async (req) => {
 
   try {
     await connectToDB();
-    const clearanceReq = new StudentClearnceReq({
+    const clearanceReq = new StaffRequestSchema({
       userId,
-      firstname,
-      middlename,
       reason,
       status,
+      firstname,
+      middlename
     });
 
     await clearanceReq.save();
@@ -40,7 +40,7 @@ export const POST = async (req) => {
 //     await connectToDB();
 
 //     // Fetch all users from the database
-//     const requests = await StudentClearnceReq.find();
+//     const requests = await StaffRequestSchema.find();
 
 //     // Return a success response with the users data
 //     return new Response(JSON.stringify(requests), { status: 200 });

@@ -1,16 +1,17 @@
 "use client";
 
-import AdminContainer from "@/components/Admin/AdminContainer";
+import UserContainer from "@/components/User/UserContainer/UserContainer";
 import React from "react";
 import { useState } from "react";
 import RegisterStaff from "@/components/Modals/RegisterStaff";
+import useSWR from "swr";
 
 const columns = [
-    { field: "id", headerName: "ID", width: "100" },
-    { field: "firstName", headerName: "First name", width: "240" },
-    { field: "lastName", headerName: "Last name", width: "240" },
-    { field: "officeName", headerName: "Office name", width: "240" },
-    { field: "department", headerName: "Department", width: "240" },
+    { field: "userId", headerName: "ID", width: "100" },
+    { field: "firstname", headerName: "First name", width: "160" },
+    { field: "middlename", headerName: "Last name", width: "160" },
+    { field: "reason", headerName: "Reason", width: "160" },
+    { field: "status", headerName: "Status", width: "160" },
 ];
 
 const rows = [
@@ -79,10 +80,36 @@ const rows = [
     },
 ];
 
+const fetcher = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id }));
+    return updatedData;
+  };
 const ApproveStaff = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const filteredInfo = rows.filter((info) =>
-        info.officeName.toLowerCase().includes(searchTerm.toLowerCase())
+        // Use SWR to fetch and cache data with automatic refresh every 10 seconds
+        const { data: userData, error } = useSWR('http://localhost:3000/api/staffApproval', fetcher, {
+          initialData: rows,
+          revalidateOnFocus: false,
+          refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+        });
+        console.log("session from approval ad ",userData)
+        // Handle loading and fetch errors
+        if (!userData && !error) {
+          return <p>Loading...</p>;
+        }
+      
+        if (error) {
+          console.error('Error fetching data:', error);
+          return <p>Failed to fetch data</p>;
+        }
+    
+
+
+  
+    const filteredInfo = userData.filter((info) =>
+        info.reason.toLowerCase().includes(searchTerm.toLowerCase())
     );
     //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
 
@@ -97,13 +124,13 @@ const ApproveStaff = () => {
                 <input
                     type="text"
                     placeholder="Search office requirement here"
-                    value={searchTerm}
-                    onChange={handleSearch}
+                     value={searchTerm}
+                     onChange={handleSearch}
                     className=" w-full sm:hidden pt-4 pb-3 px-3 py-4 mb-7  rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary "
                 />
 
                 <div className=" grid grid-cols-12 ">
-                    <AdminContainer
+                    <UserContainer
                         columns={columns}
                         rows={filteredInfo}
                         modal={RegisterStaff}
