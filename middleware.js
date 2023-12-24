@@ -13,10 +13,12 @@ export default withAuth(
       return new NextResponse("You are not authorized!");
     }
     if (
+
       (req.nextUrl.pathname.includes("/studentApproval") ||
         req.nextUrl.pathname.includes("/staffApproval")) &&
       req.nextauth.token?.role !== "STAFF"
     ) {
+
       return new NextResponse("You are not authorized!");
     }
     if (
