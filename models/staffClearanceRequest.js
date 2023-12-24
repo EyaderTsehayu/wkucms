@@ -13,18 +13,21 @@ const StaffRequestSchema = new Schema({
     type: String,
     required: [true, "Status is required!"],
   },
-  firstname:{
+  firstname: {
     type: String,
-    required: [true, "Status is required!"],
+    required: [true, "firstname is required!"],
   },
-  middlename:{
+  middlename: {
     type: String,
-    required: [true, "Status is required!"],
-  }
+    required: [true, "middlename is required!"],
+  },
+  role: {
+    type: String,
+    required: [true, "role is required!"],
+  },
 });
 
 const StaffClearnceReq =
-  models.StaffClearnceReq ||
-  model("StaffClearnceReq", StaffRequestSchema);
+  models.StaffClearnceReq || model("StaffClearnceReq", StaffRequestSchema);
 
 export default StaffClearnceReq;
