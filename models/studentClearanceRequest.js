@@ -14,15 +14,18 @@ const StudentRequestSchema = new Schema({
     required: [true, "Status is required!"],
   },
 
-  firstname:{
+  firstname: {
     type: String,
-    required: [true, "Status is required!"],
+    required: [true, "firstname is required!"],
   },
-  middlename:{
+  middlename: {
     type: String,
-    required: [true, "Status is required!"],
-  }
-
+    required: [true, "middlename is required!"],
+  },
+  role: {
+    type: String,
+    required: [true, "role is required!"],
+  },
 });
 
 const StudentClearnceReq =

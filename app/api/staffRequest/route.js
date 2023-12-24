@@ -2,7 +2,8 @@ import { connectToDB } from "@/utils/database";
 import StaffRequestSchema from "@/models/staffClearanceRequest";
 
 export const POST = async (req) => {
-  const { userId, reason, status,firstname,middlename } = await req.json();
+  const { userId, reason, status, firstname, middlename, role } =
+    await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
 
   if (requests.length > 0 && requests != null) {
@@ -19,7 +20,8 @@ export const POST = async (req) => {
       reason,
       status,
       firstname,
-      middlename
+      middlename,
+      role,
     });
 
     await clearanceReq.save();

@@ -5,25 +5,97 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Table from "../../Admin/Table";
-
 // import RegisterStudent from "../Modals/RegisterStudent";
 
 import { usePathname } from "next/navigation";
+import { toast } from "react-toastify";
 
 const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   const pathname = usePathname();
-
   const [open, setOpen] = useState(false);
-  
+  const [selectedRows, setSelectedRows] = useState([]);
+  const handleApproveAll = async (selectedRowsData) => {
+    // console.log(
+    //   "Selected Rows to Approve from handle approve:",
+    //   selectedRowsData
+    // );
+    const len = selectedRowsData.length;
+    try {
+      const requests = selectedRowsData.map(async (eachData) => {
+        // console.log("log data", eachData.firstname);
+        if (eachData.role == "STUDENT") {
+          try {
+            const response = await fetch(`/api/approveStudentReq`, {
+              method: "PATCH",
+              body: JSON.stringify({
+                objectId: eachData._id,
+                arrLength: len,
+              }),
+            });
+
+            if (response.ok) {
+              return await response.text();
+            }
+          } catch (error) {
+            console.log(error);
+            return null;
+          }
+        } else if (eachData.role == "STAFF") {
+          try {
+            const response = await fetch(`/api/approveStaffReq`, {
+              method: "PATCH",
+              body: JSON.stringify({
+                objectId: eachData._id,
+                arrLength: len,
+              }),
+            });
+
+            if (response.ok) {
+              return await response.text();
+            }
+          } catch (error) {
+            console.log(error);
+            return null;
+          }
+        }
+      });
+
+      const responses = await Promise.all(requests);
+
+      let toastShown = false;
+
+      responses.forEach((responsedata, index) => {
+        if (responsedata) {
+          if (
+            selectedRowsData.length > 1 &&
+            !toastShown &&
+            index === responses.length - 1
+          ) {
+            toast.success(responsedata);
+            toastShown = true;
+          } else if (selectedRowsData.length === 1) {
+            toast.success("Approved Successfully");
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleClose = () => setOpen(false);
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       handleClose();
     }
   };
-
-  // search
   const [searchTerm, setSearchTerm] = useState("");
+  const handleOpen = (event) => {};
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  // search
   // const filteredInfo = rows.filter((info) =>
   //   info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
   // );
@@ -31,19 +103,11 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   // if (filteredInfo) {
   //   rows = filteredInfo;
   // }
-
-  const handleOpen = (event) => {
-   
-  };
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${pathname.includes("student") && "col-span-9"
-        } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
+        pathname.includes("student") && "col-span-9"
+      } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -58,11 +122,11 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          {/* <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
-            Deactivate
-          </button> */}
+          <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+            Reject
+          </button>
           <button
-            onClick={handleOpen}
+            onClick={() => handleApproveAll(selectedRows)}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
           >
             Approve
@@ -71,7 +135,12 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <Table columns={columns} rows={rows} />
+          <Table
+            columns={columns}
+            rows={rows}
+            setSelectedRows={setSelectedRows}
+            handleApproveAll={handleApproveAll}
+          />
         </div>
       </div>
       {/* <Modal
