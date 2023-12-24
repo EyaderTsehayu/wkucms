@@ -38,9 +38,9 @@ const TaskItem = () => {
   const session = useSession();
   //console.log("session from my clearance", session?.data?.user.userId);
   const userId = session?.data?.user.userId;
-  const firstname=session?.data?.user.firstname;
-  const middlename=session?.data?.user.middlename;
- 
+  const firstname = session?.data?.user.firstname;
+  const middlename = session?.data?.user.middlename;
+
   var status;
   if (session?.data?.user.role == "STUDENT") {
     status = "HEAD";
@@ -54,8 +54,7 @@ const TaskItem = () => {
 
   const handleSend = async () => {
     if (selectedTask != null) {
-      if(session?.data?.user.role == "STUDENT"){
-
+      if (session?.data?.user.role == "STUDENT") {
         try {
           const response = await fetch("/api/studentRequest", {
             method: "POST",
@@ -63,14 +62,15 @@ const TaskItem = () => {
               userId: userId,
               reason: selectedTask,
               status: status,
-              firstname:firstname,
-              middlename:middlename
+              firstname: firstname,
+              middlename: middlename,
+              role: "STUDENT",
             }),
             headers: {
               "Content-Type": "application/json",
             },
           });
-  
+
           if (response.ok) {
             const responseData = await response.text();
             toast.success(responseData);
@@ -81,8 +81,7 @@ const TaskItem = () => {
         }
       }
 
-      if(session?.data?.user.role == "STAFF"){
-
+      if (session?.data?.user.role == "STAFF") {
         try {
           const response = await fetch("/api/staffRequest", {
             method: "POST",
@@ -90,14 +89,15 @@ const TaskItem = () => {
               userId: userId,
               reason: selectedTask,
               status: status,
-              firstname:firstname,
-              middlename:middlename
+              firstname: firstname,
+              middlename: middlename,
+              role: "STAFF",
             }),
             headers: {
               "Content-Type": "application/json",
             },
           });
-  
+
           if (response.ok) {
             const responseData = await response.text();
             toast.success(responseData);

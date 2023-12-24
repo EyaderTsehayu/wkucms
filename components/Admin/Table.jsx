@@ -1,7 +1,23 @@
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useState, useMemo, useEffect } from "react";
 
-const Table = ({ columns, rows }) => {
+const Table = ({ columns, rows, setSelectedRows, handleApproveAll }) => {
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+  // const selectedRowsData = rows.filter((row) => row._id == rowSelectionModel);
+
+  const selectedRowsData = useMemo(
+    () => rows.filter((row) => rowSelectionModel.includes(row._id)),
+    [rowSelectionModel, rows]
+  );
+
+  useEffect(() => {
+    setSelectedRows(selectedRowsData);
+  }, [selectedRowsData, setSelectedRows]);
+
+  // console.log("Selected Rows Data:", selectedRowsData);
+
   return (
     <Box
       style={{ height: 520, width: "100%" }}
@@ -9,8 +25,6 @@ const Table = ({ columns, rows }) => {
         "& .MuiDataGrid-footerContainer": {
           borderTop: "none",
           backgroundColor: "#34e1eb",
-
-
         },
         "& .MuiCheckbox-root": {
           color: "#64748B",
@@ -19,7 +33,6 @@ const Table = ({ columns, rows }) => {
       className="dark:bg-boxdark-2"
     >
       <DataGrid
-     
         rows={rows}
         columns={columns}
         initialState={{
@@ -30,6 +43,10 @@ const Table = ({ columns, rows }) => {
         pageSizeOptions={[5, 10]}
         checkboxSelection
         className="dark:bg-gray-800 dark:text-gray "
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel);
+        }}
+        rowSelectionModel={rowSelectionModel}
       />
     </Box>
   );

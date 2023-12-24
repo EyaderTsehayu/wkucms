@@ -5,7 +5,7 @@ export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
     console.log(req.nextauth);
-     req.nextauth.token?.privilege;
+    req.nextauth.token?.privilege;
     if (
       req.nextUrl.pathname.includes("/admin") &&
       req.nextauth.token?.role !== "ADMIN"
@@ -13,10 +13,12 @@ export default withAuth(
       return new NextResponse("You are not authorized!");
     }
     if (
-     ( req.nextUrl.pathname.includes("/studentApproval") ||
-      req.nextUrl.pathname.includes("/staffApproval")) &&
-        req.nextauth.token?.role !== "STAFF")
-    {
+
+      (req.nextUrl.pathname.includes("/studentApproval") ||
+        req.nextUrl.pathname.includes("/staffApproval")) &&
+      req.nextauth.token?.role !== "STAFF"
+    ) {
+
       return new NextResponse("You are not authorized!");
     }
     if (
@@ -26,9 +28,7 @@ export default withAuth(
       if (
         req.nextUrl.pathname.includes("/user") &&
         req.nextauth.token?.role !== "STAFF"
-      )
-      
-      {
+      ) {
         return new NextResponse("You are not authorized!");
       }
   },
