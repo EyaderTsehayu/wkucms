@@ -13,6 +13,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { ROLES, STAFFSTEPS, STUDENTSTEPS } from "@/utils/constants";
 const columns = [
   { id: "stepName", label: "Ofiice Name", minWidth: 170 },
   { id: "status", label: "Progress", minWidth: 100 },
@@ -124,12 +125,15 @@ export default function ColumnGroupingTable(props) {
   //
   const rows = [];
   let step;
-  if (session?.user?.role == "STUDENT") {
-    step = ["HEAD", "COLLEGEDEAN", "DORMITARY"];
+  if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STUDENT.toUpperCase()) {
+    step = STUDENTSTEPS;
   }
-  if (session?.user?.role == "STAFF") {
-    step = ["HR", "LIBRARY", "LAW"];
+  if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STAFF.toUpperCase()) {
+    step = STUDENTSTEPS;
   }
+  // if (session?.user?.role == ROLES.STAFF) {
+  //   step = STAFFSTEPS;
+  // }
   let status;
   // if the user does not request the clearance
   status = userData[0]?.status ?? "Null";

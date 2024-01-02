@@ -1,7 +1,8 @@
 import { connectToDB } from "@/utils/database";
 import StaffClearnceReq from "@/models/staffClearanceRequest";
+import { STAFFSTEPS } from "@/utils/constants";
 
-const staffApproval = ["HR", "HEAD", "DORM"];
+const staffApproval = STAFFSTEPS;
 
 export const PATCH = async (request) => {
   try {
