@@ -35,12 +35,17 @@ const fetcher = async (url) => {
 };
 
 export default function LabTabs() {
-  const [value, setValue] = React.useState('1');
+
+ 
+  // var index="1"
+  // if(!userData[0].status){
+  //   index="2"
+  // }
+  const [value, setValue] =useState("3");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
 
   const a = [];
   // Step 3: Use useEffect to trigger the API request
@@ -73,23 +78,33 @@ export default function LabTabs() {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="pt-2 px-4 dark:border-body">
             <TabList indicatorColor="primary" textColor='#AEB7C0' onChange={handleChange} aria-label="lab API tabs example" >
               {!userData[0]?.status && (
-                <Tab
-                  sx={{ textTransform: 'none', color: 'black', fontSize: '1rem' }}
-                  className='dark:text-white'
-                  value='1'
-                  label={
-                    <div className='flex'>
-                      <RequestPageOutlinedIcon className='mr-2' /> Request Clearance
-                    </div>
-                  }
-                />
-              )}
+              <Tab
+                sx={{ textTransform: 'none', color: 'black', fontSize: '1rem' }}
+                className='dark:text-white'
+                value='1'
+                label={
+                  <div className='flex'>
+                    <RequestPageOutlinedIcon className='mr-2' /> Request Clearance
+                  </div>
+                }
+              />
+              )} 
               <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }}
                 className=' dark:text-white  '
                 value="3"
                 label={
                   <div className="flex">
                     <AutorenewOutlinedIcon className='mr-2' /> Status
+                  </div>
+                }
+              />
+
+              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }}
+                className=' dark:text-white  '
+                value="2"
+                label={
+                  <div className="flex">
+                    <AutorenewOutlinedIcon className='mr-2' /> History
                   </div>
                 }
               />
@@ -104,18 +119,24 @@ export default function LabTabs() {
               />
             </TabList>
           </Box>
-          <TabPanel value="1">
-            <RequestClearance />
-          </TabPanel>
-          <TabPanel value="2">
-            <History />
-          </TabPanel>
-          <TabPanel value="3">
-            <Status />
-          </TabPanel>
-          <TabPanel value="4">
-            <PrintClearance />
-          </TabPanel>
+
+          <>
+            <TabPanel value="1">
+              <RequestClearance />
+            </TabPanel>
+            <TabPanel value="2">
+              <History />
+            </TabPanel>
+            <TabPanel value="3">
+              <Status />
+            </TabPanel>
+            <TabPanel value="4">
+              <PrintClearance />
+            </TabPanel>
+          </>
+
+
+
         </TabContext>
       </Box>
     </div>
