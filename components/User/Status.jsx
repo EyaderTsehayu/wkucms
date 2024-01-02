@@ -129,7 +129,7 @@ export default function ColumnGroupingTable(props) {
     step = STUDENTSTEPS;
   }
   if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STAFF.toUpperCase()) {
-    step = STUDENTSTEPS;
+    step = STAFFSTEPS;
   }
   // if (session?.user?.role == ROLES.STAFF) {
   //   step = STAFFSTEPS;

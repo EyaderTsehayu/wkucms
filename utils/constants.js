@@ -7,7 +7,7 @@ export const ROLES = {
 };
 
 export const STUDENTSTEPS=["HEAD", "COLLEGEDEAN", "DORMITARY"];
-export const STAFFSTEPS=["HR", "HEAD", "DORM"];
+export const STAFFSTEPS=["HR", "BOOKCERCULATION", "FINANCE"];
 export const CollegeData = [
   { id: "1", name: "College of Computing and Informatics" },
   { id: "2", name: "Engineering" },
