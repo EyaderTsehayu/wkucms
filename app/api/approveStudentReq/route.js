@@ -1,7 +1,8 @@
 import { connectToDB } from "@/utils/database";
 import StudentClearnceReq from "@/models/studentClearanceRequest";
+import { STUDENTSTEPS } from "@/utils/constants";
 
-const studentApproval = ["HEAD", "COLLEGEDEAN", "DORMITARY"];
+const studentApproval = STUDENTSTEPS;
 
 export const PATCH = async (request) => {
   try {

@@ -13,6 +13,9 @@ import { useState } from "react";
 import useSWR from "swr";
 import { useEffect } from "react";
 
+import { signOut, useSession } from "next-auth/react";
+import { ROLES, STAFFSTEPS, STUDENTSTEPS } from "@/utils/constants";
+
 const columns = [
   { id: "stepName", label: "Ofiice Name", minWidth: 170 },
   { id: "status", label: "Progress", minWidth: 100 },
@@ -92,6 +95,9 @@ export default function ColumnGroupingTable(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const { data: session } = useSession();
+
+
   const [data, setData] = useState(null);
   // const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -122,8 +128,23 @@ export default function ColumnGroupingTable(props) {
 
   //
   const rows = [];
-  let step = ["HEAD", "COLLEGEDEAN", "DORMITARY"];
-  let status = userData[0].status;
+
+  let step;
+  if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STUDENT.toUpperCase()) {
+    step = STUDENTSTEPS;
+  }
+  if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STAFF.toUpperCase()) {
+    step = STAFFSTEPS;
+  }
+  // if (session?.user?.role == ROLES.STAFF) {
+  //   step = STAFFSTEPS;
+  // }
+  let status;
+  // if the user does not request the clearance
+  status = userData[0]?.status ?? "Null";
+
+
+
   // let status = "COLLEGEDEAN";
   console.log("status a", status);
   for (let i = 0; i < step.length; i++) {
@@ -132,8 +153,10 @@ export default function ColumnGroupingTable(props) {
       step[i] === status
         ? "pending"
         : step.indexOf(status) > i
-        ? "approved"
-        : "not started"
+
+          ? "approved"
+          : "not started"
+
     );
     rows.push(row);
   }

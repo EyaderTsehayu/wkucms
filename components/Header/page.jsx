@@ -120,7 +120,7 @@ const Header = (props) => {
                 alt="Logo"
               />
             </Link>
-            <h5 className="text-lg font-semibold text-primary lg:block hidden">
+            <h5 className="text-lg font-semibold text-primary lg:block hidden dark:text-bodydark1">
               WKU-CMS
             </h5>
           </div>
