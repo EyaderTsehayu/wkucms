@@ -8,7 +8,9 @@ import HomeWorkOutlinedIcon from "@mui/icons-material/HomeWorkOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
+import { useSession } from "next-auth/react";
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   const trigger = useRef(null);
@@ -277,7 +279,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   </Link>
                 </li>
 
-                <li>
+                 {session?.user?.privilege &&
+              
+                ( <li>
                   <div className="relative h-40 ">
                     <Link
                       className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname == "/user/myclearance" &&
@@ -367,7 +371,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       </div>
                     )}
                   </div>
-                </li>
+                </li>)}
                 {/* <!-- Menu Item Help --> */}
               </ul>
             </div>

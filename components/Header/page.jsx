@@ -107,12 +107,12 @@ const Header = (props) => {
             />
           </Link>
           <h5 className="text-md font-semibold text-primary pl-1 lg:hidden dark:text-white">
-            WKUCMS
+            CMS
           </h5>
         </div>
 
         {(pathname == "/user" || pathname.includes("/user")) && (
-          <div className="flex flex-row gap-6 items-center">
+          <div className="flex flex-row gap-2 items-center">
             <Link className=" flex-shrink-0 lg:block hidden" href="/">
               <Image
                 width={50}
