@@ -7,10 +7,11 @@ import Image from "next/image";
 
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const Header = (props) => {
   const pathname = usePathname();
-
+  const { data: session } = useSession();
   // on hover
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -106,12 +107,12 @@ const Header = (props) => {
             />
           </Link>
           <h5 className="text-md font-semibold text-primary pl-1 lg:hidden dark:text-white">
-            WKUCMS
+            CMS
           </h5>
         </div>
 
         {(pathname == "/user" || pathname.includes("/user")) && (
-          <div className="flex flex-row gap-6 items-center">
+          <div className="flex flex-row gap-2 items-center">
             <Link className=" flex-shrink-0 lg:block hidden" href="/">
               <Image
                 width={50}
@@ -121,7 +122,7 @@ const Header = (props) => {
               />
             </Link>
             <h5 className="text-lg font-semibold text-primary lg:block hidden dark:text-bodydark1">
-              WKU-CMS
+              CMS
             </h5>
           </div>
         )}
@@ -161,48 +162,50 @@ const Header = (props) => {
                   </>
 
 
-                  <div className="relative">
-                    <Link
-                      className={`  text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${pathname === "/user/staff" &&
-                        "py-1 px-3 transition-all border border-primary rounded-full"
-                        }`}
-                      href="/user/studentApproval"
+              {session?.user?.privilege &&
+              
+              (  <div className="relative">
+                  <Link
+                    className={`  text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${pathname === "/user/staff" &&
+                      "py-1 px-3 transition-all border border-primary rounded-full"
+                      }`}
+                    href="/user/studentApproval"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    Approve
+                  </Link>
+                  {showDropdown && (
+                    <div
+                      ref={dropdownRef} // Assign the ref to the dropdown element
+                      className="absolute top-10 right-0 z-10 bg-white p-2 dark:bg-boxdark"
                       onMouseEnter={handleMouseEnter}
                       onMouseLeave={handleMouseLeave}
                     >
-                      Approve
-                    </Link>
-                    {showDropdown && (
-                      <div
-                        ref={dropdownRef} // Assign the ref to the dropdown element
-                        className="absolute top-10 right-0 z-10 bg-white p-2 dark:bg-boxdark"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <ul className="text-sm border border-whiten rounded-lg dark:border-boxdark dark:text-white text-primary px-4">
-                          <li className="pb-4">
+                      <ul className="text-sm border border-whiten rounded-lg dark:border-boxdark dark:text-white text-primary px-4">
+                        <li className="pb-4">
 
-                            <Link
-                              href="/user/studentApproval"
-                              onClick={() => handleDropdownItemClick("/student")}
+                          <Link
+                            href="/user/studentApproval"
+                            onClick={() => handleDropdownItemClick("/student")}
 
-                            >
-                              Student
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/user/staffApproval"
-                              onClick={() => handleDropdownItemClick("/staff")}
-                            >
-                              Staff
-                            </Link>
-                          </li>
+                          >
+                            Student
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/user/staffApproval"
+                            onClick={() => handleDropdownItemClick("/staff")}
+                          >
+                            Staff
+                          </Link>
+                        </li>
 
-                        </ul>
-                      </div>
-                    )}
-                  </div>
+                      </ul>
+                    </div>
+                  )}
+                </div>)}
 
                 </div>
 

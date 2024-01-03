@@ -47,6 +47,7 @@ export const config = {
     "/admin",
     "/user",
     "/user/myclearance",
+    "/user/help",
     "/user/settings",
     "/user/staffApproval",
     "/user/studentApproval",

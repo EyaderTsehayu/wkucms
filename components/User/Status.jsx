@@ -147,7 +147,7 @@ export default function ColumnGroupingTable(props) {
 
   // let status = "COLLEGEDEAN";
   console.log("status a", status);
-  for (let i = 0; i < step.length; i++) {
+  for (let i = 0; i < step.length - 1; i++) {
     const row = createData(
       step[i],
       step[i] === status
@@ -177,78 +177,106 @@ export default function ColumnGroupingTable(props) {
   const isDarkMode = window.matchMedia("(prefers-color-scheme: black)").matches;
 
   return (
-    <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
-      <h1 className="pl-4 font-satoshi text-3xl font-extrabold text-primary dark:text-white">
-        Approval status
-      </h1>
-      {/* <br style={{ color: "white", backgroundColor: "white" }} /> */}
-      <Paper sx={{ width: "100%" }} className="mt-7 ">
-        <TableContainer sx={{ height: "100%" }}>
-          <Table>
-            <TableHead>
-              <TableRow className=" ">
-                {columns.map((column) => (
-                  <TableCell
-                    className={`dark:bg-boxdark  dark:text-white dark:border-body}`}
-                    key={column.id}
-                    align={column.align}
-                    style={{
-                      top: 57,
-                      minWidth: column.minWidth,
-                      ...headerCellStyle,
-                    }}
-                  >
-                    <h2 className=" text-lg dark:text-white font-satoshi  font-bold">
-                      {column.label}
-                    </h2>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.date}
-                    >
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell
-                            className={`dark:bg-boxdark dark:text-white `}
-                            key={column.id}
-                            align={column.align}
-                            style={{ ...customFont }}
-                          >
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          className={`dark:bg-boxdark dark:text-white `}
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </div>
+    <>
+      {status !== "APPROVED" && (
+
+
+        <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
+          <h1 className="pl-4 font-satoshi text-3xl font-extrabold text-primary dark:text-white">
+            Approval status
+          </h1>
+          {/* <br style={{ color: "white", backgroundColor: "white" }} /> */}
+          <Paper sx={{ width: "100%" }} className="mt-7 ">
+            <TableContainer sx={{ height: "100%" }}>
+              <Table>
+                <TableHead>
+                  <TableRow className=" ">
+                    {columns.map((column) => (
+                      <TableCell
+                        className={`dark:bg-boxdark  dark:text-white dark:border-body}`}
+                        key={column.id}
+                        align={column.align}
+                        style={{
+                          top: 57,
+                          minWidth: column.minWidth,
+                          ...headerCellStyle,
+                        }}
+                      >
+                        <h2 className=" text-lg dark:text-white font-satoshi  font-bold">
+                          {column.label}
+                        </h2>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, index) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.date}
+                        >
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell
+                                className={`dark:bg-boxdark dark:text-white `}
+                                key={column.id}
+                                align={column.align}
+                                style={{ ...customFont }}
+                              >
+                                {column.format && typeof value === "number"
+                                  ? column.format(value)
+                                  : value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              className={`dark:bg-boxdark dark:text-white `}
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </div>
+      )}
+      {status.toUpperCase() === "APPROVED".toUpperCase() && (
+        <div className="relative md:mt-7 mt-4 md:py-7 py-4 px-4 lg:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
+          <div className="md:mt-12 lg:mt-12 mt-8 ">
+          <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
+          Congrats on successfully finishing the clearance procedure. The clearance is now ready for printing !!
+            </h5>
+            <Link
+              href=""
+              className="absolute bottom-10 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
+            >
+              Print Clearance
+            </Link>
+          </div>
+          <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
+
+          </h5>
+
+
+
+        </div>
+
+      )}
+    </>
   );
 }
 // import * as React from 'react';

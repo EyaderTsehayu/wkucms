@@ -21,7 +21,7 @@ const OuterNav = () => {
             width={60}
             height={40}
           />
-          <h2 className="text-primary text-xl font-extrabold pl-4 ">WKUCMS</h2>
+          <h2 className="text-primary text-xl font-extrabold pl-4 ">CMS</h2>
         </div>
 
         {/* Links on the right */}
