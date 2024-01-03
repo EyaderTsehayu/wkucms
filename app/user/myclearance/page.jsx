@@ -108,7 +108,7 @@ export default function LabTabs() {
                   </div>
                 }
               />
-              <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }}
+              {/* <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }}
                 className=' dark:text-white  '
                 value="4"
                 label={
@@ -116,7 +116,7 @@ export default function LabTabs() {
                     <LocalPrintshopOutlinedIcon className='mr-2' /> Print Clearance
                   </div>
                 }
-              />
+              /> */}
             </TabList>
           </Box>
 
@@ -130,9 +130,9 @@ export default function LabTabs() {
             <TabPanel value="3">
               <Status />
             </TabPanel>
-            <TabPanel value="4">
+            {/* <TabPanel value="4">
               <PrintClearance />
-            </TabPanel>
+            </TabPanel> */}
           </>
 
 
