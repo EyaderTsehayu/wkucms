@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 
 const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
   const pathname = usePathname();
-
+  const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -38,8 +38,9 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${pathname.includes("student") && "col-span-9"
-        } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
+        pathname.includes("student") && "col-span-9"
+      } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -67,7 +68,11 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <Table columns={columns} rows={rows} />
+          <Table
+            columns={columns}
+            rows={rows}
+            setSelectedRows={setSelectedRows}
+          />
         </div>
       </div>
       <Modal
