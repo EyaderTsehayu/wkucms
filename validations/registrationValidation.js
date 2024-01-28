@@ -37,7 +37,7 @@ export const registerStaffSchema = yup.object({
   middleName: yup.string().required("Middle middle name is required"),
   lastName: yup.string().required("Last name is required"),
   staffId: yup.string().required("Students id is required"),
-  officeName: yup.string().required("Office Name is required"),
+  // officeName: yup.string().required("Office Name is required"),
 });
 
 export const personalInfoSchema = yup.object({

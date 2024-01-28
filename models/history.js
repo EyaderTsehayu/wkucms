@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const StudentRequestSchema = new Schema({
+const HistorySchema = new Schema({
   userId: {
     type: String,
     required: [true, "Id is required!"],
@@ -13,7 +13,6 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "Status is required!"],
   },
-
   firstname: {
     type: String,
     required: [true, "firstname is required!"],
@@ -22,18 +21,24 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "middlename is required!"],
   },
-  role: {
-    type: String,
-    required: [true, "role is required!"],
-  },
   dateRequested:{
     type:String,
     required: [true, "Requested date is required!"],
   },
+  dateApproved:{
+    type:String,
+    required: [true, "Approved date is required!"],
+  },
+  clearanceId:{
+    type:String,
+    required: [true, "Approved date is required!"],
+  },
+  role: {
+    type: String,
+    required: [true, "role is required!"],
+  },
 });
 
-const StudentClearnceReq =
-  models.StudentClearnceReq ||
-  model("StudentClearnceReq", StudentRequestSchema);
+const History =models.History || model("History", HistorySchema);
 
-export default StudentClearnceReq;
+export default History;

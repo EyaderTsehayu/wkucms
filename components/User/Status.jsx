@@ -12,10 +12,10 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import useSWR from "swr";
 import { useEffect } from "react";
-
+import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { ROLES, STAFFSTEPS, STUDENTSTEPS } from "@/utils/constants";
-
+import { toast } from "react-toastify";
 const columns = [
   { id: "stepName", label: "Ofiice Name", minWidth: 170 },
   { id: "status", label: "Progress", minWidth: 100 },
@@ -96,7 +96,7 @@ export default function ColumnGroupingTable(props) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { data: session } = useSession();
-
+  const router = useRouter();
 
   const [data, setData] = useState(null);
   // const [error, setError] = useState(null);
@@ -141,19 +141,26 @@ export default function ColumnGroupingTable(props) {
   // }
   let status;
   // if the user does not request the clearance
-  status = userData[0]?.status ?? "Null";
+  status = userData[0]?.status?.trim().toLowerCase() ?? "Null";
 
 
+  const capitalize = (str) => {
+    return str.replace(/\b\w/g, (match) => match.toUpperCase());
+  };
+  
 
+  
+  //const currentIndex = studentApproval.indexOf(capitalize(existingRequest.status?.trim().toLowerCase()));
   // let status = "COLLEGEDEAN";
   console.log("status a", status);
   for (let i = 0; i < step.length - 1; i++) {
     const row = createData(
       step[i],
-      step[i] === status
-        ? "pending"
-        : step.indexOf(status) > i
+      // step[i] === status
+      step[i]?.trim().toLowerCase() === status
 
+        ? "pending"
+        : step.indexOf(capitalize(status)) > i
           ? "approved"
           : "not started"
 
@@ -173,12 +180,71 @@ export default function ColumnGroupingTable(props) {
     setPage(0);
   };
 
+
+  const createHistory = async () => {
+
+    try {
+      const response = await fetch("/api/approvalHistory", {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: userData[0]?.userId ?? 'Null',
+          reason: userData[0]?.reason ?? 'Null',
+          status: userData[0]?.status ?? 'Null',
+          firstname: userData[0]?.firstname ?? 'Null',
+          middlename: userData[0]?.middlename ?? 'Null',
+          role: userData[0]?.role ?? 'Null',
+          dateRequested: userData[0]?.dateRequested ?? 'Null',
+          clearanceId: userData[0]?._id ?? 'NULL'
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const responseData = await response.text();
+        toast.success(responseData);
+        // router.push("/user");
+      }
+    } catch (error) {
+      toast.error('Invalid request');
+      console.log(error);
+    }
+
+  };
+
+  const handlePrintClearance = () => {
+    // Navigate to the /user/PrintClearance route
+    router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
+  };
+
+  // Use useEffect to call createHistory when the component mounts
+  // if (status.toUpperCase() === 'APPROVED'.toUpperCase()) {
+
+  // createHistory();
+  // Empty dependency array means this effect runs once on mount
+
+  // }
+
+  // Use useEffect to call createHistory when the component mounts
+  let ct = 0;
+  useEffect(() => {
+    if (status.toUpperCase() === 'APPROVED') {
+      ct += 1;
+      if (ct == 1) {
+        createHistory();
+      }
+
+    }
+  }, [status]); // The useEffect will re-run whenever the 'status' changes
+
+
   // Check if the user is in dark mode (you might need a more precise method)
   const isDarkMode = window.matchMedia("(prefers-color-scheme: black)").matches;
 
   return (
     <>
-      {status !== "APPROVED" && (
+      {status.toUpperCase()  !== "APPROVED" && (
 
 
         <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
@@ -255,26 +321,29 @@ export default function ColumnGroupingTable(props) {
         </div>
       )}
       {status.toUpperCase() === "APPROVED".toUpperCase() && (
-        <div className="relative md:mt-7 mt-4 md:py-7 py-4 px-4 lg:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
-          <div className="md:mt-12 lg:mt-12 mt-8 ">
-          <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
-          Congrats on successfully finishing the clearance procedure. The clearance is now ready for printing !!
+        <>
+          {/* { createHistory()} */}
+          <div className="relative md:mt-7 mt-4 md:py-7 lg:py-4 py-8   px-4 lg:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
+            <div className="md:mt-12 lg:mt-12 mt-8 ">
+              <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
+                Congrats on successfully finishing the clearance procedure. The clearance is now ready for printing !!
+              </h5>
+              <button
+                 onClick={handlePrintClearance}
+                //  href="/user/PrintClearance"
+                className="absolute lg:bottom-10 bottom-1 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
+              >
+                Print Clearance
+              </button>
+            </div>
+            <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
+
             </h5>
-            <Link
-              href=""
-              className="absolute bottom-10 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
-            >
-              Print Clearance
-            </Link>
+
+
+
           </div>
-          <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary text-center">
-
-          </h5>
-
-
-
-        </div>
-
+        </>
       )}
     </>
   );
