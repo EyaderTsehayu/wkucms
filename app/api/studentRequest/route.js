@@ -13,6 +13,16 @@ export const POST = async (req) => {
     );
   }
 
+  // Get the current date
+  const today = new Date();
+
+  // Format the date as "DD/MM/YY"
+  const formattedDate = today.toLocaleDateString('en-US', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  });
+console.log("formattedDate");
   try {
     await connectToDB();
     const clearanceReq = new StudentClearnceReq({
@@ -22,6 +32,7 @@ export const POST = async (req) => {
       reason,
       status,
       role,
+      dateRequested:formattedDate
     });
 
     await clearanceReq.save();

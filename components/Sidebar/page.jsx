@@ -525,7 +525,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   {/* <!-- Menu offices  --> */}
 
                   {/* <!-- Menu officers  --> */}
-                  <li>
+                  {/* <li>
                     <Link
                       href="/admin/officer"
                       className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium  text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("officer") && "bg-gray dark:bg-meta-4"
@@ -534,7 +534,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       <ManageAccountsOutlinedIcon />
                       Officers
                     </Link>
-                  </li>
+                  </li> */}
                   {/* <!-- Menu Officers --> */}
 
                   {/* <!-- Menu Admin  --> */}

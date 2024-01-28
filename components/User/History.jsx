@@ -1,3 +1,5 @@
+import useSWR from "swr";
+import { useRouter } from "next/navigation";
 const metadata = {
     title: "Alerts Page | Next.js E-commerce Dashboard Template",
     description: "This is Alerts page for TailAdmin Next.js",
@@ -38,16 +40,44 @@ const history = [
 
 ];
 
+const rows = [];
+const fetcher = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id }));
+    return updatedData;
+};
 const History = () => {
+    // Use SWR to fetch and cache data with automatic refresh every 10 seconds
+    const { data: userData, error } = useSWR('http://localhost:3000/api/approvalHistoryGet', fetcher, {
+        initialData: rows,
+        revalidateOnFocus: false,
+        refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+    });
+    const router = useRouter();
+    // Handle loading and fetch errors
+    if (!userData && !error) {
+        return <p>Loading...</p>;
+    }
+    console.log(userData);
+    if (error) {
+        console.error('Error fetching data:', error);
+        return <p>Failed to fetch data</p>;
+    }
+    const handlePrintClearance = () => {
+        // Navigate to the /user/PrintClearance route
+        router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
+      };
+
     return (
         <div className="flex flex-col sm:gap-7.5 gap-2">
-            {history.map((his) => (
+            {userData.map((his) => (
                 <div
-                    key={his.id}
+                    key={his._id}
                     className="rounded-lg   dark:border-strokedark dark:bg-boxdark my-7 flex flex-col sm:flex-row sm:items-center sm:justify-center w-full border-l-6 border-[#34D399] bg-[#34D399] bg-opacity-[15%] px-7 py-8 shadow-md dark-bg-[#1B1B24] dark-bg-opacity-30 md:p-9"
                 >
 
-                    <div className="w-full  text-left">
+                    <div className="relative w-full lg:h-60 h-100   text-left">
                         <div className="flex flex-row">
                             <div className="mr-3 flex h-9 w-full max-w-[30px] items-center justify-center rounded-lg bg-[#34D399]">
                                 <svg
@@ -69,7 +99,7 @@ const History = () => {
                         </div>
 
                         <h5 className="font-satoshi text-xl font-bold text-primary dark:text-meta-5">
-                            <span className="text-xl font-bold text-black dark:text-white">Clearance Id - </span>  {his.clearanceId
+                            <span className="text-xl font-bold text-black dark:text-white">Clearance Id - </span>  {his._id
                             }
                         </h5>
                         <p className=" text-justify font-satoshi text-black text-lg dark:text-bodydark1 leading-7">
@@ -85,6 +115,13 @@ const History = () => {
                         <p className=" text-justify font-satoshi text-black text-lg dark:text-bodydark1 leading-7">
                             <span className="text-xl font-bold text-black dark:text-white">Status - </span> {his.status}
                         </p>
+                        {/* <button
+                            onClick={handlePrintClearance}
+                            // href=""
+                            className="absolute lg:bottom-0 bottom-5 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
+                        >
+                            Print Clearance
+                        </button> */}
                     </div>
                 </div>
             ))
