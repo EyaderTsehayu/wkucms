@@ -1,5 +1,5 @@
 import useSWR from "swr";
-
+import { useRouter } from "next/navigation";
 const metadata = {
     title: "Alerts Page | Next.js E-commerce Dashboard Template",
     description: "This is Alerts page for TailAdmin Next.js",
@@ -54,7 +54,7 @@ const History = () => {
         revalidateOnFocus: false,
         refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     });
-
+    const router = useRouter();
     // Handle loading and fetch errors
     if (!userData && !error) {
         return <p>Loading...</p>;
@@ -66,7 +66,7 @@ const History = () => {
     }
     const handlePrintClearance = () => {
         // Navigate to the /user/PrintClearance route
-        router.push('/user/PrintClearance');
+        router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
       };
 
     return (
@@ -115,13 +115,13 @@ const History = () => {
                         <p className=" text-justify font-satoshi text-black text-lg dark:text-bodydark1 leading-7">
                             <span className="text-xl font-bold text-black dark:text-white">Status - </span> {his.status}
                         </p>
-                        <button
+                        {/* <button
                             onClick={handlePrintClearance}
                             // href=""
                             className="absolute lg:bottom-0 bottom-5 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
                         >
                             Print Clearance
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             ))

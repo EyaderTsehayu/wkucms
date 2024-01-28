@@ -21,6 +21,10 @@ const StaffRequestSchema = new Schema({
     type: String,
     required: [true, "middlename is required!"],
   },
+  privilege: {
+    type: String,
+    required: [true, "middlename is required!"],
+  },
   role: {
     type: String,
     required: [true, "role is required!"],

@@ -149,12 +149,12 @@ export default function PrintClearance({
                 console.log("Fetching data...");
                 const response = await fetch(`http://localhost:3000/api/approvalHistoryGetById/${clearanceId}`);
                 const data = await response.json();
-                setHistory(data);
+                setHistory(data[0]);
                 // setHistory({
                 //     prompt: data.prompt,
                 //     tag: data.tag,
                 // });
-               
+               console.log(data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -180,8 +180,8 @@ export default function PrintClearance({
     };
 
     return (
-        <div className="wrapper">
-            <div className="receipt-box">
+        <div className="wrapper ">
+            <div className="receipt-box ">
                 {/* actual receipt */}
                 <div className="actual-receipt">
                     {/* organization logo */}
@@ -191,11 +191,12 @@ export default function PrintClearance({
                     {/* organization name */}
                     <h5>WKUCMS</h5>
                     <h5>Congratulations on Your Clearance Certificate, {firstName} {middleName}!</h5>
-                    <h5>Date Approved: {history.dateApproved}</h5>
+                    <h5>Clearance ID: {history._id}</h5>
+                    <h5>User ID: {history.userId}</h5>
                     <h5>Date Requested: {history.dateRequested}</h5>
+                    <h5>Date Approved: {history.dateApproved}</h5>
                     <h5>Reason for Clearance: {history.reason}</h5>
                     <h5>Status: {history.status}</h5>
-                    <h5>User ID: {history.userId}</h5>
 
                     {/* Stamp Section */}
                     <div className="stamp-section">

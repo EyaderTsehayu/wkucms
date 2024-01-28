@@ -141,19 +141,26 @@ export default function ColumnGroupingTable(props) {
   // }
   let status;
   // if the user does not request the clearance
-  status = userData[0]?.status ?? "Null";
+  status = userData[0]?.status?.trim().toLowerCase() ?? "Null";
 
 
+  const capitalize = (str) => {
+    return str.replace(/\b\w/g, (match) => match.toUpperCase());
+  };
+  
 
+  
+  //const currentIndex = studentApproval.indexOf(capitalize(existingRequest.status?.trim().toLowerCase()));
   // let status = "COLLEGEDEAN";
   console.log("status a", status);
   for (let i = 0; i < step.length - 1; i++) {
     const row = createData(
       step[i],
-      step[i] === status
-        ? "pending"
-        : step.indexOf(status) > i
+      // step[i] === status
+      step[i]?.trim().toLowerCase() === status
 
+        ? "pending"
+        : step.indexOf(capitalize(status)) > i
           ? "approved"
           : "not started"
 
@@ -237,7 +244,7 @@ export default function ColumnGroupingTable(props) {
 
   return (
     <>
-      {status !== "APPROVED" && (
+      {status.toUpperCase()  !== "APPROVED" && (
 
 
         <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">

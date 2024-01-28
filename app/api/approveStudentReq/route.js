@@ -13,8 +13,15 @@ export const PATCH = async (request) => {
     const existingRequest = await StudentClearnceReq.findById(objectId);
 
     if (existingRequest) {
-      const currentIndex = studentApproval.indexOf(existingRequest.status);
 
+      const capitalize = (str) => {
+        return str.replace(/\b\w/g, (match) => match.toUpperCase());
+      };
+      
+
+      
+      const currentIndex = studentApproval.indexOf(capitalize(existingRequest.status?.trim().toLowerCase()));
+      //  console.log("currentIndex" ,capitalize(existingRequest.status?.trim().toLowerCase()));
       if (currentIndex !== -1 && currentIndex < studentApproval.length - 1) {
         existingRequest.status = studentApproval[currentIndex + 1];
       } else {
