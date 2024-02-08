@@ -18,7 +18,6 @@ export const registerOfficerSchema = yup.object({
   lastName: yup.string().required("Last name is required"),
   studentId: yup.string().required("Students id is required"),
   collegeName: yup.string().required("privilege name is required"),
-  
 });
 export const registerOfficeSchema = yup.object({
   officeName: yup.string().required("Office name is required"),
@@ -60,4 +59,10 @@ export const changePasswordSchema = yup.object({
     .required("Re enter  your new password")
     .min(8, "New password must be at least 8 characters")
     .max(20, "New password must be at most 20 characters"),
+});
+
+export const rejectReasonSchema = yup.object({
+  rejectionReason: yup.string().required("Rejection reason is required"),
+
+  // officeName: yup.string().required("Office Name is required"),
 });
