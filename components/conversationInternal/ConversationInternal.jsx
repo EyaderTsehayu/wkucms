@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
-const ConversationInternal = () => {
+const ConversationInternal = ({ conversation, currentUser }) => {
+  const [user, setUser] = useState([]);
+  const { data: session } = useSession();
+  useEffect(() => {
+    const currentUserId = session?.user?.id;
+
+    const friendId = conversation.members.find((m) => m !== currentUserId);
+
+    const getUser = async () => {
+      try {
+        const response = await fetch(`/api/user/${friendId}`);
+
+        const data = await response.json();
+
+        setUser(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUser();
+  }, [currentUser, conversation]);
+  // console.log("user from internal conversation", user);
   return (
     <div>
       <div class="flex cursor-pointer items-center rounded px-4 py-2 hover:bg-gray-2 dark:hover:bg-strokedark">
@@ -18,7 +40,7 @@ const ConversationInternal = () => {
         </div>
         <div class="w-full">
           <h5 class="text-sm font-medium text-black dark:text-white">
-            Henry Dholi
+            {user[0]?.firstname} {user[0]?.middlename}
           </h5>
           <p class="text-sm font-medium">I cam across your profile and...</p>
         </div>
