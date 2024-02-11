@@ -522,6 +522,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       Offices
                     </Link>
                   </li>
+
+                  <li>
+                    <Link
+                      href="/admin/manageOffices"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("manageOffices") && "bg-gray dark:bg-meta-4"
+                        }`}
+                    >
+                      <HomeWorkOutlinedIcon />
+                      Manage Offices
+                    </Link>
+                  </li>
                   {/* <!-- Menu offices  --> */}
 
                   {/* <!-- Menu officers  --> */}
@@ -541,7 +552,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   <li>
                     <Link
                       href="/admin/manageAdmins"
-                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("manage") && "bg-gray dark:bg-meta-4"
+                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("manageAdmins") && "bg-gray dark:bg-meta-4"
                         }`}
                     >
                       <AdminPanelSettingsOutlinedIcon /> Admins

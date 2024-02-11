@@ -9,13 +9,16 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
 import { Button } from "@mui/material";
-import { useState } from "react";
+// import { useState } from "react";
 import useSWR from "swr";
-import { useEffect } from "react";
+import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { ROLES, STAFFSTEPS, STUDENTSTEPS } from "@/utils/constants";
+import { ROLES, STUDENTSTEPS } from "@/utils/constants";
 import { toast } from "react-toastify";
+
+
+
 const columns = [
   { id: "stepName", label: "Ofiice Name", minWidth: 170 },
   { id: "status", label: "Progress", minWidth: 100 },
@@ -33,13 +36,13 @@ function createData(stepName, status) {
         )}
 
         {status === "pending" && (
-          <p class="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium text-warning bg-warning">
+          <p className="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium text-warning bg-warning">
             {status}
           </p>
         )}
 
         {status === "not started" && (
-          <p class="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium text-danger bg-danger">
+          <p className="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium text-danger bg-danger">
             {status}
           </p>
         )}
@@ -101,6 +104,8 @@ export default function ColumnGroupingTable(props) {
   const [data, setData] = useState(null);
   // const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [stepData, setStepData] = useState(null);
+  const [stepError, setStepError] = useState(null);
   // console.log("data iuiuu dgfgdfgfdgf");
   const a = [];
   // Step 3: Use useEffect to trigger the API request
@@ -124,7 +129,118 @@ export default function ColumnGroupingTable(props) {
     return <p>Failed to fetch data</p>;
   }
 
-  // Continue with the rest of your component
+
+  let status;
+  // if the user does not request the clearance
+  status = userData[0]?.status?.trim().toLowerCase() ?? "Null";
+
+  let ct = 0;
+  // fetch steps from db
+
+// create history
+const createHistory = async () => {
+
+  try {
+    const response = await fetch("/api/approvalHistory", {
+      method: 'POST',
+      body: JSON.stringify({
+        userId: userData[0]?.userId ?? 'Null',
+        reason: userData[0]?.reason ?? 'Null',
+        status: userData[0]?.status ?? 'Null',
+        firstname: userData[0]?.firstname ?? 'Null',
+        middlename: userData[0]?.middlename ?? 'Null',
+        role: userData[0]?.role ?? 'Null',
+        dateRequested: userData[0]?.dateRequested ?? 'Null',
+        clearanceId: userData[0]?._id ?? 'NULL'
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const responseData = await response.text();
+      toast.success(responseData);
+      // router.push("/user");
+    }
+  } catch (error) {
+    toast.error('Invalid request');
+    console.log(error);
+  }
+
+};
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/step");
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const updatedData = data.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+        setStepData(updatedData);
+      } catch (error) {
+        setStepError(error); // Corrected from `error` to `stepError`
+      }
+    };
+
+
+    fetchData(); // Fetch data once when component mounts
+    // generate history
+
+    if (status.toUpperCase() === 'APPROVED') {
+      ct += 1;
+      if (ct == 1) {
+        createHistory();
+      }
+
+    }
+    // The useEffect will re-run whenever the 'status' changes
+
+
+    // No cleanup or dependency array needed as we only want to fetch data once
+  }, []);
+
+  if (stepData) {
+
+    console.log("stepData ", stepData[0].steps)
+  }
+
+  // Render loading state
+  if (!stepData && !stepError) {
+    return <p>Loading...</p>;
+  }
+
+  // Render error state
+  if (stepError) {
+    console.error("Error fetching data:", error);
+    return <p>Failed to fetch data</p>;
+  }
+
+
+  // // generate history
+  // let status;
+  // // if the user does not request the clearance
+  // status = userData[0]?.status?.trim().toLowerCase() ?? "Null";
+
+  //   let ct = 0;
+  //   useEffect(() => {
+  //         if (status.toUpperCase() === 'APPROVED') {
+  //     ct += 1;
+  //     if (ct == 1) {
+  //       createHistory();
+  //     }
+
+  //   }
+  // }, [status]); // The useEffect will re-run whenever the 'status' changes
+
+
+
 
   //
   const rows = [];
@@ -134,38 +250,38 @@ export default function ColumnGroupingTable(props) {
     step = STUDENTSTEPS;
   }
   if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STAFF.toUpperCase()) {
-    step = STAFFSTEPS;
+    step = stepData[0].steps;
   }
   // if (session?.user?.role == ROLES.STAFF) {
   //   step = STAFFSTEPS;
   // }
-  let status;
-  // if the user does not request the clearance
-  status = userData[0]?.status?.trim().toLowerCase() ?? "Null";
 
 
   const capitalize = (str) => {
     return str.replace(/\b\w/g, (match) => match.toUpperCase());
   };
-  
 
-  
+
+
   //const currentIndex = studentApproval.indexOf(capitalize(existingRequest.status?.trim().toLowerCase()));
   // let status = "COLLEGEDEAN";
   console.log("status a", status);
-  for (let i = 0; i < step.length - 1; i++) {
-    const row = createData(
-      step[i],
-      // step[i] === status
-      step[i]?.trim().toLowerCase() === status
+  if(step){
 
-        ? "pending"
-        : step.indexOf(capitalize(status)) > i
-          ? "approved"
-          : "not started"
-
-    );
-    rows.push(row);
+    for (let i = 0; i < step.length - 1; i++) {
+      const row = createData(
+        step[i],
+        // step[i] === status
+        step[i]?.trim().toLowerCase() === status
+  
+          ? "pending"
+          : step.indexOf((status.toUpperCase())) >i
+            ? "approved"
+            : "not started"
+            );
+            console.log(i,"=>",step[i],"status",step.indexOf(capitalize(status)));
+      rows.push(row);
+    }
   }
   const headerCellStyle = {
     // fontWeight: 'bold',
@@ -181,37 +297,9 @@ export default function ColumnGroupingTable(props) {
   };
 
 
-  const createHistory = async () => {
 
-    try {
-      const response = await fetch("/api/approvalHistory", {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: userData[0]?.userId ?? 'Null',
-          reason: userData[0]?.reason ?? 'Null',
-          status: userData[0]?.status ?? 'Null',
-          firstname: userData[0]?.firstname ?? 'Null',
-          middlename: userData[0]?.middlename ?? 'Null',
-          role: userData[0]?.role ?? 'Null',
-          dateRequested: userData[0]?.dateRequested ?? 'Null',
-          clearanceId: userData[0]?._id ?? 'NULL'
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
 
-      if (response.ok) {
-        const responseData = await response.text();
-        toast.success(responseData);
-        // router.push("/user");
-      }
-    } catch (error) {
-      toast.error('Invalid request');
-      console.log(error);
-    }
-
-  };
+  
 
   const handlePrintClearance = () => {
     // Navigate to the /user/PrintClearance route
@@ -227,24 +315,13 @@ export default function ColumnGroupingTable(props) {
   // }
 
   // Use useEffect to call createHistory when the component mounts
-  let ct = 0;
-  useEffect(() => {
-    if (status.toUpperCase() === 'APPROVED') {
-      ct += 1;
-      if (ct == 1) {
-        createHistory();
-      }
-
-    }
-  }, [status]); // The useEffect will re-run whenever the 'status' changes
-
 
   // Check if the user is in dark mode (you might need a more precise method)
   const isDarkMode = window.matchMedia("(prefers-color-scheme: black)").matches;
 
   return (
     <>
-      {status.toUpperCase()  !== "APPROVED" && (
+      {status.toUpperCase() !== "APPROVED" && (
 
 
         <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
@@ -329,7 +406,7 @@ export default function ColumnGroupingTable(props) {
                 Congrats on successfully finishing the clearance procedure. The clearance is now ready for printing !!
               </h5>
               <button
-                 onClick={handlePrintClearance}
+                onClick={handlePrintClearance}
                 //  href="/user/PrintClearance"
                 className="absolute lg:bottom-10 bottom-1 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
               >

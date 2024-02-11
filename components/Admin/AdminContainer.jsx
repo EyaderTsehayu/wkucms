@@ -83,7 +83,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       >
         <div
           onClick={handleOverlayClick}
-          class="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
+          className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
           <OpenedModal />
         </div>

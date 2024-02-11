@@ -8,7 +8,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const GET = async () => {
   const session = await getServerSession(authOptions);
   const privilage=session?.user?.privilege;
-  
+  console.log("privilageprivilage",privilage)
    console.log("session from studentApproval ",session?.user?.privilege)
   try {
 

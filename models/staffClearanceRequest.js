@@ -23,7 +23,7 @@ const StaffRequestSchema = new Schema({
   },
   privilege: {
     type: String,
-    required: [true, "middlename is required!"],
+    // required: [true, "privilege is required!"],
   },
   role: {
     type: String,

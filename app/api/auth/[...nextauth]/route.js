@@ -15,6 +15,9 @@ export const authOptions = {
         try {
           await connectToDB();
           const user = await User.findOne({ userId });
+
+          
+
           //console.log("user in route js", user);
 
           if (!user) {

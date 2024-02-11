@@ -8,7 +8,8 @@ export const ROLES = {
 
 export const STUDENTSTEPS=["Head", "College Dean","Cafteria","Library Chief","College Book Store","Sport And Recreation", "Dormitary","Dean Of Student","Registrar","APPROVED"];
 export const STAFFSTEPS=["HR", "BOOKCERCULATION", "FINANCE","APPROVED"];
-export const CollegeData = [
+
+  export const CollegeData = [
   { id: "1", name: "College of Computing and Informatics" },
   { id: "2", name: "Engineering" },
   { id: "3", name: "Social sciences and Humanities" },
@@ -34,3 +35,5 @@ export const privilegeData = [
   { id: "4", name: "Dean Of Student" },
   { id: "5", name: "Registrar" },
 ];
+
+

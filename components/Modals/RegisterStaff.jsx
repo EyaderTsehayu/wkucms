@@ -305,13 +305,13 @@ const RegisterStaff = () => {
 
 
   return (
-    <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <div className="flex flex-row place-content-between">
         <div>
-          <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
+          <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
             Register Officer
           </h3>
-          <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+          <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
 
        
@@ -441,18 +441,18 @@ const RegisterStaff = () => {
         </div>
       
 
-        <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
-          <div class="w-full px-3 2xsm:w-1/2">
+        <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
+          <div className="w-full px-3 2xsm:w-1/2">
             <button
               type="submit"
-              class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+              className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
             >
               Save
             </button>
           </div>
 
-          <div class="w-full px-3 2xsm:w-1/2">
-            <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+          <div className="w-full px-3 2xsm:w-1/2">
+            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
           </div>
