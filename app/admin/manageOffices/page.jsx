@@ -11,9 +11,13 @@ import Modal from "@mui/material/Modal";
 
 
 const PersonItem = ({ person }) => (
+  <>
+   {person!="APPROVED"&&(
   <div className="relative flex space-x-3 border rounded p-2 bg-gray-100">
     <p>{person}</p>
-  </div>
+    </div>
+    )}
+  </>
 );
 
 
