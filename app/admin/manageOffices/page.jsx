@@ -35,7 +35,8 @@ const ManageOffices = ({ modal: OpenedModal }) => {
   const [stepData, setStepData] = useState(null);
   const [stepError, setStepError] = useState(null);
   const [updateSteps, setUpdateSteps] = useState();
-
+  const [draggedData,setDraggedData]=useState();
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,6 +50,8 @@ const ManageOffices = ({ modal: OpenedModal }) => {
           id: user._id,
         }));
         setStepData(updatedData);
+        setDraggedData(updatedData[0].steps);
+        console.log("setDraggedData",draggedData);
       } catch (error) {
         setStepError(error); // Corrected from `error` to `stepError`
       }
@@ -85,7 +88,9 @@ const ManageOffices = ({ modal: OpenedModal }) => {
     const temp = peopleClone[dragPerson.current];
     peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
     peopleClone[draggedOverPerson.current] = temp;
-    updatePeople(peopleClone);
+    console.log("peopleClone",peopleClone)
+    setDraggedData(peopleClone);
+    console.log("setDraggedData",draggedData);
     setUpdateSteps(peopleClone);
   }
 
@@ -95,7 +100,7 @@ const ManageOffices = ({ modal: OpenedModal }) => {
   const modifySteps = async () => {
     console.log("updateStepsss", updateSteps);
     try {
-      const response = await fetch(`/api/step/steps`, {
+      const response = await fetch(`/api/step`, {
         method: "PATCH",
         body: JSON.stringify({
           stepType: "STAFF",
@@ -169,7 +174,8 @@ const ManageOffices = ({ modal: OpenedModal }) => {
 
           <main className="flex min-h-screen flex-col items-center space-y-4">
             <h1 className="text-xl font-bold mt-4">List</h1>
-            {stepData[0].steps.map((person, index) => (
+            {/* {stepData[0]?.steps?.map((person, index) => ( */}
+               {draggedData.map((person, index) => (
               <div key={index}
                 draggable
                 onDragStart={() => (dragPerson.current = index)}
