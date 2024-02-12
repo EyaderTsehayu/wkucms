@@ -533,6 +533,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       Manage Offices
                     </Link>
                   </li>
+
+                  
                   {/* <!-- Menu offices  --> */}
 
                   {/* <!-- Menu officers  --> */}

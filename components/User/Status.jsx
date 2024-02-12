@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { ROLES, STUDENTSTEPS } from "@/utils/constants";
 import { toast } from "react-toastify";
-
+import { getSession, signIn } from "next-auth/react";
 
 
 const columns = [
@@ -98,6 +98,8 @@ export default function ColumnGroupingTable(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+
+  
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -172,11 +174,34 @@ const createHistory = async () => {
 
 
   useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await fetch("http://localhost:3000/api/step");
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     const data = await response.json();
+    //     const updatedData = data.map((user) => ({
+    //       ...user,
+    //       id: user._id,
+    //     }));
+    //     setStepData(updatedData);
+    //   } catch (error) {
+    //     setStepError(error); // Corrected from `error` to `stepError`
+    //   }
+    // };
     const fetchData = async () => {
+      const session = await getSession(); // Get the updated session after sign-in
+      console.log("Hello Role -- ", session?.user?.role);
+      const role = session.user?.role;
       try {
-        const response = await fetch("http://localhost:3000/api/step");
+        const stepType = role; // Define your stepType here
+        const url = new URL("http://localhost:3000/api/step");
+        url.searchParams.append("stepType", stepType);
+    
+        const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         const updatedData = data.map((user) => ({
@@ -184,11 +209,12 @@ const createHistory = async () => {
           id: user._id,
         }));
         setStepData(updatedData);
+        // setDraggedData(updatedData[0].steps);
+        // console.log("setDraggedData", draggedData);
       } catch (error) {
-        setStepError(error); // Corrected from `error` to `stepError`
+        setStepError(error);
       }
     };
-
 
     fetchData(); // Fetch data once when component mounts
     // generate history
@@ -204,7 +230,7 @@ const createHistory = async () => {
 
 
     // No cleanup or dependency array needed as we only want to fetch data once
-  }, []);
+  }, [stepData]);
 
   if (stepData) {
 
@@ -218,7 +244,7 @@ const createHistory = async () => {
 
   // Render error state
   if (stepError) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching data:", stepError);
     return <p>Failed to fetch data</p>;
   }
 
@@ -247,7 +273,7 @@ const createHistory = async () => {
 
   let step;
   if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STUDENT.toUpperCase()) {
-    step = STUDENTSTEPS;
+    step = stepData[0].steps;
   }
   if (session?.user?.role && session?.user?.role.toUpperCase() === ROLES.STAFF.toUpperCase()) {
     step = stepData[0].steps;
@@ -275,7 +301,7 @@ const createHistory = async () => {
         step[i]?.trim().toLowerCase() === status
   
           ? "pending"
-          : step.indexOf((status.toUpperCase())) >i
+          : step.indexOf(capitalize(status)) >i
             ? "approved"
             : "not started"
             );

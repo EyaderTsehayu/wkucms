@@ -5,16 +5,21 @@ import StepSchema from "@/models/step";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
-export const GET = async () => {
+export const GET = async (request) => {
+     // Parse the stepType from the URL query parameters
+     const params = new URL(request.url).searchParams;
+     const stepType = params.get("stepType");
+ 
   const session = await getServerSession(authOptions);
   const privilage=session?.user?.privilege;
-  
+  console.log("sendtoapi",stepType);
+
    console.log("session from studentApproval ",session?.user?.privilege)
   try {
 
     await connectToDB();
    
-    const requests = await StepSchema.find({ stepType:"STAFF"});
+    const requests = await StepSchema.find({ stepType});
 
 
     // Return a success response with the users data
