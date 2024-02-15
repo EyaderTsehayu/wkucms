@@ -29,7 +29,7 @@ const ManageAdmin = () => {
   const { data: userData, error } = useSWR('http://localhost:3000/api/user/new/admin', fetcher, {
     initialData: rows,
     revalidateOnFocus: false,
-    refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+    // refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
   });
 
   // Handle loading and fetch errors

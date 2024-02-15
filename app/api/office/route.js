@@ -8,7 +8,8 @@ export const POST = async (req) => {
     officeName,
     password,
     location,
-    items
+    items,
+    type
   } = await req.json();
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,7 +21,8 @@ export const POST = async (req) => {
       officeName,
       password: hashedPassword,
       location,
-      items
+      items,
+      type
     });
 
     console.log(
@@ -28,7 +30,8 @@ export const POST = async (req) => {
       officeName,
       hashedPassword,
       location,
-      items
+      items,
+      type
     );
     await newOffice.save();
     return new Response(JSON.stringify(newOffice), { status: 201 });

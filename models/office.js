@@ -23,6 +23,10 @@ const OfficeSchema = new Schema({
     type: String,
     required: [true, "items is required"],
   },
+  type: {
+    type: String,
+    required: [true, "step type is required"],
+  },
 });
 
 const Office = models.Office || model("Office", OfficeSchema);

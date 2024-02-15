@@ -121,7 +121,7 @@ const RegisterStudent = () => {
   const onSubmit = async (data) => {
     const fromFirstName = data.firstName.toLowerCase();
     const fromMiddleName = data.middleName.charAt(0).toLowerCase();
-
+    
     // Generate a random number between 100 and 999
 
     const password = `${fromFirstName}@${fromMiddleName}1234`;

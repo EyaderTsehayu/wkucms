@@ -92,7 +92,7 @@ const ApproveStaff = () => {
         const { data: userData, error } = useSWR('http://localhost:3000/api/staffApproval', fetcher, {
           initialData: rows,
           revalidateOnFocus: false,
-          refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+        //   refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
         });
         console.log("session from approval ad ",userData)
         // Handle loading and fetch errors

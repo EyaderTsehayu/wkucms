@@ -210,10 +210,10 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
                 <PersonItem key={index} person={person} />
               </div>
             ))}
-            <div className="w-full px-3 2xsm:w-1/2">
+           <div className="w-full px-1 2xsm:w-1/2">
               <button
                 onClick={modifySteps}
-                className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                className="block w-full rounded border border-primary bg-primary py-2 text-center font-medium text-white transition hover:bg-opacity-90"
               >
                 Save
               </button>
