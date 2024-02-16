@@ -49,10 +49,10 @@ const fetcher = async (url) => {
 };
 const History = () => {
     // Use SWR to fetch and cache data with automatic refresh every 10 seconds
-    const { data: userData, error } = useSWR('http://localhost:3000/api/approvalHistoryGet', fetcher, {
+    const { data: userData, error } = useSWR('http://localhost:3000/api/approvalHistory', fetcher, {
         initialData: rows,
         revalidateOnFocus: false,
-        // refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+         refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     });
     const router = useRouter();
     // Handle loading and fetch errors
