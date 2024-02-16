@@ -171,16 +171,16 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
         <div className="flex w-1/3 ">
-          <input
-            type="text"
-            placeholder="Search here ..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className=" w-full hidden sm:block px-4 py-2 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-          />
+            {/* <input
+              type="text"
+              placeholder="Search here ..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className=" w-full hidden sm:block px-4 py-2 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            /> */}
         </div>
 
-        <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
+        {/* <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
           <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
             Deactivate
           </button>
@@ -190,7 +190,7 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
           >
             Register
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
