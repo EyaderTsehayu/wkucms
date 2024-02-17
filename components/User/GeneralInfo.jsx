@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 
 const genInfo = [
@@ -39,16 +40,35 @@ const genInfo = [
         desc: "A is a vital component of the college experience for many students. It serves as a temporary residence during their time at a college or university, providing not only a place to sleep but also an environment for learning, personal growth, and social interaction.",
     },
 ];
-
+ //     const updatedData = data.map((user) => ({
+    //       ...user,
+    //       id: user._id,
+    //     }));
 
 const GeneralInfo = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [generalInfo,setGeneralInfo]=useState([]);
 
+    useEffect(()=>{
+        const fetchInfo=async()=>{
+            const result=await fetch("/api/office");
+            const generalInfoResult=await result.json()
+            // console.log("generalInfo  ",generalInfoResult)
+            setGeneralInfo(generalInfoResult)
+
+            
+        }
+        fetchInfo();
+    },[generalInfo])
+    
+    
+    
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
+    console.log("generalInfoResult",generalInfo);
 
-    const filteredInfo = genInfo.filter(info => info.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredInfo = generalInfo.filter(info => info.officeName.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <div>
@@ -66,12 +86,13 @@ const GeneralInfo = () => {
                         <div className=" sm:px-2 pt-1 shadow  shadow-stroke rounded-lg border border-stroke  shadow-9 dark:border-strokedark dark:bg-boxdark dark:shadow-none ">
                             <div className="border-b border-stroke py-5 sm:px-7.5 px-2 dark:border-body ">
                                 <h4 className=" font-satoshi text-2xl font-bold text-primary dark:text-white">
-                                    <a href="#">{info.title}</a>
+                                    <a href="#">{info.officeName}</a>
                                 </h4>
                             </div>
                             <div className="px-7.5 pt-6 pb-9">
                                 <p className="font-satoshi font-md text-body text-lg dark:text-bodydark1 leading-7 text-justify">
-                                    {info.desc}
+                                Prior to requesting approval from {info.officeName}, please return any materials or things associated with this office, including  {info.items}.
+                                   
                                 </p>
                             </div>
                         </div>

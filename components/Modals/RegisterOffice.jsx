@@ -58,7 +58,8 @@ const RegisterOffice = () => {
           password: password,
           location: data.location,
           items: data.items,
-          type:stepType
+          type:stepType,
+          status:"active"
         }),
       });
 

@@ -124,7 +124,7 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
   const modifySteps = async () => {
     console.log("updateStepsss", updateSteps);
     try {
-      const response = await fetch(`/api/step`, {
+      const response = await fetch(`/api/step`, {  
         method: "PATCH",
         body: JSON.stringify({
           stepType: "STAFF",
@@ -180,7 +180,7 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
             /> */}
         </div>
 
-        {/* <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
+        <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
           <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
             Deactivate
           </button>
@@ -190,7 +190,7 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
           >
             Register
           </button>
-        </div> */}
+        </div>
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
