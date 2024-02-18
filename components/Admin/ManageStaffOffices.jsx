@@ -8,13 +8,15 @@ import useSWR from 'swr';
 import { usePathname } from "next/navigation";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 
 
-
-const PersonItem = ({ person }) => (
+const PersonItem = ({ person,index }) => (
   <>
    {person!="APPROVED"&&(
-  <div className="relative flex space-x-3 border rounded p-2 bg-gray-100">
+  <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+  <SwapVertIcon/>
+  <p>{index}{ }</p>
     <p>{person}</p>
     </div>
     )}
@@ -25,7 +27,7 @@ const PersonItem = ({ person }) => (
 
 
 
-const ManageStaffOffices = ({ modal: OpenedModal }) => {
+const ManageStaffOffices = () => {
 
   const dragPerson = useRef(0);
   const draggedOverPerson = useRef(0);
@@ -181,9 +183,9 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+          {/* <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
             Deactivate
-          </button>
+          </button> */}
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
@@ -207,13 +209,16 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
                 onDragEnd={handleSort}
                 onDragOver={(e) => e.preventDefault()}
               >
-                <PersonItem key={index} person={person} />
+                {/* <h>{index+1}</h> */}
+                <PersonItem index={index+1} person={person} />
               </div>
             ))}
-           <div className="w-full px-1 2xsm:w-1/2">
+
+            {/* 2xsm:w-1/2 */}
+           <div className="w-60 w-full px-1 ">
               <button
                 onClick={modifySteps}
-                className="block w-full rounded border border-primary bg-primary py-2 text-center font-medium text-white transition hover:bg-opacity-90"
+                className="block  w-full rounded border border-primary bg-primary py-2 text-center font-medium text-white transition hover:bg-opacity-90"
               >
                 Save
               </button>
@@ -236,7 +241,7 @@ const ManageStaffOffices = ({ modal: OpenedModal }) => {
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <OpenedModal />
+          <RegisterOffice />
         </div>
       </Modal>
 

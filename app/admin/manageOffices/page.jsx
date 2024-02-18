@@ -24,7 +24,7 @@ export default function LabTabs() {
 
   return (
     <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
-      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">Manage office steps</h1>
+      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">Manage Office Steps</h1>
       <Box sx={{ typography: 'body1', backgroundColor: "white", minHeight: "100vh" }} className="dark:border-black dark:bg-black" >
         <TabContext value={value} >
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="pt-2 px-4 dark-border-body">

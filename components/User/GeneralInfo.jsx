@@ -143,7 +143,7 @@ const GeneralInfo = () => {
                             {accordionOpen[index] && (
                                 <div className="  mt-5 ml-16.5 duration-200 ease-in-out ">
                                     <p className="font-satoshi text-body text-lg dark:text-bodydark1 leading-8">
-                                    Prior to requesting approval from {info.officeName}, please return any materials or things associated with this office, including  {info.items}.
+                                    Prior to requesting approval from {info.officeName}, please return any materials or things associated with this office or fulfil the prerequisit before asking permission from the {info.officeName} including  {info.items}.
                                    
                                     </p>
                                 </div>

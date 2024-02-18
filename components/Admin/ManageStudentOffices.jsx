@@ -8,13 +8,16 @@ import useSWR from 'swr';
 import { usePathname } from "next/navigation";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
+import SwapVertIcon from '@mui/icons-material/SwapVert';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-
-
-const PersonItem = ({ person }) => (
+const PersonItem = ({person,index }) => (
   <>
    {person!="APPROVED"&&(
-  <div className="relative flex space-x-3 border rounded p-2 bg-gray-100">
+  <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+     {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
+    <SwapVertIcon/>
+    <p>{index}</p>
     <p>{person}</p>
     </div>
     )}
@@ -25,7 +28,7 @@ const PersonItem = ({ person }) => (
 
 
 
-const ManageStudentOffices = ({ modal: OpenedModal }) => {
+const ManageStudentOffices = () => {
 
   const dragPerson = useRef(0);
   const draggedOverPerson = useRef(0);
@@ -182,17 +185,17 @@ const ManageStudentOffices = ({ modal: OpenedModal }) => {
           /> */}
         </div>
 
-        {/* <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+        <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
+          {/* <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
             Deactivate
-          </button>
+          </button> */}
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
           >
             Register
           </button>
-        </div> */}
+        </div>
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
@@ -209,10 +212,10 @@ const ManageStudentOffices = ({ modal: OpenedModal }) => {
                 onDragEnd={handleSort}
                 onDragOver={(e) => e.preventDefault()}
               >
-                <PersonItem key={index} person={person} />
+                <PersonItem index={index+1}  person={person} />
               </div>
             ))}
-            <div className="w-full px-3 2xsm:w-1/2">
+            <div className="w-60 w-full px-1 ">
               <button
                 onClick={modifySteps}
                 className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
@@ -238,7 +241,7 @@ const ManageStudentOffices = ({ modal: OpenedModal }) => {
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <OpenedModal />
+          <RegisterOffice />
         </div>
       </Modal>
 
