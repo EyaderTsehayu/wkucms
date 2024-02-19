@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 const request = [
@@ -35,18 +36,63 @@ const request = [
 
 const TaskItem = () => {
   const [selectedTask, setSelectedTask] = useState(null);
+
+   // fetch the steps from db
+   const [stepData, setStepData] = useState(null);
+   const [stepError, setStepError] = useState(null);
+
+   const [draggedData, setDraggedData] = useState();
+ 
   const session = useSession();
   //console.log("session from my clearance", session?.data?.user.userId);
   const userId = session?.data?.user.userId;
   const firstname = session?.data?.user.firstname;
   const middlename = session?.data?.user.middlename;
 
+
+
+  var stepType;
   var status;
-  if (session?.data?.user.role == "STUDENT") {
-    status = "HEAD";
-  } else if (session?.data?.user.role == "STAFF") {
-    status = "HR";
-  }
+  // if (session?.data?.user.role == "STUDENT") {
+   
+  //   stepType = "STUDENT";
+  // } else if (session?.data?.user.role == "STAFF") {
+  //   stepType = "STAFF";
+  // }
+
+
+  // fetch the starting office
+  useEffect(() => {
+    stepType=session?.data?.user.role;
+    const fetchData = async () => {
+      try {
+        const url = new URL("http://localhost:3000/api/step");
+        url.searchParams.append("stepType", stepType );
+        
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        const updatedData = data.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+        setStepData(updatedData);
+        setDraggedData(updatedData[0].steps[0]);
+        // console.log("13errrrrrrr",stepType );
+        // status=updatedData[0].steps[0];
+        
+      } catch (error) {
+        setStepError(error);
+      }
+    };
+
+
+    fetchData(); // Fetch data once when component mounts
+
+    // No cleanup or dependency array needed as we only want to fetch data once
+  }, []);
 
   const handleTaskSelection = (task) => {
     setSelectedTask(task);
@@ -56,12 +102,13 @@ const TaskItem = () => {
     if (selectedTask != null) {
       if (session?.data?.user.role == "STUDENT") {
         try {
+          console.log("222setDraggedDatastatus",draggedData );
           const response = await fetch("/api/studentRequest", {
             method: "POST",
             body: JSON.stringify({
               userId: userId,
               reason: selectedTask,
-              status: status,
+              status: draggedData,
               firstname: firstname,
               middlename: middlename,
               role: "STUDENT",
@@ -83,12 +130,13 @@ const TaskItem = () => {
 
       if (session?.data?.user.role == "STAFF") {
         try {
+          console.log("222setDraggedDatastatus",draggedData );
           const response = await fetch("/api/staffRequest", {
             method: "POST",
             body: JSON.stringify({
               userId: userId,
               reason: selectedTask,
-              status: status,
+              status: draggedData,
               firstname: firstname,
               middlename: middlename,
               role: "STAFF",

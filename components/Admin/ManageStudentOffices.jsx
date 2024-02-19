@@ -9,22 +9,25 @@ import { usePathname } from "next/navigation";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+
+
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const PersonItem = ({person,index }) => (
-  <>
-   {person!="APPROVED"&&(
-  <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
-     {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
-    <SwapVertIcon/>
-    <p>{index}</p>
-    <p>{person}</p>
-    </div>
-    )}
-  </>
-);
-
-
+// const PersonItem = ({person,index }) => (
+//   <>
+//    {person!="APPROVED"&&(
+//   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+//      {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
+//     <SwapVertIcon/>
+//     <p>{index}</p>
+//     <p>{person}</p>
+//     </div>
+//     )}
+//   </>
+// );
 
 
 
@@ -41,6 +44,84 @@ const ManageStudentOffices = () => {
   const [updateSteps, setUpdateSteps] = useState();
   const [draggedData,setDraggedData]=useState();
   
+
+
+
+  const PersonItem = ({ person, index, draggedData, setDraggedData }) => {
+    const SwapDecreamentally = () => {
+     
+  
+      if ((index < draggedData.length - 1) && (index != 0)) {
+  
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[index - 1];
+        updatedData[index - 1] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+        console.log("wwww", updatedData)
+        setUpdateSteps(updatedData);
+      } else if (index == 0) {
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[draggedData.length - 2];
+        updatedData[draggedData.length - 2] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+  
+        setUpdateSteps(updatedData);
+      }
+    };
+  
+    const SwapIncreamentally = () => {
+     
+  
+      if (index < draggedData.length - 2) {
+  
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[index + 1];
+        updatedData[index + 1] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+        console.log("wwww", updatedData)
+        setUpdateSteps(updatedData);
+      } else if (index == draggedData.length - 2) {
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[0];
+        updatedData[0] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+  
+        setUpdateSteps(updatedData);
+      }
+    };
+  
+  
+    return (
+      <>
+        {person !== "APPROVED" && (
+          <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+            <KeyboardDoubleArrowUpIcon onClick={SwapDecreamentally} />
+  
+            <p onClick={() => console.log(`${index + 1}`)}>{index + 1}</p>
+            <p>{person}</p>
+            <div class="flex flex-1 justify-end">
+              <KeyboardDoubleArrowDownIcon onClick={SwapIncreamentally} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
+  
+  
+
   useEffect(() => {
     // const fetchData = async () => {
     //   try {
@@ -212,7 +293,10 @@ const ManageStudentOffices = () => {
                 onDragEnd={handleSort}
                 onDragOver={(e) => e.preventDefault()}
               >
-                <PersonItem index={index+1}  person={person} />
+                 <PersonItem index={index}
+                  person={person}
+                  draggedData={draggedData}
+                  setDraggedData={setDraggedData} />
               </div>
             ))}
             <div className="w-60 w-full px-1 ">

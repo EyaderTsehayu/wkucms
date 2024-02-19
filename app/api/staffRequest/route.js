@@ -5,7 +5,7 @@ export const POST = async (req) => {
   const { userId, reason, status, firstname, middlename, role } =
     await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
-
+console.log("pkyrsf",status);
   if (requests.length > 0 && requests != null) {
     return new Response(
       `Cannot request clearance. An active request is already in progress`,

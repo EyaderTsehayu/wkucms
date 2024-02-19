@@ -10,20 +10,9 @@ import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 
-
-const PersonItem = ({ person,index }) => (
-  <>
-   {person!="APPROVED"&&(
-  <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
-  <SwapVertIcon/>
-  <p>{index}{ }</p>
-    <p>{person}</p>
-    </div>
-    )}
-  </>
-);
-
-
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 
 
@@ -38,8 +27,94 @@ const ManageStaffOffices = () => {
   const [stepData, setStepData] = useState(null);
   const [stepError, setStepError] = useState(null);
   const [updateSteps, setUpdateSteps] = useState();
-  const [draggedData,setDraggedData]=useState();
-  
+  const [draggedData, setDraggedData] = useState();
+
+
+  // const PersonItem = ({ person,index }) => (
+  //   <>
+  //    {person!="APPROVED"&&(
+  //   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+  //   <SwapVertIcon onClick={()=>console.log(`${index}`)}/>
+  //   <p onClick={()=>console.log(`${index}`)}>{index}{ }</p>
+  //     <p>{person}</p>
+  //     </div>
+  //     )}
+  //   </>
+  // );
+  const PersonItem = ({ person, index, draggedData, setDraggedData }) => {
+    const SwapDecreamentally = () => {
+     
+
+      if ((index < draggedData.length - 1) && (index != 0)) {
+
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[index - 1];
+        updatedData[index - 1] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+        console.log("wwww", updatedData)
+        setUpdateSteps(updatedData);
+      } else if (index == 0) {
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[draggedData.length - 2];
+        updatedData[draggedData.length - 2] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+
+        setUpdateSteps(updatedData);
+      }
+    };
+
+    const SwapIncreamentally = () => {
+     
+
+      if (index < draggedData.length - 2) {
+
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[index + 1];
+        updatedData[index + 1] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+        console.log("wwww", updatedData)
+        setUpdateSteps(updatedData);
+      } else if (index == draggedData.length - 2) {
+        const updatedData = [...draggedData];
+        // Swap the items
+        const temp = updatedData[index];
+        updatedData[index] = updatedData[0];
+        updatedData[0] = temp;
+        // Update the state
+        setDraggedData(updatedData);
+
+        setUpdateSteps(updatedData);
+      }
+    };
+
+
+    return (
+      <>
+        {person !== "APPROVED" && (
+          <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+            <KeyboardDoubleArrowUpIcon onClick={SwapDecreamentally} />
+
+            <p onClick={() => console.log(`${index + 1}`)}>{index + 1}</p>
+            <p>{person}</p>
+            <div class="flex flex-1 justify-end">
+              <KeyboardDoubleArrowDownIcon onClick={SwapIncreamentally} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
+
+
   useEffect(() => {
     // const fetchData = async () => {
     //   try {
@@ -55,7 +130,7 @@ const ManageStaffOffices = () => {
     //     setStepData(updatedData);
     //     setDraggedData(updatedData[0].steps);
     //     console.log("setDraggedData",draggedData);
-       
+
     //   } catch (error) {
     //     setStepError(error); // Corrected from `error` to `stepError`
     //   }
@@ -65,7 +140,7 @@ const ManageStaffOffices = () => {
         const stepType = "STAFF"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/step");
         url.searchParams.append("stepType", stepType);
-    
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -82,7 +157,7 @@ const ManageStaffOffices = () => {
         setStepError(error);
       }
     };
-    
+
 
     fetchData(); // Fetch data once when component mounts
 
@@ -114,9 +189,9 @@ const ManageStaffOffices = () => {
     const temp = peopleClone[dragPerson.current];
     peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
     peopleClone[draggedOverPerson.current] = temp;
-    console.log("peopleClone",peopleClone)
+    console.log("peopleClone", peopleClone)
     setDraggedData(peopleClone);
-    console.log("setDraggedData",draggedData);
+    console.log("setDraggedData", draggedData);
     setUpdateSteps(peopleClone);
   }
 
@@ -126,14 +201,14 @@ const ManageStaffOffices = () => {
   const modifySteps = async () => {
     console.log("updateStepsss", updateSteps);
     try {
-      const response = await fetch(`/api/step`, {  
+      const response = await fetch(`/api/step`, {
         method: "PATCH",
         body: JSON.stringify({
           stepType: "STAFF",
           updatedSteps: updateSteps,
         }),
       });
-  
+
       if (!response.ok) {
         // Check if response status is not in the range 200-299 (successful)
         throw new Error('Failed to fetch data. Server returned ' + response.status);
@@ -145,7 +220,7 @@ const ManageStaffOffices = () => {
       // Handle error appropriately, perhaps by displaying an error message to the user
     }
   };
-  
+
 
   const pathname = usePathname();
   // const [selectedRows, setSelectedRows] = useState([]);
@@ -173,7 +248,7 @@ const ManageStaffOffices = () => {
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
         <div className="flex w-1/3 ">
-            {/* <input
+          {/* <input
               type="text"
               placeholder="Search here ..."
               value={searchTerm}
@@ -201,7 +276,7 @@ const ManageStaffOffices = () => {
           <main className="flex min-h-screen flex-col items-center space-y-4">
             {/* <h1 className="text-xl font-bold mt-4">List</h1> */}
             {/* {stepData[0]?.steps?.map((person, index) => ( */}
-               {draggedData.map((person, index) => (
+            {draggedData.map((person, index) => (
               <div key={index}
                 draggable
                 onDragStart={() => (dragPerson.current = index)}
@@ -210,12 +285,15 @@ const ManageStaffOffices = () => {
                 onDragOver={(e) => e.preventDefault()}
               >
                 {/* <h>{index+1}</h> */}
-                <PersonItem index={index+1} person={person} />
+                <PersonItem index={index}
+                  person={person}
+                  draggedData={draggedData}
+                  setDraggedData={setDraggedData} />
               </div>
             ))}
 
             {/* 2xsm:w-1/2 */}
-           <div className="w-60 w-full px-1 ">
+            <div className="w-60 w-full px-1 ">
               <button
                 onClick={modifySteps}
                 className="block  w-full rounded border border-primary bg-primary py-2 text-center font-medium text-white transition hover:bg-opacity-90"
