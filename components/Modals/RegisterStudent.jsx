@@ -137,8 +137,8 @@ const RegisterStudent = () => {
 
           password: password,
 
-          collegeId: data.collegeId,
-          departmentId: data.departmentId,
+          collegeName: data.collegeName,
+          departmentName: data.departmentName,
           year: data.year,
           role: ROLES.STUDENT,
         }),

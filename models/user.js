@@ -23,10 +23,10 @@ const UserSchema = new Schema({
     type: String,
   },
 
-  collegeId: {
+  collegeName: {
     type: String,
   },
-  departmentId: {
+  departmentName: {
     type: String,
   },
   officename: {

@@ -48,8 +48,9 @@ const TaskItem = () => {
   const userId = session?.data?.user.userId;
   const firstname = session?.data?.user.firstname;
   const middlename = session?.data?.user.middlename;
-
-
+   const collegeName=session?.data?.user.collegeName;
+   const departmentName=session?.data?.user.departmentName;
+    const _userId=session?.data?.user.id;
 
   var stepType;
   var status;
@@ -63,6 +64,9 @@ const TaskItem = () => {
 
   // fetch the starting office
   useEffect(() => {
+    console.log("departmentName",departmentName);
+console.log("_userId",_userId);
+
     stepType=session?.data?.user.role;
     const fetchData = async () => {
       try {
@@ -99,6 +103,12 @@ const TaskItem = () => {
   };
 
   const handleSend = async () => {
+    console.log("departmentName");
+   
+    
+    console.log("departmentName",departmentName);
+    console.log("_userId",_userId);
+    
     if (selectedTask != null) {
       if (session?.data?.user.role == "STUDENT") {
         try {
@@ -111,6 +121,9 @@ const TaskItem = () => {
               status: draggedData,
               firstname: firstname,
               middlename: middlename,
+              collegeName:collegeName,
+              departmentName:departmentName,
+              _userId:_userId,
               role: "STUDENT",
             }),
             headers: {
@@ -139,6 +152,9 @@ const TaskItem = () => {
               status: draggedData,
               firstname: firstname,
               middlename: middlename,
+              collegeName:collegeName,
+              departmentName:departmentName,
+              _userId:_userId,
               role: "STAFF",
             }),
             headers: {

@@ -21,6 +21,7 @@ export const DepartmentData = [
   { id: "2", name: "English" },
   { id: "3", name: "Psychology" },
   { id: "4", name: "Nursing" },
+  { id: "4", name: "Electrical" },
 ];
 
 //for privilege
@@ -30,10 +31,10 @@ export const privilegeData = [
   { id: "3", name: "Library Chief" },
   { id: "4", name: "Cafteria" },
   { id: "5", name: "College Book Store" },
-  { id: "2", name: "Sport And Recreation" },
-  { id: "3", name: "Dormitary" },
-  { id: "4", name: "Dean Of Student" },
-  { id: "5", name: "Registrar" },
+  { id: "6", name: "Sport And Recreation" },
+  { id: "7", name: "Dormitary" },
+  { id: "8", name: "Dean Of Student" },
+  { id: "9", name: "Registrar" },
 ];
 
 
