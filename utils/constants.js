@@ -27,7 +27,7 @@ export const DepartmentData = [
 //for privilege
 export const privilegeData = [
   { id: "1", name: "College Dean" },
-  { id: "2", name: "HEAD" },
+  { id: "2", name: "Head" },
   { id: "3", name: "Library Chief" },
   { id: "4", name: "Cafteria" },
   { id: "5", name: "College Book Store" },
@@ -35,6 +35,9 @@ export const privilegeData = [
   { id: "7", name: "Dormitary" },
   { id: "8", name: "Dean Of Student" },
   { id: "9", name: "Registrar" },
+  { id: "10", name: "Money And Saving Officer" },
+  { id: "11", name: "Finance Directorate Director" },
+  
 ];
 
 

@@ -123,28 +123,7 @@ const ManageStudentOffices = () => {
   
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch("http://localhost:3000/api/step");
-    //     if (!response.ok) {
-    //       throw new Error('Network response was not ok');
-    //     }
-    //     const data = await response.json();
-    //     const updatedData = data.map((user) => ({
-    //       ...user,
-    //       id: user._id,
-    //     }));
-    //     setStepData(updatedData);
-    //     setDraggedData(updatedData[0].steps);
-    //     console.log("setDraggedData",draggedData);
-
-    //      // Send data to API here
-    //      const stepType = "STUDENT"; // Define your stepType here
-    //      await sendDataToAPI(stepType);
-    //   } catch (error) {
-    //     setStepError(error); // Corrected from `error` to `stepError`
-    //   }
-    // };
+    
 
     const fetchData = async () => {
       try {
