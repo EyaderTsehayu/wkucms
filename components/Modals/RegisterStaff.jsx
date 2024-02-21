@@ -239,7 +239,8 @@ const RegisterStaff = () => {
   const initialDropdownColleges = CollegeData.slice(0, 1);
   const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
-
+  // let previlege={};
+const [Previlege,setPrevilege]=useState([])
 
 
   const handleSearchInputFocus = () => {
@@ -265,13 +266,86 @@ const RegisterStaff = () => {
     if (searchPrevilege) {
       setShowPrevilegeDropdown(true);
     } else {
-      setFilteredPrevilege(initialDropdownPrivilege);
+      setFilteredPrevilege(Previlege);
       setShowPrevilegeDropdown(true);
     }
   };
 
 
+  // useEffect(() => {
+  //   if (searchCollege) {
+
+  //     const filteredResults = CollegeData.filter((college) =>
+  //       college.name.toLowerCase().includes(searchCollege.toLowerCase())
+  //     );
+  //     setFilteredColleges(filteredResults);
+  //   } else {
+  //     setFilteredColleges(initialDropdownColleges);
+  //   }
+  // }, [searchCollege, CollegeData]);
+
+
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const staffStepType = "STAFF"; // Define your stepType here
+        const studentStepType="STUDENT"
+  
+        
+        const staffUrl = new URL("http://localhost:3000/api/step");
+        staffUrl.searchParams.append("stepType", staffStepType);
+        const responseStaff = await fetch(staffUrl);
+  // fetch students step
+        const studentUrl = new URL("http://localhost:3000/api/step");
+        studentUrl.searchParams.append("stepType", studentStepType);
+        const responseStudent = await fetch(studentUrl);
+  
+  
+        if (!responseStaff.ok && !responseStudent.ok) {
+          throw new Error("Network responseStaff was not ok");
+        }
+        const staffData = await responseStaff.json();
+        const updatedStaffData = staffData.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+  
+  
+        const studentData = await responseStudent.json();
+        const updatedStudentData = studentData.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+  
+        // Assuming setStepData and setStepError are state updating functions
+        // setStepData(updatedStaffData);
+        // setDraggedData(updatedStaffData[0].steps);
+        const concatenatedArray = [
+          ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
+          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+        ];
+        const  previlege = concatenatedArray.map((role, index) => ({
+          id: (index + 1).toString(),
+          name: role
+        }));
+        
+        setPrevilege(previlege);
+  
+        
+      //   console.log("Data fetched successfully:", previlege);
+      //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+      } catch (error) {
+        // Handle errors
+        console.error("Error fetching data:", error);
+        // setStepError(error);
+      }
+    };
+  
+    fetchData(); // Fetch data once when component mounts
+
+
+
     if (searchCollege) {
 
       const filteredResults = CollegeData.filter((college) =>
@@ -281,11 +355,7 @@ const RegisterStaff = () => {
     } else {
       setFilteredColleges(initialDropdownColleges);
     }
-  }, [searchCollege, CollegeData]);
 
-
-
-  useEffect(() => {
     if (searchTerm) {
 
       const filteredResults = DepartmentData.filter((college) =>
@@ -295,25 +365,139 @@ const RegisterStaff = () => {
     } else {
       setFilteredOffices(initialDropdownItems);
     }
-  }, [searchTerm, DepartmentData]);
 
 
-
-
-
-
-  useEffect(() => {
     if (searchPrevilege) {
-
-      const filteredResults = privilegeData.filter((college) =>
+// console.log("concatPrevilegeenatedArray",Previlege);
+// console.log("privilegeData",privilegeData);
+      const filteredResults = Previlege.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
       setFilteredPrevilege(filteredResults);
-    } else {
-      setFilteredPrevilege(initialDropdownPrivilege);
     }
-  }, [searchPrevilege, privilegeData]);
+    //  else {
+    //   setFilteredPrevilege(filteredResults);
+    // }
+  }, [searchTerm, DepartmentData,searchCollege,searchPrevilege]);
 
+
+
+
+
+
+  // useEffect(() => {
+  //   if (searchPrevilege) {
+
+  //     const filteredResults = privilegeData.filter((college) =>
+  //       college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
+  //     );
+  //     setFilteredPrevilege(filteredResults);
+  //   } else {
+  //     setFilteredPrevilege(initialDropdownPrivilege);
+  //   }
+  // }, [searchPrevilege, privilegeData]);
+
+
+// useEffect(()=>{
+//   const fetchSteps=async()=>{
+//        const result=await fetch(`api/step`);
+//        const res=await result.json()
+//        console.log("resresress",res)
+//   }
+//   fetchSteps()
+// })
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const stepType = "STAFF"; // Define your stepType here
+//       console.log("setDraggedData");
+//       const url = new URL("/api/step");
+//       url.searchParams.append("stepType", stepType);
+      
+//       const response = await fetch(url);
+//       if (!response.ok) {
+//         throw new Error("Network response was not ok");
+//       }
+//       const data = await response.json();
+//       const updatedData = data.map((user) => ({
+//         ...user,
+//         id: user._id,
+//       }));
+//       // setStepData(updatedData);
+//       // setDraggedData(updatedData[0].steps);
+//       console.log("setDraggedData", data);
+//     } catch (error) {
+//       // setStepError(error);
+//     }
+//   };
+
+
+//   fetchData(); // Fetch data once when component mounts
+
+//   // No cleanup or dependency array needed as we only want to fetch data once
+// }, []);
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const staffStepType = "STAFF"; // Define your stepType here
+//       const studentStepType="STUDENT"
+
+      
+//       const staffUrl = new URL("http://localhost:3000/api/step");
+//       staffUrl.searchParams.append("stepType", staffStepType);
+//       const responseStaff = await fetch(staffUrl);
+// // fetch students step
+//       const studentUrl = new URL("http://localhost:3000/api/step");
+//       studentUrl.searchParams.append("stepType", studentStepType);
+//       const responseStudent = await fetch(studentUrl);
+
+
+//       if (!responseStaff.ok && !responseStudent.ok) {
+//         throw new Error("Network responseStaff was not ok");
+//       }
+//       const staffData = await responseStaff.json();
+//       const updatedStaffData = staffData.map((user) => ({
+//         ...user,
+//         id: user._id,
+//       }));
+
+
+//       const studentData = await responseStudent.json();
+//       const updatedStudentData = studentData.map((user) => ({
+//         ...user,
+//         id: user._id,
+//       }));
+
+//       // Assuming setStepData and setStepError are state updating functions
+//       // setStepData(updatedStaffData);
+//       // setDraggedData(updatedStaffData[0].steps);
+//       const concatenatedArray = [
+//         ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
+//         ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+//       ];
+
+
+//       previlege = concatenatedArray.map((role, index) => ({
+//         id: (index + 1).toString(),
+//         name: role
+//       }));
+      
+      
+//       console.log("Data fetched successfully:", previlege);
+//      console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+//     } catch (error) {
+//       // Handle errors
+//       console.error("Error fetching data:", error);
+//       // setStepError(error);
+//     }
+//   };
+
+//   fetchData(); // Fetch data once when component mounts
+
+//   // No cleanup or dependency array needed as we only want to fetch data once
+// }, []);
 
 
   useEffect(() => {
