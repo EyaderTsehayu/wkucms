@@ -192,7 +192,7 @@
 
 //         </div>
 //     );
-// };
+// }; 
 // export default RegisterStaff;
 
 
@@ -202,7 +202,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {CollegeData, privilegeData, DepartmentData, ROLES } from "@/utils/constants";
+import {CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
 const RegisterStaff = () => {
@@ -237,7 +237,7 @@ const RegisterStaff = () => {
 
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
-  const initialDropdownPrivilege = privilegeData.slice(0, 1);
+  // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
 const [Previlege,setPrevilege]=useState([])

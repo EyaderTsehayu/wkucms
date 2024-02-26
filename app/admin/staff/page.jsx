@@ -11,6 +11,7 @@ const columns = [
   { field: "firstname", headerName: "First name", width: "240" },
   { field: "middlename", headerName: "Middle name", width: "240" },
   { field: "lastname", headerName: "Last name", width: "240" },
+  { field: "privilege", headerName: "Previlege", width: "240" },
   { field: "role", headerName: "Role", width: "240" },
 ];
 
@@ -140,7 +141,7 @@ const ManageStaff = () => {
   const { data: userData, error } = useSWR('http://localhost:3000/api/user/new/staff', fetcher, {
     initialData: rows, // Provide initial data (can be an empty array)
     revalidateOnFocus: true,
-    //  refreshInterval: 2000,// Disable automatic revalidation on focus
+    refreshInterval: 2000,// Disable automatic revalidation on focus
   });
 
   // Handle loading and fetch errors
@@ -152,7 +153,7 @@ const ManageStaff = () => {
     console.error('Error fetching data:', error);
     return <p>Failed to fetch data</p>;
   }
-
+ console.log("userDatafilteredInfo",userData);
   const filteredInfo = userData.filter((info) =>
     info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
     info.roleId.toString().includes(searchTerm) // Include roleId in filtering
