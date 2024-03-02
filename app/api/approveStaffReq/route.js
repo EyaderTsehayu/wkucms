@@ -11,13 +11,13 @@ export const PATCH = async (request) => {
   
 
     await connectToDB();
-
     // first fetch the steps
-     
+    
     const steps = await StepSchema.findOne({ stepType:"STAFF"});
-   
-     staffApproval=steps.steps;
-       console.log("staffApprovalithink it works",staffApproval)
+    
+    staffApproval=steps.steps;
+    console.log("staffApprovalithink it works",staffApproval)
+    console.log("ererererr",objectId,"aaaa",arrLength)
     
     const existingRequest = await StaffClearnceReq.findById(objectId);
 

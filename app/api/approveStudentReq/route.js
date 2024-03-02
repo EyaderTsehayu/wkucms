@@ -15,7 +15,7 @@ export const PATCH = async (request) => {
 
     studentApproval = steps.steps;
     console.log("studentApprovalithink it works", studentApproval)
-
+    console.log("ererererr",objectId,"aaaa",arrLength)
 
     const existingRequest = await StudentClearnceReq.findById(objectId);
 
