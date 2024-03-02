@@ -5,8 +5,11 @@ import { rejectReasonSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import { useSocket } from "@/context/SocketContext";
+import { v4 as uuidv4 } from "uuid";
 
 const RejectionMessageBox = ({ selectedUser }) => {
+  const socket = useSocket();
   const { data: session } = useSession();
   const user = session?.user;
   const receiverId = selectedUser[0]?._userId;
@@ -39,26 +42,6 @@ const RejectionMessageBox = ({ selectedUser }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const getConversations = async () => {
-  //     try {
-  //       const response = await fetch(`/api/conversation/${user?.userId}`);
-  //       const data = await response.json();
-  //       setConversations(data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getConversations();
-  // }, [user?.id]);
-
-  // console.log("conversations normal", conversations);
-  // const filteredConversations = conversations.filter((conversation) => {
-  //   console.log("Members array for conversation:", conversation.members);
-  //   return conversation.members.includes(receiverId);
-  // });
-  // console.log("conversations filtered", filteredConversations);
-
   useEffect(() => {
     const getConversations = async () => {
       try {
@@ -77,21 +60,18 @@ const RejectionMessageBox = ({ selectedUser }) => {
     if (conversations.length > 0) {
       // Filter conversations based on receiverId
       const filteredConversations = conversations.filter((conversation) => {
-        console.log("Members array for conversation:", conversation.members);
+        // console.log("Members array for conversation:", conversation.members);
         return conversation.members.includes(receiverId);
       });
 
-      //console.log("conversations filtered", filteredConversations);
+      console.log("conversations filtered", filteredConversations);
 
       if (filteredConversations.length > 0) {
         // Set the first filtered conversation as the current chat
         setCurrentChat(filteredConversations[0]);
+        console.log("not new conversation needed");
       } else {
-        // Create a new conversation and set it as the current chat
-        // Your logic to create a new conversation goes here
-        // ...
-        // After creating the conversation, fetch conversations again
-        // getConversations();
+        console.log("but nothing is here");
       }
     }
   }, [conversations, receiverId]);
@@ -100,6 +80,7 @@ const RejectionMessageBox = ({ selectedUser }) => {
   // ...
   useEffect(() => {
     const getMessages = async () => {
+      console.log("changed current chat inside the get message", currentChat);
       try {
         const response = await fetch(`/api/message/${currentChat?._id}`);
         const data = await response.json();
@@ -111,36 +92,153 @@ const RejectionMessageBox = ({ selectedUser }) => {
     getMessages();
   }, [currentChat]);
 
-  // console.log("messages inside the current chat", messages);
   const onSubmit = async (data) => {
-    // const receiverId = currentChat.members.find(
-    //   (member) => member !== user?.id
-    // );
-    // socket.current.emit("sendMessage", {
-    //   senderId: user.id,
-    //   receiverId,
-    //   text: newMessage,
-    // });
     try {
-      const response = await fetch("/api/message/", {
-        method: "POST",
-        body: JSON.stringify({
-          sender: user?.id,
-          text: data.rejectionReason,
-          conversationId: currentChat._id,
-        }),
-      });
+      // ... (existing code)
 
-      if (response.ok) {
-        const data = await response.json();
-        setMessages([...messages, data]);
-        console.log("rejected successfully");
+      // Check if currentChat is not null before accessing its members property
+      if (currentChat && currentChat.members) {
+        const receiverId = currentChat.members.find(
+          (member) => member !== user?.id
+        );
+
+        socket.emit("sendMessage", {
+          senderId: user.id,
+          receiverId,
+          conversationId: currentChat._id,
+          text: data.rejectionReason,
+        });
+
+        const type = 1;
+        const notificationId = uuidv4();
+
+        // Step 2: Emit the notification
+        socket.emit("sendNotification", {
+          senderId: user.id,
+          receiverId,
+          type,
+          notificationId,
+        });
+
+        // Step 1: Send message and get the response data
+        const messageResponse = await fetch("/api/message/", {
+          method: "POST",
+          body: JSON.stringify({
+            sender: user?.id,
+            text: data.rejectionReason,
+            conversationId: currentChat._id,
+            notificationId, // Include the unique notificationId in the message data
+          }),
+        });
+
+        if (!messageResponse.ok) {
+          // Handle the case where sending the message fails
+          console.log("Failed to send the message");
+          return;
+        }
+
+        const responseData = await messageResponse.json();
+
+        setMessages([...messages, responseData]);
+        const notificationResponse = await fetch("/api/notification/", {
+          method: "POST",
+          body: JSON.stringify({
+            senderId: user.id,
+            receiverId,
+            type,
+            notificationId,
+          }),
+        });
+
+        if (notificationResponse.ok) {
+          console.log("Notification saved successfully");
+        } else {
+          console.log("Failed to save the notification");
+        }
+
+        console.log("Rejected successfully");
         reset();
+      } else {
+        // Create a new conversation and set it as the current chat
+        const createConversations = async () => {
+          console.log("creating new conversation inside submit ....");
+          try {
+            const conversationResp = await fetch("/api/conversation/", {
+              method: "POST",
+              body: JSON.stringify({
+                senderId: user?.id,
+                receiverId: selectedUser[0]?._userId,
+              }),
+            });
+
+            const responseData = await conversationResp.json();
+            console.log("response data while creating ", responseData._id);
+            const conversationId = responseData._id;
+            console.log("setting response data to current chat");
+            setCurrentChat(responseData);
+            console.log("trying to send the message");
+            // console.log("tryn to get the current chat", currentChat);
+
+            console.log("get in to the message sender after response ...");
+
+            const type = 1;
+            const notificationId = uuidv4();
+
+            // Step 2: Emit the notification
+            socket.emit("sendNotification", {
+              senderId: user.id,
+              receiverId: selectedUser[0]?._userId,
+              type,
+              notificationId,
+            });
+            // Step 1: Send message and get the response data
+            const messageResponse = await fetch("/api/message/", {
+              method: "POST",
+              body: JSON.stringify({
+                sender: user?.id,
+                text: data.rejectionReason,
+                conversationId: conversationId,
+                notificationId, // Include the unique notificationId in the message data
+              }),
+            });
+
+            if (!messageResponse.ok) {
+              // Handle the case where sending the message fails
+              console.log("Failed to send the message");
+              return;
+            }
+
+            const msgResponseData = await messageResponse.json();
+
+            setMessages([...messages, msgResponseData]);
+            const notificationResponse = await fetch("/api/notification/", {
+              method: "POST",
+              body: JSON.stringify({
+                senderId: user.id,
+                receiverId,
+                type,
+                // notificationId,
+              }),
+            });
+
+            if (notificationResponse.ok) {
+              console.log("Notification saved successfully");
+            } else {
+              console.log("Failed to save the notification");
+            }
+
+            console.log("Rejected successfully");
+            reset();
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+        createConversations();
       }
     } catch (error) {
       console.log(error);
     }
-    //console.log("data from rejection", data.rejectionReason);
   };
 
   return (
