@@ -6,6 +6,7 @@ import ConversationInternal from "@/components/conversationInternal/Conversation
 import ChatBox from "@/components/chatBox/ChatBox";
 import Image from "next/image";
 import { io } from "socket.io-client";
+import { useSocket } from "@/context/SocketContext";
 
 const Message = () => {
   const { data: session } = useSession();
@@ -16,8 +17,8 @@ const Message = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
   const [conversations, setConversations] = useState([]);
-  const socket = useRef();
-
+  // const socket = useRef();
+  const socket = useSocket();
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
@@ -25,8 +26,8 @@ const Message = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
-    socket.current.on("getMessage", (data) => {
+    // socket.current = io("ws://localhost:8900");
+    socket.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
@@ -35,12 +36,12 @@ const Message = () => {
     });
   }, []);
 
-  useEffect(() => {
-    socket.current.emit("addUser", user?.id);
-    socket.current.on("getUsers", (users) => {
-      console.log(users);
-    });
-  }, [user]);
+  // useEffect(() => {
+  //   socket.emit("addUser", user?.id);
+  //   socket.on("getUsers", (users) => {
+  //     console.log(users);
+  //   });
+  // }, [user]);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -76,7 +77,7 @@ const Message = () => {
       (member) => member !== user?.id
     );
 
-    socket.current.emit("sendMessage", {
+    socket.emit("sendMessage", {
       senderId: user.id,
       receiverId,
       text: newMessage,
@@ -184,7 +185,7 @@ const Message = () => {
                 </div>
                 <div>
                   <h5 class="font-medium text-black dark:text-white">
-                    {user.firstname} {user.middlename}
+                    {user?.firstname} {user?.middlename}
                   </h5>
                   <p class="text-sm font-medium">Reply to message</p>
                 </div>
