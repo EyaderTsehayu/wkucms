@@ -1,20 +1,76 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Conversation from "../conversation/Conversation";
 import { useSession } from "next-auth/react";
+import { useSocket } from "@/context/SocketContext";
+import DropdownConversation from "../conversation/DropdownConversation";
+import { format } from "timeago.js";
 
 const DropdownMessage = () => {
+  const socket = useSocket();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
+  const [friendUsers, setFriendUsers] = useState({});
+  const [messages, setMessages] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   const [conversations, setConversations] = useState([]);
-  const { data: session } = useSession();
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [lastMessages, setLastMessages] = useState({});
 
-  const user = session?.user;
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  // close on click outside
+  useEffect(() => {
+    const getConversations = async () => {
+      try {
+        const response = await fetch(`/api/conversation/${user?.id}`);
+        const data = await response.json();
+        setConversations(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getConversations();
+  }, [user?.id]);
+
+  useEffect(() => {
+    const fetchLastMessages = async () => {
+      const newLastMessages = {};
+      const newFriendUsers = {};
+
+      for (const conversation of conversations) {
+        try {
+          const response = await fetch(`/api/message/${conversation._id}`);
+          const data = await response.json();
+          if (data.length > 0) {
+            newLastMessages[conversation._id] = data[data.length - 1];
+          }
+
+          const friendId = conversation.members.find((m) => m !== user.id);
+          console.log("friend id of each user", friendId);
+
+          const userResponse = await fetch(`/api/user/${friendId}`);
+          const userData = await userResponse.json();
+          console.log("user data from of user", userData);
+
+          newFriendUsers[conversation._id] = userData;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      setLastMessages(newLastMessages);
+      setFriendUsers(newFriendUsers);
+    };
+
+    if (conversations.length > 0) {
+      fetchLastMessages();
+    }
+  }, [conversations, user]);
+
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -40,26 +96,25 @@ const DropdownMessage = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  useEffect(() => {
-    const getConversations = async () => {
-      try {
-        const response = await fetch(`/api/conversation/${user?.id}`);
-        const data = await response.json();
-        setConversations(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const fetchMessages = async () => {
+    console.log("fetch message called");
+    try {
+      const response = await fetch(`/api/conversation/${user?.id}`);
+      const data = await response.json();
+      setConversations(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    getConversations();
-  }, [user?.id]);
   return (
     <li className="relative">
       <Link
         ref={trigger}
-        onClick={() => {
+        onClick={async () => {
           setNotifying(false);
           setDropdownOpen(!dropdownOpen);
+          await fetchMessages();
         }}
         className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
         href="#"
@@ -111,11 +166,50 @@ const DropdownMessage = () => {
         <div className="px-4.5 py-3">
           <h5 className="text-sm font-medium text-bodydark2">Messages</h5>
         </div>
-        {conversations.map((c) => (
-          <div onClick={() => setCurrentChat(c)}>
-            <Conversation conversation={c} currentUser={user} />
-          </div>
-        ))}
+        {friendUsers != null &&
+          conversations.map((conversation) => (
+            <ul className="flex h-auto flex-col overflow-y-auto">
+              <li>
+                <Link
+                  className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                  href="/messages"
+                >
+                  <div className="h-12.5 w-12.5 rounded-full">
+                    <Image
+                      width={112}
+                      height={112}
+                      src={"/images/user/user-02.png"}
+                      alt="User"
+                    />
+                  </div>
+
+                  <div>
+                    {/* {user.length > 0 && ( */}
+                    <h6 className="text-sm font-medium text-black dark:text-white">
+                      {/* {user[0].firstname} {user[0].lastname} */}
+                      {friendUsers[conversation._id]?.[0]?.firstname}
+                    </h6>
+                    {/* )} */}
+                    <p className="text-sm">
+                      {/* {messages.map((m) => ( */}
+                      <div>
+                        {lastMessages[conversation._id]?.text}
+                        <p className="text-xs">
+                          {format(lastMessages[conversation._id]?.createdAt)}
+                        </p>
+                      </div>
+                      {/* ))} */}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            </ul>
+            // <li key={conversation._id}>
+            //   <p>{`Friend: ${
+            //     friendUsers[conversation._id]?.[0]?.firstname
+            //   }, Text: ${lastMessages[conversation._id]?.text}`}</p>
+            // </li>
+          ))}
       </div>
       {/* <!-- Dropdown End --> */}
     </li>
