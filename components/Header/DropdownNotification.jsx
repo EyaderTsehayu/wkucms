@@ -1,12 +1,63 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSocket } from "@/context/SocketContext";
+import { useSession } from "next-auth/react";
+import { format } from "timeago.js";
 
 const DropdownNotification = () => {
+  const socket = useSocket();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  const [notifications, setNotifications] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [arrivalNotification, setArrivalNotification] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (arrivalNotification) {
+      setNotifications((prev) => [...prev, arrivalNotification]);
+      setUnreadCount((prevCount) => prevCount + 1);
+    }
+  }, [arrivalNotification, user?.id]);
+
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      // console.log("first unread count on top", unreadCount);
+      setArrivalNotification({
+        senderId: data.senderId,
+        type: data.type,
+        notificationId: data.notificationId,
+        createdAt: Date.now(),
+      });
+      setNotifying(true);
+    });
+  }, []);
+
+  //console.log("Internal conversations", conversations);
+  useEffect(() => {
+    const getNotification = async () => {
+      try {
+        const response = await fetch(`/api/notification/${user?.id}`);
+        const data = await response.json();
+        const unreadCount = data.filter(
+          (notification) => !notification.isChecked
+        ).length;
+        setNotifications(data);
+        setUnreadCount(unreadCount);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getNotification();
+  }, [user?.id]);
+  // console.log("fetched notifications ", notifications);
+
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -17,10 +68,12 @@ const DropdownNotification = () => {
       )
         return;
       setDropdownOpen(false);
+      setNotifying(false);
+      // setUnreadCount(0);
     };
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
-  });
+  }, [dropdownOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -32,23 +85,75 @@ const DropdownNotification = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  const displayNotification = ({
+    senderId,
+    type,
+    notificationId,
+    createdAt,
+  }) => {
+    let action;
+
+    if (type === 1) {
+      action = "your clearance is rejected please check the reason";
+    } else if (type === 2) {
+      action = "commented";
+    } else {
+      action = "shared";
+    }
+    // setUnreadCount((prevCount) => prevCount + 1);
+    return (
+      <li key={notificationId}>
+        <Link
+          className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+          href="#"
+        >
+          <p className="text-sm">
+            <span className="text-black dark:text-white">{`${action} `}</span>{" "}
+            {`${action} `}
+          </p>
+          <p className="text-xs"> {format(createdAt)}</p>
+        </Link>
+      </li>
+    );
+  };
+
+  const handleRead = () => {
+    // setNotifications([]); // Clear the notifications
+    setUnreadCount(0);
+  };
+
+  //console.log("third unread count on top", unreadCount);
+  const updateStatus = async () => {
+    await fetch(`/api/notification/${user?.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+  };
+
   return (
     <li className="relative">
       <Link
         ref={trigger}
         onClick={() => {
+          updateStatus();
           setNotifying(false);
+          setUnreadCount(0);
           setDropdownOpen(!dropdownOpen);
         }}
         href="#"
         className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
       >
         <span
-          className={`absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-meta-1 ${
+          className={`absolute -m-0.5 -top-0.5 right-0 z-1 h-2 w-2 text-meta-1  ${
             notifying === false ? "hidden" : "inline"
           }`}
         >
-          <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
+          {unreadCount > 0 && (
+            <p className="absolute -z-1  text-black-2   ">{unreadCount}</p>
+          )}
         </span>
 
         <svg
@@ -77,72 +182,21 @@ const DropdownNotification = () => {
         <div className="px-4.5 py-3">
           <h5 className="text-sm font-medium text-bodydark2">Notification</h5>
         </div>
-
         <ul className="flex h-auto flex-col overflow-y-auto">
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  Edit your information in a swipe
-                </span>{" "}
-                Sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim.
-              </p>
-
-              <p className="text-xs">12 May, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  It is a long established fact
-                </span>{" "}
-                that a reader will be distracted by the readable.
-              </p>
-
-              <p className="text-xs">24 Feb, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{" "}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">04 Jan, 2025</p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-              href="#"
-            >
-              <p className="text-sm">
-                <span className="text-black dark:text-white">
-                  There are many variations
-                </span>{" "}
-                of passages of Lorem Ipsum available, but the majority have
-                suffered
-              </p>
-
-              <p className="text-xs">01 Dec, 2024</p>
-            </Link>
-          </li>
+          {notifications.length > 0 ? (
+            // Map through notifications only if there are any
+            notifications.map((notification) =>
+              displayNotification(notification)
+            )
+          ) : (
+            // Render a message when there are no notifications
+            <p className="text-sm text-gray-500">No notifications</p>
+          )}
         </ul>
+
+        <button className="nButton" onClick={handleRead}>
+          Mark as read
+        </button>
       </div>
     </li>
   );
