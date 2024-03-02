@@ -26,6 +26,17 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "role is required!"],
   },
+  collegeName:{
+    type: String,
+    // required: [true, "collegeId is required!"],
+  },
+  departmentName:{
+    type: String,
+    // required: [true, "departmentId is required!"],
+  },
+  _userId:{
+    type:String,
+  },
   dateRequested:{
     type:String,
     required: [true, "Requested date is required!"],

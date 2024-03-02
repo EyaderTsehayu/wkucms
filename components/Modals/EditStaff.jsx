@@ -1,41 +1,57 @@
-"use client";
+"use client"
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { registerStudentSchema } from "@/validations/registrationValidation";
+import { registerOfficerSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterStudent = () => {
+const EditStaff = ({ userData }) => {
+ 
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
     setValue,
-  } = useForm({ resolver: yupResolver(registerStudentSchema) });
+  } = useForm({ resolver: yupResolver(registerOfficerSchema) });
+  console.log("www", userData);
+  // userData && userData.forEach((user) => {
+  //   console.log(user.privilege); // Output: Head (or the privilege for each user)
+  // })
 
-  const Items = [1, 2, 3, 4, 5, 6, 7];
-  const programs = ["Regular", "Weekend"];
 
-  const [selectedCollege, setSelectedCollege] = useState(null);
+
+  console.log("sera mesel", userData[0]);
+  // userData && userData[0].map((data)=>console.log(data));
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedCollege, setSelectedCollege] = useState(null);
+  const [selectedPrevilege, setSelectedPrevilege] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCollege, setSearchCollege] = useState("");
+  const [searchPrevilege, setSearchPrevilege] = useState("");
 
   const [filteredOffices, setFilteredOffices] = useState([]);
   const [filteredColleges, setFilteredColleges] = useState([]);
+  const [filteredPrevilege, setFilteredPrevilege] = useState([]);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
+  const [showPrevilegeDropdown, setShowPrevilegeDropdown] = useState(false);
 
+  const collegeDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
-  const collegeDropdownRef = useRef(null); // Add a new ref for the college dropdown
+  const previlegeDropdownRef = useRef(null);
 
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
+  // const initialDropdownPrivilege = privilegeData.slice(0, 1);
+
+  // let previlege={};
+  const [Previlege, setPrevilege] = useState([])
+
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -45,6 +61,7 @@ const RegisterStudent = () => {
       setShowDropdown(true);
     }
   };
+
   const handleSearchCollegeFocus = () => {
     if (searchCollege) {
       setShowCollegeDropdown(true);
@@ -53,8 +70,114 @@ const RegisterStudent = () => {
       setShowCollegeDropdown(true);
     }
   };
+
+
+  const handleSearchPrevilegeFocus = () => {
+    if (searchPrevilege) {
+      setShowPrevilegeDropdown(true);
+    } else {
+      setFilteredPrevilege(Previlege);
+      setShowPrevilegeDropdown(true);
+    }
+  };
+
+
+  //  fetch from staff by id
   useEffect(() => {
+
+
+    const fetchData = async () => {
+      try {
+        const stepType = "STUDENT"; // Define your stepType here
+        const url = new URL("/api/step");
+        url.searchParams.append("stepType", stepType);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        const updatedData = data.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+        // setStepData(updatedData);
+        // setDraggedData(updatedData[0].steps);
+        console.log("setDraggedData", updatedData);
+      } catch (error) {
+        setStepError(error);
+      }
+    };
+    fetchData(); // Fetch data once when component mounts
+
+    // No cleanup or dependency array needed as we only want to fetch data once
+  }, []);
+
+
+  // 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const staffStepType = "STAFF"; // Define your stepType here
+        const studentStepType = "STUDENT"
+
+
+        const staffUrl = new URL("http://localhost:3000/api/step");
+        staffUrl.searchParams.append("stepType", staffStepType);
+        const responseStaff = await fetch(staffUrl);
+        // fetch students step
+        const studentUrl = new URL("http://localhost:3000/api/step");
+        studentUrl.searchParams.append("stepType", studentStepType);
+        const responseStudent = await fetch(studentUrl);
+
+
+        if (!responseStaff.ok && !responseStudent.ok) {
+          throw new Error("Network responseStaff was not ok");
+        }
+        const staffData = await responseStaff.json();
+        const updatedStaffData = staffData.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+
+
+        const studentData = await responseStudent.json();
+        const updatedStudentData = studentData.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+
+        // Assuming setStepData and setStepError are state updating functions
+        // setStepData(updatedStaffData);
+        // setDraggedData(updatedStaffData[0].steps);
+        const concatenatedArray = [
+          ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
+          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+        ];
+        const previlege = concatenatedArray.map((role, index) => ({
+          id: (index + 1).toString(),
+          name: role
+        }));
+
+        setPrevilege(previlege);
+
+
+        //   console.log("Data fetched successfully:", previlege);
+        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+      } catch (error) {
+        // Handle errors
+        console.error("Error fetching data:", error);
+        // setStepError(error);
+      }
+    };
+
+    fetchData(); // Fetch data once when component mounts
+
+
+
     if (searchCollege) {
+
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
@@ -62,18 +185,51 @@ const RegisterStudent = () => {
     } else {
       setFilteredColleges(initialDropdownColleges);
     }
-  }, [searchCollege, CollegeData]);
 
-  useEffect(() => {
     if (searchTerm) {
-      const filteredResults = DepartmentData.filter((office) =>
-        office.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+      const filteredResults = DepartmentData.filter((college) =>
+        college.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredOffices(filteredResults);
     } else {
       setFilteredOffices(initialDropdownItems);
     }
-  }, [searchTerm, DepartmentData]);
+
+
+    if (searchPrevilege) {
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
+      const filteredResults = Previlege.filter((college) =>
+        college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
+      );
+      setFilteredPrevilege(filteredResults);
+    }
+    //  else {
+    //   setFilteredPrevilege(filteredResults);
+    // }
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (collegeDropdownRef.current && !collegeDropdownRef.current.contains(event.target)) {
+        setShowCollegeDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -93,10 +249,38 @@ const RegisterStudent = () => {
     };
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        (previlegeDropdownRef.current && !previlegeDropdownRef.current.contains(event.target)) ||
+        (previlegeDropdownRef.current &&
+          !previlegeDropdownRef.current.contains(event.target))
+      ) {
+        setShowPrevilegeDropdown(false);
+        setShowPrevilegeDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
   };
+
+
+  const handleSearchPrevilegeChange = (event) => {
+    setSearchPrevilege(event.target.value);
+    setShowDropdown(true);
+  };
+
+
+
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
     setValue("departmentId", office.id);
@@ -105,6 +289,16 @@ const RegisterStudent = () => {
     setSearchTerm(office.name);
     setShowDropdown(false);
   };
+
+  const handleDropdownPrevilegeItemClick = (office) => {
+    setValue("previlegeName", office.name);
+    setValue("previlegeId", office.id);
+    setSelectedPrevilege(office);
+
+    setSearchPrevilege(office.name);
+    setShowPrevilegeDropdown(false);
+  };
+
   const handleSearchCollegeChange = (event) => {
     setSearchCollege(event.target.value);
     setShowCollegeDropdown(true);
@@ -112,87 +306,78 @@ const RegisterStudent = () => {
 
   const handleDropdownCollegeClick = (college) => {
     setValue("collegeName", college.name);
+    // toast.success("rerrrrr!",college.name," ",college.id);
     setValue("collegeId", college.id);
     setSelectedCollege(college);
     setSearchCollege(college.name);
     setShowCollegeDropdown(false);
   };
 
+
+  // useEffect(()=>{
+  //   const fetchStaff=async()=>{
+  //       try {
+  //     //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
+  //     const ur=`/api/user/new/staff/${userId}`
+  //     const response = await fetch(ur);
+
+  //     if (response.ok) {
+  //       const responseData = await response.text();
+  //       let toastShown = false;
+  //       setUserData(responseData);
+  //       if (responseData) {
+  //         if (selectedRows.length > 1) {
+  //           toast.success(responseData);
+  //           toastShown = true;
+  //         } else {
+  //           toast.success("Approved Successfully");
+  //         }
+  //       }
+  //     } else {
+  //       console.error("Error fetching data:", response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+
+
+  //   }
+  //   if(userId){
+  //     fetchStaff();
+  //   }
+  // },[])
+
+
   const onSubmit = async (data) => {
-    const fromFirstName = data.firstName.toLowerCase();
-    const fromMiddleName = data.middleName.charAt(0).toLowerCase();
-    
-    // Generate a random number between 100 and 999
+    // const fromFirstName = data.firstName.toLowerCase();
+    // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
+    // const password = `${fromFirstName}@${fromMiddleName}1234`;
+    console.log("check",data.previlegeName,"and",userData[0].privilege);
+    if (data.previlegeName !== userData[0].privilege && data.previlegeName!=undefined ) {
 
-    const password = `${fromFirstName}@${fromMiddleName}1234`;
-    console.log(data);
-    try {
-      const response = await fetch("/api/user/new", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: data.studentId,
-          firstname: data.firstName,
-          middlename: data.middleName,
-          lastname: data.lastName,
-
-          password: password,
-
-          collegeName: data.collegeName,
-          departmentName: data.departmentName,
-          year: data.year,
-          role: ROLES.STUDENT,
-        }),
-      });
-
-      if (response.ok) {
-        toast.success("Student registered Successfully!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setSearchTerm("");
-    setSearchCollege("");
-    reset();
-  };
-
-  // Import many students once from excel
-
-  const handleFileUpload = (e) => {
-    const reader = new FileReader();
-    reader.readAsBinaryString(e.target.files[0]);
-    reader.onload = async (e) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const parsedData = XLSX.utils.sheet_to_json(sheet);
-      const da = JSON.stringify(parsedData);
-      console.log("data stringified", da);
       try {
-        const response = await fetch("/api/user/import", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Add any other headers if needed
-          },
-          body: JSON.stringify(parsedData),
+        const response = await fetch(`/api/user/new/staff`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            objectId: userData[0]._id,
+            userId: userData[0].userId,
+            privilege: data.previlegeName,
+
+          }),
         });
 
         if (response.ok) {
-          const responseData = await response.text();
-          // Handle the response data from the server if needed
-          toast.success(responseData);
-          //console.log("Data sent successfully!", responseData);
-        } else {
-          // Handle error cases
-          toast.error("Failed to send data");
-
-          //          console.error();
+          toast.success("Officer Updated Successfully!");
         }
       } catch (error) {
-        console.error("Error sending data:", error);
+
+        console.log(error);
       }
-    };
+      setSearchCollege("");
+      reset();
+    } else {
+      toast.error("First update the previlege before updating!");
+    }
   };
 
   return (
@@ -200,41 +385,12 @@ const RegisterStudent = () => {
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-            Register Student
+            Edit Staff Previlege
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
 
-        <div className=" px-3 ">
-          <div className="flex flex-row gap-3">
-            <label
-              htmlFor="file-upload"
-              className="flex flex-row gap-3 rounded border border-primary bg-primary px-6 py-2 text-center font-medium text-white transition hover:bg-opacity-90"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#fff"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
-              </svg>
-              Import
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              style={{ display: "none" }}
-              onChange={handleFileUpload}
-              accept=".xlsx , .xls"
-            />
-          </div>
-        </div>
+
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -242,7 +398,7 @@ const RegisterStudent = () => {
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="phoneNumber"
+              htmlFor="firstName"
             >
               First Name
             </label>
@@ -251,6 +407,8 @@ const RegisterStudent = () => {
               type="text"
               name="firstName"
               id="firstName"
+              value={userData[0].firstname}
+              readOnly
               placeholder="student's name"
               {...register("firstName")}
             />
@@ -260,7 +418,7 @@ const RegisterStudent = () => {
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="fullName"
+              htmlFor="middleName"
             >
               Middle Name
             </label>
@@ -270,6 +428,8 @@ const RegisterStudent = () => {
                 type="text"
                 name="middleName"
                 id="middleName"
+                readOnly
+                value={userData[0].middlename}
                 placeholder="Father's name"
                 {...register("middleName")}
               />
@@ -281,7 +441,7 @@ const RegisterStudent = () => {
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="phoneNumber"
+              htmlFor="lastName"
             >
               Last Name
             </label>
@@ -290,6 +450,8 @@ const RegisterStudent = () => {
               type="text"
               name="lastName"
               id="lastName"
+              readOnly
+              value={userData[0].lastname}
               placeholder="Grand father's Name"
               {...register("lastName")}
             />
@@ -299,22 +461,26 @@ const RegisterStudent = () => {
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="phoneNumber"
+              htmlFor="studentId"
             >
-              Student Id
+              user Id
             </label>
             <input
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               type="text"
               name="studentId"
               id="studentId"
+              readOnly
+              value={userData[0].userId}
               placeholder=".../..../.."
               {...register("studentId")}
             />
             <p>{errors.studentId?.message}</p>
           </div>
         </div>
+
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               College
@@ -323,12 +489,13 @@ const RegisterStudent = () => {
               type="text"
               name="collegeName"
               id="collegeName"
+              readOnly
               placeholder="Search for a college..."
-              value={searchCollege}
+              value={searchCollege ? searchCollege : userData[0].collegeName}
               onFocus={handleSearchCollegeFocus}
               onChange={handleSearchCollegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
+            //   {...register("collegeName")}
             />
             <input
               type="hidden"
@@ -357,6 +524,9 @@ const RegisterStudent = () => {
             )}
           </div>
 
+
+
+
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -368,12 +538,13 @@ const RegisterStudent = () => {
               type="text"
               name="departmentName"
               id="departmentName"
+              readOnly
               placeholder="Search for an office..."
-              value={searchTerm}
+              value={searchTerm ? searchTerm : userData[0].departmentName}
               onFocus={handleSearchInputFocus}
               onChange={handleSearchInputChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //  {...register("departmentName")}
+            //  {...register("departmentName")}
             />
             <input
               type="hidden"
@@ -402,59 +573,51 @@ const RegisterStudent = () => {
             )}
           </div>
         </div>
-        <div className="relative mb-5.5">
-          <label className=" block text-sm font-medium text-black dark:text-white">
-            Year
-          </label>
-          <div className="grid grid-cols-7">
-            {Items.map((item) => (
-              <div key={item} className="flex pt-4 min-w-47.5">
-                <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center">
-                  <input
-                    className="text-primary"
-                    type="radio"
-                    name="year"
-                    id={`year${item}`}
-                    value={item}
-                    {...register("year")}
-                  />
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary dark:text-gray">
-                    {item}
-                  </p>
-                </div>
+
+        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Previlege
+            </label>
+            <input
+              type="text"
+              name="previlegeName"
+              id="previlegeName"
+              placeholder={userData[0].privilege}
+              value={searchPrevilege}
+              onFocus={handleSearchPrevilegeFocus}
+              onChange={handleSearchPrevilegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //   {...register("collegeName")}
+            />
+            {/* <input
+          type="hidden"
+          name="collegeId"
+          id="collegeId"
+          value={selectedCollege ? selectedCollege.id : ""}
+        /> */}
+
+            <p>{errors.collegeName?.message}</p>
+
+            {showPrevilegeDropdown && (
+              <div
+                ref={previlegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredPrevilege.map((previlege) => (
+                  <div
+                    key={previlege.id}
+                    onClick={() => handleDropdownPrevilegeItemClick(previlege)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {previlege.name}
+                  </div>
+                ))}
               </div>
-            ))}{" "}
+            )}
           </div>
-          <p>{errors.year?.message}</p>
-        </div>
-        <div className="relative ">
-          <label className=" block text-sm font-medium text-black dark:text-white">
-            Program
-          </label>
-          <div className="grid grid-cols-4">
-            {programs.map((item) => (
-              <div key={item} className="flex pt-4 min-w-47.5">
-                <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center">
-                  <input
-                    className="text-primary"
-                    type="radio"
-                    name="program"
-                    id={`program${item}`}
-                    value={item}
-                    {...register("program")}
-                  />
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary dark:text-gray">
-                    {item}
-                  </p>
-                </div>
-              </div>
-            ))}{" "}
-          </div>
-          <p>{errors.program?.message}</p>
+
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
@@ -477,4 +640,7 @@ const RegisterStudent = () => {
     </div>
   );
 };
-export default RegisterStudent;
+export default EditStaff;
+
+
+

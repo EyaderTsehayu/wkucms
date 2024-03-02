@@ -2,6 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { personalInfoSchema } from "../../validations/userValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 const mockData = {
   fullName: "Eyader Tsehayu",
   idNumber: "NSR/0559/12",
@@ -18,11 +21,69 @@ const PersonalInfo = () => {
     resolver: yupResolver(personalInfoSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Email updated Successfully!");
-    reset();
+  const session = useSession();
+  const [userData, setUserData] = useState([]);
+  const userId = session?.data?.user.userId;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/user/new/${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const fetchedData = await response.json();
+        // const updatedData = fetchedData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
+        setUserData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, [userId]);
+  const fullName=userData.firstname+" " + userData.middlename
+console.log("userData   ",userData);
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  //   toast.success("Email updated Successfully!");
+  //   reset();
+  // };
+
+  const onSubmit = async (data) => {
+    // const fromFirstName = data.firstName.toLowerCase();
+    // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
+    // const password = `${fromFirstName}@${fromMiddleName}1234`;
+    console.log("check",data.email,"and",userData.userId);
+    if (data.email !== userData.email ) {
+
+      try {
+        const response = await fetch(`/api/user/new/`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            objectId: userData._id,
+            userId: userData.userId,
+            email: data.email,
+
+          }),
+        });
+
+        if (response.ok) {
+          toast.success("Email updated Successfully!");
+        }
+      } catch (error) {
+
+        console.log(error);
+      }
+      
+      reset();
+    } else {
+      toast.error("First update the email before updating!");
+    }
   };
+
   return (
     <div className="col-span-12 xl:col-span-5">
       <div className="rounded-lg border  border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -73,7 +134,7 @@ const PersonalInfo = () => {
                     name="fullName"
                     id="fullName"
                     placeholder="Eyader Tsehayu"
-                    value={mockData.fullName}
+                    value={fullName}
                     {...register("fullName")}
                     disabled
                   />
@@ -93,7 +154,7 @@ const PersonalInfo = () => {
                   name="idNumber"
                   id="idNumber"
                   placeholder="../..../.."
-                  Value={mockData.idNumber}
+                  Value={userData.userId}
                   {...register("idNumber")}
                   disabled
                 />
@@ -134,13 +195,14 @@ const PersonalInfo = () => {
                   </svg>
                 </span>
                 <input
+            
                   className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                   type="email"
                   name="email"
                   id="email"
                   placeholder="abc@gmail.com"
-                  defaultValue={mockData.emailAddress}
-                  {...register("email")}
+                  defaultValue={userData.email}
+                   {...register("email")}
                 />
               </div>
               <p>{errors.email?.message}</p>
@@ -159,7 +221,7 @@ const PersonalInfo = () => {
                 name="department"
                 id="department"
                 placeholder="Software Engineering"
-                Value={mockData.department}
+                Value={userData.department}
                 {...register("department")}
                 disabled
               />

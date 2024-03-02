@@ -23,11 +23,26 @@ const StaffRequestSchema = new Schema({
   },
   privilege: {
     type: String,
-    required: [true, "middlename is required!"],
+    // required: [true, "privilege is required!"],
+  },
+  collegeName:{
+    type: String,
+    // required: [true, "collegeId is required!"],
+  },
+  departmentName:{
+    type: String,
+    // required: [true, "departmentId is required!"],
+  },
+  _userId:{
+    type:String,
   },
   role: {
     type: String,
     required: [true, "role is required!"],
+  },
+  dateRequested:{
+    type:String,
+    required: [true, "Requested date is required!"],
   },
 });
 

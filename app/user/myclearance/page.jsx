@@ -55,7 +55,7 @@ export default function LabTabs() {
     {
       initialData: a,
       revalidateOnFocus: false,
-      refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+      // refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     }
   );
   console.log("session from approval ad ", userData);

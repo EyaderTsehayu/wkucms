@@ -2,8 +2,17 @@ import { connectToDB } from "@/utils/database";
 import StudentClearnceReq from "@/models/studentClearanceRequest";
 
 export const POST = async (req) => {
-  const { userId, firstname, middlename, reason, status, role } =
-    await req.json();
+  const {
+    userId,
+    firstname,
+    middlename,
+    reason,
+    status,
+    role,
+    collegeName,
+    departmentName,
+    _userId 
+  }=await req.json();
   const requests = await StudentClearnceReq.find({ userId: userId });
 
   if (requests.length > 0 && requests != null) {
@@ -22,7 +31,7 @@ export const POST = async (req) => {
     month: '2-digit',
     day: '2-digit',
   });
-console.log("formattedDate");
+  console.log("formattedDate");
   try {
     await connectToDB();
     const clearanceReq = new StudentClearnceReq({
@@ -32,7 +41,10 @@ console.log("formattedDate");
       reason,
       status,
       role,
-      dateRequested:formattedDate
+      collegeName,
+      departmentName,
+      _userId,
+      dateRequested: formattedDate
     });
 
     await clearanceReq.save();

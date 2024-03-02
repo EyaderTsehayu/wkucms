@@ -2,7 +2,7 @@
 
 import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegisterOffice from "@/components/Modals/RegisterOffice";
 import useSWR from 'swr';
 
@@ -36,6 +36,21 @@ const row = [
 
 const ManageOffices = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  // const [tryy, settry] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchOffices = async () => {
+  //     const response = await fetch(`/api/office`);
+  //     const data = await response.json();
+  //     const updatedData = data.map((user) => ({
+  //       ...user,
+  //       id: user._id,
+  //     }));
+  //     console.log("data", updatedData);
+  //     settry(updatedData);
+  //   }
+  //   fetchOffices();
+  // }, [tryy])
 
   // Use useSWR to fetch data
   const { data: officeData, error } = useSWR(
@@ -48,7 +63,7 @@ const ManageOffices = () => {
     {
       initialData: row, // Provide initial data (can be an empty array)
       revalidateOnFocus: false,
-      refreshInterval: 2000,
+       refreshInterval: 2000,
     }
   );
 

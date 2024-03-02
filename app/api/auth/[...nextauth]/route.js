@@ -15,6 +15,9 @@ export const authOptions = {
         try {
           await connectToDB();
           const user = await User.findOne({ userId });
+
+          
+
           //console.log("user in route js", user);
 
           if (!user) {
@@ -50,7 +53,10 @@ export const authOptions = {
           middlename: user.middlename,
           lastname: user.lastname,
           role: user.role,
-          privilege:user.privilege
+          privilege:user.privilege,
+          collegeName:user.collegeName,
+          departmentName:user.departmentName,
+          
         };
       }
       return token;
@@ -67,7 +73,9 @@ export const authOptions = {
           middlename: token.middlename,
           lastname: token.lastname,
           role: token.role,
-          privilege:token.privilege
+          privilege:token.privilege,
+          collegeName:token.collegeName,
+          departmentName:token.departmentName
         },
       };
 

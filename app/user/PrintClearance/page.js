@@ -147,7 +147,7 @@ export default function PrintClearance({
         const getPromptDetails = async () => {
             try {
                 console.log("Fetching data...");
-                const response = await fetch(`http://localhost:3000/api/approvalHistoryGetById/${clearanceId}`);
+                const response = await fetch(`http://localhost:3000/api/approvalHistory/${clearanceId}`);
                 const data = await response.json();
                 setHistory(data[0]);
                 // setHistory({

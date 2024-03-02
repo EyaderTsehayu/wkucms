@@ -3,9 +3,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficeSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
+import { useState } from "react";
 
 const RegisterOffice = () => {
+  const [stepData, setStepData] = useState([]);
   const {
     handleSubmit,
     register,
@@ -13,45 +14,116 @@ const RegisterOffice = () => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
+
+  const programs = ["STUDENT", "STAFF"];
+
   const onSubmit = async (data) => {
 
-    const fromFirstName=data.officeName.toLowerCase();
-   
+    const fromFirstName = data.officeName.toLowerCase();
+
 
     // Generate a random number between 100 and 999
-   
-    const password=`${fromFirstName}@office`;
+
+    const password = `${fromFirstName}@office`;
 
     console.log(data);
     try {
+
+      // first fetch the steps from step model start
+
+      const stepType =data.program; // Define your stepType here
+
+      const url = new URL("http://localhost:3000/api/step");
+      url.searchParams.append("stepType", stepType);
+  
+      const responsed = await fetch(url);
+      if (!responsed.ok) {
+        throw new Error("Network responsed was not ok");
+      }
+      const data2 = await responsed.json();
+      const updatedData = data2.map((user) => ({
+        ...user,
+        id: user._id,
+      }));
+      // setStepData(updatedData);
+      setStepData(updatedData[0].steps);
+      const UpdatedSteps = [...updatedData[0].steps];
+      // console.log("erekoy eski",updatedData[0].steps)
+
       const response = await fetch("/api/office", {
         method: "POST",
         body: JSON.stringify({
           officeId: data.officeId,
           officeName: data.officeName,
-          password:password,
+          password: password,
           location: data.location,
           items: data.items,
+          type:stepType,
+          status:"active"
         }),
       });
 
+
+      
+      
+      
+      
       if (response.ok) {
-        toast.success("Office registered Successfully!");
+        // push to step
+        // const UpdatedSteps = [...stepData, data.officeName];
+        
+        // console.log("erekoy eskieee",stepData)
+        // Calculate the index to insert data.officeName
+        const insertIndex = UpdatedSteps.length - 1;
+
+        // Insert data.officeName at the specified index
+        UpdatedSteps.splice(insertIndex, 0, data.officeName);
+
+        const response = await fetch(`/api/step`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            stepType: stepType,
+            updatedSteps: UpdatedSteps,
+          }),
+
+        // setStepData(...stepData,data.officeName)
+        // console.log("i think is working",UpdatedSteps)
+        // const stepResponse = await fetch("/api/step", {
+        //   method: "POST",
+        //   body: JSON.stringify({
+        //       // id: "65c4891df9228bec3acfe3a0",
+        //       steps:UpdatedSteps,
+        //       stepType:stepType
+        //   }),
+      });
+     
+
+      // Check if step insertion was successful
+      if (response.ok) {
+          toast.success("Office and Steps registered Successfully!");
+      } else {
+          toast.error("Steps Not registered Successfully!");
+      }
+
+
+        // toast.success("Office registered Successfully!");
       }
     } catch (error) {
-    toast.error("Office Not registered Successfully!");
+      toast.error("Office Not registered Successfully!");
       console.log(error);
     }
-  
-  
+
+
     reset();
   };
+
+  
   return (
-    <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
-      <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
+    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
         Register Office
       </h3>
-      <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+      <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5.5">
           <label
@@ -129,18 +201,46 @@ const RegisterOffice = () => {
           />
         </div>
 
-        <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
-          <div class="w-full px-3 2xsm:w-1/2">
+        {/* choose the step type(student or staff) */}
+        <div className="relative ">
+          <label className=" block text-sm font-medium text-black dark:text-white">
+            Choose the step type
+          </label>
+          <div className="grid grid-cols-4">
+            {programs.map((item) => (
+              <div key={item} className="flex pt-4 min-w-47.5">
+                <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center">
+                  <input
+                    className="text-primary"
+                    type="radio"
+                    name="program"
+                    id={`program${item}`}
+                    value={item}
+                    {...register("program")}
+                  />
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-primary dark:text-gray">
+                    {item}
+                  </p>
+                </div>
+              </div>
+            ))}{" "}
+          </div>
+        </div>
+
+        <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
+          <div className="w-full px-3 2xsm:w-1/2">
             <button
               type="submit"
-              class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+              className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
             >
               Save
             </button>
           </div>
 
-          <div class="w-full px-3 2xsm:w-1/2">
-            <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+          <div className="w-full px-3 2xsm:w-1/2">
+            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
           </div>

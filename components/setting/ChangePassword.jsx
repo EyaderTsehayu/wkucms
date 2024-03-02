@@ -2,6 +2,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { changePasswordSchema } from "../../validations/userValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import bcrypt from "bcryptjs";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const ChangePassword = () => {
   const {
@@ -13,10 +17,69 @@ const ChangePassword = () => {
     resolver: yupResolver(changePasswordSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Password updated Successfully!");
-    reset();
+
+  const [userData, setUserData] = useState([]);
+  const session = useSession();
+  const userId = session?.data?.user.userId;
+
+  // fetch user password for checking
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/user/new/${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const fetchedData = await response.json();
+        // const updatedData = fetchedData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
+        setUserData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  const onSubmit = async (data) => {
+    console.log(data.oldPassword, "aaa", data.newPassword, "bb", data.confirmPassword, "userPassword", userData.password);
+
+    const passwordMatch = await bcrypt.compare(data.oldPassword, userData.password);
+
+   if(passwordMatch){
+       if(data.newPassword===data.confirmPassword){
+        const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+        try {
+          const response = await fetch(`/api/user/new/`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              objectId: userData._id,
+              userId: userData.userId,
+              password: hashedPassword,
+  
+            }),
+          });
+  
+          if (response.ok) {
+            toast.success("Password updated Successfully!");
+          }
+        } catch (error) {
+  
+          console.log(error);
+        }
+         
+         reset();
+       }else{
+        toast.error("Password match error!");
+
+       }
+   }else{
+    toast.error("Password unmatch!");
+
+   }
   };
 
   return (
