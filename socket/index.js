@@ -32,13 +32,29 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+  socket.on("sendMessage", ({ senderId, receiverId, text, conversationId }) => {
     const user = getUser(receiverId);
     io.to(user.socketId).emit("getMessage", {
       senderId,
       text,
+      conversationId,
     });
   });
+
+  //send and get notifications
+
+  socket.on(
+    "sendNotification",
+    ({ senderId, receiverId, type, notificationId }) => {
+      console.log("reciever in socket", receiverId);
+      const receiver = getUser(receiverId);
+      io.to(receiver.socketId).emit("getNotification", {
+        senderId,
+        type,
+        notificationId,
+      });
+    }
+  );
 
   //when disconnect
   socket.on("disconnect", () => {
