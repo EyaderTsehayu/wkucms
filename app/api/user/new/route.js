@@ -68,15 +68,18 @@ export const POST = async (req) => {
 
 export const PATCH = async (request) => {
   try {
-    const {objectId,email,userId } = await request.json();
+    const {objectId,email,userId, password} = await request.json();
   
     await connectToDB();
     // first fetch the steps
     
-    console.log("objectId",objectId,"userId",userId,"previlege",email)
+    console.log("objectId",objectId,"userId",password,"previlege",email)
     // const editUser = await StepSchema.findOne({ userId:userId});
     //   // Fetch the user by userId
-      const  updatedUser = await User.findOneAndUpdate({ userId: userId }, { email:email });
+
+      const  updatedUser =email? await User.findOneAndUpdate({ userId: userId }, { email:email })
+                               :password?await User.findOneAndUpdate({ userId: userId }, { password:password })
+                               :await User.find({ userId: userId });
 
       if (!updatedUser) {
         return new Response("User not found", { status: 404 });
