@@ -4,11 +4,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {CollegeData, DepartmentData, ROLES } from "@/utils/constants";
+import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const EditStaff = ({userData}) => {
-  // const [userData,setUserData]=useState();
+const EditStaff = ({ userData }) => {
+ 
   const {
     handleSubmit,
     register,
@@ -16,15 +16,15 @@ const EditStaff = ({userData}) => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
-console.log("www",userData);
-// userData && userData.forEach((user) => {
-//   console.log(user.privilege); // Output: Head (or the privilege for each user)
-// })
+  console.log("www", userData);
+  // userData && userData.forEach((user) => {
+  //   console.log(user.privilege); // Output: Head (or the privilege for each user)
+  // })
 
 
 
-console.log("sera mesel",userData[0]);
-// userData && userData[0].map((data)=>console.log(data));
+  console.log("sera mesel", userData[0]);
+  // userData && userData[0].map((data)=>console.log(data));
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedPrevilege, setSelectedPrevilege] = useState(null);
@@ -50,7 +50,7 @@ console.log("sera mesel",userData[0]);
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-const [Previlege,setPrevilege]=useState([])
+  const [Previlege, setPrevilege] = useState([])
 
 
   const handleSearchInputFocus = () => {
@@ -82,56 +82,56 @@ const [Previlege,setPrevilege]=useState([])
   };
 
 
-//  fetch from staff by id
-useEffect(() => {
-    
+  //  fetch from staff by id
+  useEffect(() => {
 
-  const fetchData = async () => {
-    try {
-      const stepType = "STUDENT"; // Define your stepType here
-      const url = new URL("/api/step");
-      url.searchParams.append("stepType", stepType);
-  
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+
+    const fetchData = async () => {
+      try {
+        const stepType = "STUDENT"; // Define your stepType here
+        const url = new URL("/api/step");
+        url.searchParams.append("stepType", stepType);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        const updatedData = data.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+        // setStepData(updatedData);
+        // setDraggedData(updatedData[0].steps);
+        console.log("setDraggedData", updatedData);
+      } catch (error) {
+        setStepError(error);
       }
-      const data = await response.json();
-      const updatedData = data.map((user) => ({
-        ...user,
-        id: user._id,
-      }));
-      // setStepData(updatedData);
-      // setDraggedData(updatedData[0].steps);
-      console.log("setDraggedData", updatedData);
-    } catch (error) {
-      setStepError(error);
-    }
-  };
-  fetchData(); // Fetch data once when component mounts
+    };
+    fetchData(); // Fetch data once when component mounts
 
-  // No cleanup or dependency array needed as we only want to fetch data once
-}, []);
+    // No cleanup or dependency array needed as we only want to fetch data once
+  }, []);
 
 
-// 
+  // 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType="STUDENT"
-  
-        
+        const studentStepType = "STUDENT"
+
+
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
         const responseStaff = await fetch(staffUrl);
-  // fetch students step
+        // fetch students step
         const studentUrl = new URL("http://localhost:3000/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
-  
-  
+
+
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");
         }
@@ -140,14 +140,14 @@ useEffect(() => {
           ...user,
           id: user._id,
         }));
-  
-  
+
+
         const studentData = await responseStudent.json();
         const updatedStudentData = studentData.map((user) => ({
           ...user,
           id: user._id,
         }));
-  
+
         // Assuming setStepData and setStepError are state updating functions
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
@@ -155,23 +155,23 @@ useEffect(() => {
           ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
           ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
         ];
-        const  previlege = concatenatedArray.map((role, index) => ({
+        const previlege = concatenatedArray.map((role, index) => ({
           id: (index + 1).toString(),
           name: role
         }));
-        
+
         setPrevilege(previlege);
-  
-        
-      //   console.log("Data fetched successfully:", previlege);
-      //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+
+
+        //   console.log("Data fetched successfully:", previlege);
+        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
         // setStepError(error);
       }
     };
-  
+
     fetchData(); // Fetch data once when component mounts
 
 
@@ -198,8 +198,8 @@ useEffect(() => {
 
 
     if (searchPrevilege) {
-// console.log("concatPrevilegeenatedArray",Previlege);
-// console.log("privilegeData",privilegeData);
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
       const filteredResults = Previlege.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
@@ -208,14 +208,14 @@ useEffect(() => {
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-  }, [searchTerm, DepartmentData,searchCollege,searchPrevilege]);
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
 
 
 
 
 
 
-  
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -278,7 +278,7 @@ useEffect(() => {
     setSearchPrevilege(event.target.value);
     setShowDropdown(true);
   };
-  
+
 
 
   const handleDropdownItemClick = (office) => {
@@ -315,73 +315,70 @@ useEffect(() => {
 
 
   // useEffect(()=>{
-//   const fetchStaff=async()=>{
-//       try {
-//     //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
-//     const ur=`/api/user/new/staff/${userId}`
-//     const response = await fetch(ur);
+  //   const fetchStaff=async()=>{
+  //       try {
+  //     //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
+  //     const ur=`/api/user/new/staff/${userId}`
+  //     const response = await fetch(ur);
 
-//     if (response.ok) {
-//       const responseData = await response.text();
-//       let toastShown = false;
-//       setUserData(responseData);
-//       if (responseData) {
-//         if (selectedRows.length > 1) {
-//           toast.success(responseData);
-//           toastShown = true;
-//         } else {
-//           toast.success("Approved Successfully");
-//         }
-//       }
-//     } else {
-//       console.error("Error fetching data:", response.statusText);
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
+  //     if (response.ok) {
+  //       const responseData = await response.text();
+  //       let toastShown = false;
+  //       setUserData(responseData);
+  //       if (responseData) {
+  //         if (selectedRows.length > 1) {
+  //           toast.success(responseData);
+  //           toastShown = true;
+  //         } else {
+  //           toast.success("Approved Successfully");
+  //         }
+  //       }
+  //     } else {
+  //       console.error("Error fetching data:", response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
 
 
-//   }
-//   if(userId){
-//     fetchStaff();
-//   }
-// },[])
+  //   }
+  //   if(userId){
+  //     fetchStaff();
+  //   }
+  // },[])
 
 
   const onSubmit = async (data) => {
     // const fromFirstName = data.firstName.toLowerCase();
     // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
     // const password = `${fromFirstName}@${fromMiddleName}1234`;
+    console.log("check",data.previlegeName,"and",userData[0].privilege);
+    if (data.previlegeName !== userData[0].privilege && data.previlegeName!=undefined ) {
 
-    try {
-      const response = await fetch(`/api/user/new/staff`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          // userId: data.studentId,
-          // firstname: data.firstName,
-          // middlename: data.middleName,
-          // lastname: data.lastName,
-          // password: password,
-          objectId:userData[0]._id,
-          userId:userData[0].userId,
-          privilege: data.previlegeName,
-          // collegeName:data.collegeName,
-          // departmentName:data.departmentName,
-          // role: ROLES.STAFF,
-        }),
-      });
+      try {
+        const response = await fetch(`/api/user/new/staff`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            objectId: userData[0]._id,
+            userId: userData[0].userId,
+            privilege: data.previlegeName,
 
-      if (response.ok) {
-        toast.success("Officer registered Successfully!");
+          }),
+        });
+
+        if (response.ok) {
+          toast.success("Officer Updated Successfully!");
+        }
+      } catch (error) {
+
+        console.log(error);
       }
-    } catch (error) {
-
-      console.log(error);
+      setSearchCollege("");
+      reset();
+    } else {
+      toast.error("First update the previlege before updating!");
     }
-    setSearchCollege("");
-    reset();
   };
-
 
   return (
     <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
@@ -483,52 +480,52 @@ useEffect(() => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-            <div className="w-full sm:w-1/2">
-              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                College
-              </label>
-              <input
-                type="text"
-                name="collegeName"
-                id="collegeName"
-                readOnly
-                placeholder="Search for a college..."
-                value={searchCollege ?searchCollege:userData[0].collegeName}
-                onFocus={handleSearchCollegeFocus}
-                onChange={handleSearchCollegeChange}
-                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
-              />
-              {/* <input
+
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              College
+            </label>
+            <input
+              type="text"
+              name="collegeName"
+              id="collegeName"
+              readOnly
+              placeholder="Search for a college..."
+              value={searchCollege ? searchCollege : userData[0].collegeName}
+              onFocus={handleSearchCollegeFocus}
+              onChange={handleSearchCollegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //   {...register("collegeName")}
+            />
+            <input
               type="hidden"
               name="collegeId"
               id="collegeId"
               value={selectedCollege ? selectedCollege.id : ""}
-            /> */}
+            />
 
-              <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-              {showCollegeDropdown && (
-                <div
-                  ref={collegeDropdownRef} // Use the college dropdown ref
-                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                >
-                  {filteredColleges.map((college) => (
-                    <div
-                      key={college.id}
-                      onClick={() => handleDropdownCollegeClick(college)}
-                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                    >
-                      {college.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {showCollegeDropdown && (
+              <div
+                ref={collegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredColleges.map((college) => (
+                  <div
+                    key={college.id}
+                    onClick={() => handleDropdownCollegeClick(college)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {college.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
 
-        
+
 
           <div className="w-full sm:w-1/2">
             <label
@@ -543,13 +540,13 @@ useEffect(() => {
               id="departmentName"
               readOnly
               placeholder="Search for an office..."
-              value={searchTerm?searchTerm:userData[0].departmentName}
+              value={searchTerm ? searchTerm : userData[0].departmentName}
               onFocus={handleSearchInputFocus}
               onChange={handleSearchInputChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
             //  {...register("departmentName")}
             />
-             <input
+            <input
               type="hidden"
               name="departmentId"
               id="departmentId"
@@ -578,48 +575,48 @@ useEffect(() => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-        <div className="w-full sm:w-1/2">
-          <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-            Previlege
-          </label>
-          <input
-            type="text"
-            name="previlegeName"
-            id="previlegeName"
-            placeholder="Search for a previlege..."
-            value={searchPrevilege?searchPrevilege:userData[0].privilege}
-            onFocus={handleSearchPrevilegeFocus}
-            onChange={handleSearchPrevilegeChange}
-            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-          //   {...register("collegeName")}
-          />
-          {/* <input
+
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Previlege
+            </label>
+            <input
+              type="text"
+              name="previlegeName"
+              id="previlegeName"
+              placeholder={userData[0].privilege}
+              value={searchPrevilege}
+              onFocus={handleSearchPrevilegeFocus}
+              onChange={handleSearchPrevilegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //   {...register("collegeName")}
+            />
+            {/* <input
           type="hidden"
           name="collegeId"
           id="collegeId"
           value={selectedCollege ? selectedCollege.id : ""}
         /> */}
 
-          <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-          {showPrevilegeDropdown && (
-            <div
-              ref={previlegeDropdownRef} // Use the college dropdown ref
-              className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            >
-              {filteredPrevilege.map((previlege) => (
-                <div
-                  key={previlege.id}
-                  onClick={() => handleDropdownPrevilegeItemClick(previlege)}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                >
-                  {previlege.name}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+            {showPrevilegeDropdown && (
+              <div
+                ref={previlegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredPrevilege.map((previlege) => (
+                  <div
+                    key={previlege.id}
+                    onClick={() => handleDropdownPrevilegeItemClick(previlege)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {previlege.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
         </div>
 
