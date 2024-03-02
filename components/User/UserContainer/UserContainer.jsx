@@ -13,7 +13,20 @@ import { toast } from "react-toastify";
 const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
   const [selectedRows, setSelectedRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const handleApproveAll = async (selectedRowsData) => {
     // console.log(
     //   "Selected Rows to Approve from handle approve:",
@@ -83,18 +96,6 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
     }
   };
 
-  const handleClose = () => setOpen(false);
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      handleClose();
-    }
-  };
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleOpen = (event) => {};
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
   // search
   // const filteredInfo = rows.filter((info) =>
   //   info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -122,7 +123,10 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+          <button
+            onClick={handleOpen}
+            className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+          >
             Reject
           </button>
           <button
@@ -143,7 +147,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
           />
         </div>
       </div>
-      {/* <Modal
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -153,9 +157,9 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
           onClick={handleOverlayClick}
           class="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <OpenedModal />
+          <OpenedModal selectedUser={selectedRows} />
         </div>
-      </Modal> */}
+      </Modal>
     </div>
   );
 };

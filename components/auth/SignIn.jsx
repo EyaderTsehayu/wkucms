@@ -42,7 +42,7 @@ const SignIn = () => {
         return;
       } else {
         toast.success("Login Successful!");
-        router.push("/user");
+        //  router.push("/user");
       }
       const session = await getSession(); // Get the updated session after sign-in
       console.log("Hello Role -- ", session?.user?.role);
@@ -51,8 +51,8 @@ const SignIn = () => {
         router.replace("/admin");
       } else if (role == "STUDENT") {
         router.replace("/user");
-      } else if (role == "OFFICER") {
-        router.replace("/user/studentApproval");
+      } else if (role == "STAFF") {
+        router.replace("/user/");
       }
     } catch (error) {
       console.log(error);
