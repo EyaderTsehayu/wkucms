@@ -14,6 +14,8 @@ const ChangePassword = () => {
   });
 
   const onSubmit = (data) => {
+console.log(data.oldPassword,"aaa",data.newPassword,"bb",data.newPassword);
+
     console.log(data);
     toast.success("Password updated Successfully!");
     reset();

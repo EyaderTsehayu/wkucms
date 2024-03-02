@@ -15,7 +15,8 @@ export const POST = async (req) => {
     officeName,
     year,
     role,
-    privilege
+    privilege,
+    email
   } = await req.json();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -33,7 +34,8 @@ export const POST = async (req) => {
       officeName,
       year,
       role,
-      privilege
+      privilege,
+      email
     });
 
     console.log(
@@ -48,7 +50,8 @@ export const POST = async (req) => {
       officeName,
       year,
       role,
-      privilege
+      privilege,
+      email
     );
     await newUser.save();
     return new Response(JSON.stringify(newUser), { status: 201 });
@@ -59,3 +62,34 @@ export const POST = async (req) => {
 
 };
 
+
+
+// const staffApproval = STAFFSTEPS;
+
+export const PATCH = async (request) => {
+  try {
+    const {objectId,email,userId } = await request.json();
+  
+    await connectToDB();
+    // first fetch the steps
+    
+    console.log("objectId",objectId,"userId",userId,"previlege",email)
+    // const editUser = await StepSchema.findOne({ userId:userId});
+    //   // Fetch the user by userId
+      const  updatedUser = await User.findOneAndUpdate({ userId: userId }, { email:email });
+
+      if (!updatedUser) {
+        return new Response("User not found", { status: 404 });
+      }
+  
+      // Success message (optional)
+      console.log(`email updated for user with ID: ${userId}`);
+  
+      return new Response("email updated successfully", { status: 200 });
+    } catch (error) {
+      console.log(error);
+      return new Response("Failed to update email", { status: 500 });
+    }
+   
+ 
+};

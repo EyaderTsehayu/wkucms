@@ -44,6 +44,9 @@ const UserSchema = new Schema({
   },
   privilege:{
     type:String,
+  },
+  email:{
+    type:String
   }
 });
 
