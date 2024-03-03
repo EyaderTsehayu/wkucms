@@ -44,8 +44,14 @@ const PersonalInfo = () => {
   
     fetchUserData();
   }, [userId]);
-  const fullName=userData.firstname+" " + userData.middlename
-console.log("userData   ",userData);
+    let fullName;
+  if(userData){
+
+     fullName=userData.firstname+" " + userData.middlename
+  console.log("userData   ",userData);
+  }else{
+     fullName="";
+  }
   // const onSubmit = (data) => {
   //   console.log(data);
   //   toast.success("Email updated Successfully!");

@@ -6,11 +6,35 @@ import { signOut, useSession } from "next-auth/react";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userData, setUserData] = useState([]);
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
   const { data: session } = useSession();
+  const userId = session?.user?.userId
 
+  //fetch user data
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/user/new/${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const fetchedData = await response.json();
+        // const updatedData = fetchedData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
+        setUserData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userData]);
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -54,12 +78,29 @@ const DropdownUser = () => {
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <Image
+          {/* <Image
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src={!userData.profilePicture ? "/images/user/user-01.png" : userData.profilePicture}
             alt="User"
-          />
+          /> */}
+
+          {userData.profilePic ? (
+            <Image
+              src={userData.profilePic} // Use the selected image URL
+              width={55}
+              height={55}
+              alt="User"
+            />
+          ) : 
+            <Image
+              src="/images/user/user-01.png"
+              width={55}
+              height={55}
+              alt="User"
+            />
+          }
+
         </span>
 
         <svg
@@ -84,9 +125,8 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-          dropdownOpen === true ? "block" : "hidden"
-        }`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen === true ? "block" : "hidden"
+          }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>

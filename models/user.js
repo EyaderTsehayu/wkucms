@@ -47,6 +47,9 @@ const UserSchema = new Schema({
   },
   email:{
     type:String
+  },
+  profilePic:{
+    type:String
   }
 });
 

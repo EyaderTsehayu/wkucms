@@ -1,8 +1,123 @@
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { personalInfoSchema } from "../../validations/userValidation";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const ChangeProfilePic = () => {
-  const { handleSubmit, register } = useForm();
+  const {
+
+    register,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(personalInfoSchema),
+  });
+  // const { handleSubmit, register } = useForm();
+  const [selectedImage, setProfilePic] = useState(null)
+  const [selectedImageBase64, setImageBase64] = useState(null)
+
+
+  const [userData, setUserData] = useState([]);
+  const session = useSession();
+  const userId = session?.data?.user.userId;
+  const objectId = session?.data?.user._id;
+
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   const base64 = await convertToBase64(file);
+  //   console.log(base64)
+  //   setPostImage({ ...postImage, myFile : base64 })
+  // }
+
+  const handleFileChange = async (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const imageURL = URL.createObjectURL(selectedFile);
+
+      const base64 = await convertToBase64(selectedFile);
+      console.log("base64",base64)
+      setImageBase64(base64);
+
+      console.log("Image selectedImage:", selectedImage);
+      console.log("Image profilePic:", userData.profilePic);
+      setProfilePic(imageURL);
+
+    }
+
+  }
+
+  function convertToBase64(file){
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result)
+      };
+      fileReader.onerror = (error) => {
+        reject(error)
+      }
+    })
+  }
+
+  const handleSubmit = async () => {
+    console.log("Submit button clicked");
+    if (selectedImage) {
+
+      try {
+        const response = await fetch(`/api/user/new/`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            objectId: objectId,
+            userId: userId,
+            profilePicture: selectedImageBase64,
+
+          }),
+        });
+
+        if (response.ok) {
+          console.log("profile Pic updated Successfully!");
+          toast.success("profile Pic updated Successfully!");
+        }
+      } catch (error) {
+
+        console.log(error);
+      }
+
+      reset();
+    } else {
+      toast.error("First update the profile Pic before updating!");
+    }
+    // Now imageURL contains the link to the picked image.
+  }
+
+
+
+  //fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`/api/user/new/${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const fetchedData = await response.json();
+        // const updatedData = fetchedData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
+        setUserData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
   return (
     <div className="col-span-12 xl:col-span-3">
       <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -12,15 +127,39 @@ const ChangeProfilePic = () => {
           </h3>
         </div>
         <div className="p-7">
-          <form action="#">
+          {/* <form action="#"> */}
+          <form onSubmit={handleSubmit}>
             <div className="mb-4 flex items-center gap-3">
               <div className="h-14 w-14 rounded-full">
-                <Image
+                {/* <Image
                   src={"/images/user/user-03.png"}
                   width={55}
                   height={55}
                   alt="User"
-                />
+                /> */}
+
+                {selectedImage ? (
+                  <Image
+                    src={selectedImage} // Use the selected image URL
+                    width={55}
+                    height={55}
+                    alt="User"
+                  />
+                ) : userData.profilePic ? (
+                  <Image
+                    src={userData.profilePic}
+                    width={55}
+                    height={55}
+                    alt="User"
+                  />
+                ) :
+                  <Image
+                    src={"/images/user/user-03.png"}
+                    width={55}
+                    height={55}
+                    alt="User"
+                  />
+                }
               </div>
               <div>
                 <span className="mb-1.5 text-black dark:text-white">
@@ -37,6 +176,7 @@ const ChangeProfilePic = () => {
                 type="file"
                 accept="image/*"
                 className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                onChange={handleFileChange}
               />
               <div className="flex flex-col items-center justify-center space-y-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
