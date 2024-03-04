@@ -12,13 +12,14 @@ const DropdownUser = () => {
 
   const { data: session } = useSession();
   const userId = session?.user?.userId
-
+  const Id = session?.user.id;
+  console.log("oooooo",Id);
   //fetch user data
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/user/new/${userId}`);
+        const response = await fetch(`/api/user/new/${Id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -34,7 +35,7 @@ const DropdownUser = () => {
     };
 
     fetchUserData();
-  }, [userData]);
+  }, [Id,userData]);
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -72,36 +73,31 @@ const DropdownUser = () => {
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
             {session?.user?.firstname}
-            {console.log("session user from dropdown", session?.user)}
+            {/* {console.log("session user from dropdown", session?.user)} */}
           </span>
           <span className="block text-xs"> {session?.user?.role}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          {/* <Image
-            width={112}
-            height={112}
-            src={!userData.profilePicture ? "/images/user/user-01.png" : userData.profilePicture}
-            alt="User"
-          /> */}
-
-          {userData.profilePic ? (
+        <span className="h-12 w-12 rounded-full overflow-hidden">
+          {userData?.profilePic ? (
             <Image
               src={userData.profilePic} // Use the selected image URL
-              width={55}
-              height={55}
+              width={112}
+              height={112}
               alt="User"
+              className="rounded-full"
             />
-          ) : 
+          ) : (
             <Image
-              src="/images/user/user-01.png"
-              width={55}
-              height={55}
+              src="/images/user/default.png"
+              width={112}
+              height={112}
               alt="User"
+              className="rounded-full"
             />
-          }
-
+          )}
         </span>
+
 
         <svg
           className="hidden fill-current sm:block"

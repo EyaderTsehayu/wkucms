@@ -18,31 +18,31 @@ const ChangePassword = () => {
   });
 
 
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const session = useSession();
   const userId = session?.data?.user.userId;
 
-  // fetch user password for checking
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`/api/user/new/${userId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const fetchedData = await response.json();
-        // const updatedData = fetchedData.map((user) => ({
-        //   ...user,
-        //   id: user._id,
-        // }));
-        setUserData(fetchedData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  // // fetch user password for checking
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/user/new/${userId}`);
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       const fetchedData = await response.json();
+  //       // const updatedData = fetchedData.map((user) => ({
+  //       //   ...user,
+  //       //   id: user._id,
+  //       // }));
+  //       setUserData(fetchedData);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
-    fetchUserData();
-  }, [userId]);
+  //   fetchUserData();
+  // }, [userId]);
 
   const onSubmit = async (data) => {
     console.log(data.oldPassword, "aaa", data.newPassword, "bb", data.confirmPassword, "userPassword", userData.password);

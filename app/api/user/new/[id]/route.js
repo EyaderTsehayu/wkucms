@@ -6,9 +6,9 @@ export const GET = async (request, { params }) => {
     // Get the user session
     // const session = await getServerSession();
     // console.log("session from studentApproval", session?.user?.privilege);
-    console.log("userId ", params.id)
+    console.log("userId lemn gn", params.id)
     await connectToDB();
-    const users = await User.findOne({ userId: params.id });
+    const users = await User.findOne({ _id: params.id });
     console.log("users ", users)
     // console.log("ojjbshvcxcgzxcvg",users);
     // Return a success response with the users data

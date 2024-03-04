@@ -11,7 +11,8 @@ const mockData = {
   emailAddress: "eyaderts@gmail.com",
   department: "Software Engineering",
 };
-const PersonalInfo = () => {
+const PersonalInfo = ({userData}) => {
+  console.log("from parent ",userData);
   const {
     handleSubmit,
     register,
@@ -22,33 +23,34 @@ const PersonalInfo = () => {
   });
 
   const session = useSession();
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const userId = session?.data?.user.userId;
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`/api/user/new/${userId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const fetchedData = await response.json();
-        // const updatedData = fetchedData.map((user) => ({
-        //   ...user,
-        //   id: user._id,
-        // }));
-        setUserData(fetchedData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  const fn=session?.data?.user.fullName;
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/user/new/${userId}`);
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       const fetchedData = await response.json();
+  //       // const updatedData = fetchedData.map((user) => ({
+  //       //   ...user,
+  //       //   id: user._id,
+  //       // }));
+  //       setUserData(fetchedData);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
   
-    fetchUserData();
-  }, [userId]);
+  //   fetchUserData();
+  // }, [userId]);
     let fullName;
   if(userData){
 
      fullName=userData.firstname+" " + userData.middlename
-  console.log("userData   ",userData);
+  // console.log("userData   ",userData);
   }else{
      fullName="";
   }
@@ -160,7 +162,7 @@ const PersonalInfo = () => {
                   name="idNumber"
                   id="idNumber"
                   placeholder="../..../.."
-                  Value={userData.userId}
+                  Value={userId}
                   {...register("idNumber")}
                   disabled
                 />
@@ -207,7 +209,7 @@ const PersonalInfo = () => {
                   name="email"
                   id="email"
                   placeholder="abc@gmail.com"
-                  defaultValue={userData.email}
+                  defaultValue={userData?.email}
                    {...register("email")}
                 />
               </div>
@@ -226,8 +228,8 @@ const PersonalInfo = () => {
                 type="text"
                 name="department"
                 id="department"
-                placeholder="Software Engineering"
-                Value={userData.department}
+                // placeholder="Software Engineering"
+                defaultValue={userData?.departmentName}
                 {...register("department")}
                 disabled
               />
