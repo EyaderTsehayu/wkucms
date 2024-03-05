@@ -55,7 +55,7 @@ export const GET = async () => {
   const session = await getServerSession(authOptions);
   const userId=session?.user?.userId;
   
-   console.log("session from studentApproval ",session?.user?.privilege)
+  //  console.log("session from studentApproval ",session?.user?.privilege)
   try {
 
     await connectToDB();
