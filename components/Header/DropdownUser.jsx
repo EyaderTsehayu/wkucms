@@ -13,10 +13,10 @@ const DropdownUser = () => {
   const { data: session } = useSession();
   const userId = session?.user?.userId
   const Id = session?.user.id;
-    console.log("oooooo",Id);
   //fetch user data
-
+  
   useEffect(() => {
+    console.log("oooooo",Id);
     const fetchUserData = async () => {
       try {
         const response = await fetch(`/api/user/new/${Id}`);

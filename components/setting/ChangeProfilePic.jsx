@@ -16,7 +16,7 @@ const ChangeProfilePic = ({userData}) => {
   } = useForm({
     resolver: yupResolver(personalProfilePic),
   });
-  console.log("wq",userData?.profilePic);
+  // console.log("wq",userData?.profilePic);
   // const { handleSubmit, register } = useForm();
   const [selectedImage, setProfilePic] = useState(null)
   const [selectedImageBase64, setImageBase64] = useState(null)

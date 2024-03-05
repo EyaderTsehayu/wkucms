@@ -1,201 +1,3 @@
-// "use client";
-
-// import { registerStaffSchema } from "@/validations/registrationValidation";
-// import { yupResolver } from "@hookform/resolvers/yup";
-
-// import { useForm } from "react-hook-form";
-// import { toast } from "react-toastify";
-// import {ROLES } from "@/utils/constants";
-
-// const RegisterStaff = () => {
-
-//     const {
-//         handleSubmit,
-//         register,
-//         formState: { errors },
-//         reset,
-//     } = useForm({ resolver: yupResolver(registerStaffSchema) });
-
-//     // const onSubmit = (data) => {
-//     //     console.log(data);
-//     //     toast.success("Staff registered Successfully!");
-//     //     reset();
-//     // };
-
-//     const onSubmit = async (data) => {
-
-//         const fromFirstName=data.firstName.toLowerCase();
-//         const fromMiddleName =data.middleName.charAt(0).toLowerCase();
-
-//         // Generate a random number between 100 and 999
-
-//         const password=`${fromFirstName}@${fromMiddleName}1234`;
-
-//         console.log(data);
-//         try {
-//           const response = await fetch("/api/user/new", {
-//             method: "POST",
-//             body: JSON.stringify({
-//              userId: data.staffId,
-//               firstname: data.firstName,
-//               middlename: data.middleName,
-//               lastname: data.lastName,
-
-//               password:password,
-
-//               staffId:data.staffId,
-//             //   collegeId: data.collegeId,
-//             //   departmentId: data.departmentId,
-//             //   year: data.year,
-//             officeName:data.officeName,
-//               role: ROLES.STAFF,
-//             }),
-//           });
-
-//           if (response.ok) {
-//             toast.success("Staff registered Successfully!");
-//           }
-//         } catch (error) {
-//         toast.error("Staff Not registered Successfully!");
-//           console.log(error);
-//         }
-
-
-//         reset();
-//       };
-
-//     return (
-//         <div class="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
-//             <h3 class="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-//                 Register Staff
-//             </h3>
-//             <span class="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
-//             <form onSubmit={handleSubmit(onSubmit)} >
-//                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-//                     <div className="w-full sm:w-1/2">
-//                         <label
-//                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-//                             htmlFor="firstName"
-//                         >
-//                             First Name
-//                         </label>
-//                         <input
-//                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-//                             type="text"
-//                             name="firstName"
-//                             id="firstName"
-//                             placeholder="Your name"
-//                             {...register("firstName")}
-//                         />
-//                         <p>{errors.firstName?.message}</p>
-//                     </div>
-
-//                     <div className="w-full sm:w-1/2">
-//                         <label
-//                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-//                             htmlFor="middleName"
-//                         >
-//                             Middle Name
-//                         </label>
-//                         <div className="relative">
-//                             <input
-//                                 className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-//                                 type="text"
-//                                 name="middleName"
-//                                 id="middleName"
-//                                 placeholder="Father's name"
-//                                 {...register("middleName")}
-//                             />
-//                             <p>{errors.middleName?.message}</p>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-//                     <div className="w-full sm:w-1/2">
-//                         <label
-//                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-//                             htmlFor="lastName"
-//                         >
-//                             Last Name
-//                         </label>
-//                         <input
-//                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-//                             type="text"
-//                             name="lastName"
-//                             id="lastName"
-//                             placeholder="Grand father's Name"
-//                             {...register("lastName")}
-//                         />
-//                         <p>{errors.lastName?.message}</p>
-//                     </div>
-
-//                     <div className="w-full sm:w-1/2">
-//                         <label
-//                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-//                             htmlFor="staffId"
-//                         >
-//                             Staff Id
-//                         </label>
-//                         <input
-//                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-//                             type="text"
-//                             name="staffId"
-//                             id="staffId"
-//                             placeholder="staff id"
-//                             {...register("staffId")}
-//                         />
-//                         <p>{errors.staffId?.message}</p>
-//                     </div>
-//                 </div>
-//                 <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-//                     <div className="w-full sm:w-1/2">
-//                         <label
-//                             className="mb-3 block text-sm font-medium text-black dark:text-white"
-//                             htmlFor="officeName"
-//                         >
-//                             Office
-//                         </label>
-//                         <input
-//                             className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-//                             type="text"
-//                             name="officeName"
-//                             id="officeName"
-//                             placeholder="Office Name"
-//                             {...register("officeName")}
-//                         />
-//                         <p>{errors.officeName?.message}</p>
-//                     </div>
-
-
-
-//                 </div>
-
-//                 <div class="-mx-3 mt-10 flex flex-wrap gap-y-4">
-//                     <div class="w-full px-3 2xsm:w-1/2">
-//                         <button
-//                             type="submit"
-//                             class="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
-//                         >
-//                             Save
-//                         </button>
-//                     </div>
-
-//                     <div class="w-full px-3 2xsm:w-1/2">
-//                         <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
-//                             Cancel
-//                         </button>
-//                     </div>
-//                 </div>
-
-//             </form>
-
-//         </div>
-//     );
-// }; 
-// export default RegisterStaff;
-
-
 "use client"
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -272,18 +74,7 @@ const [Previlege,setPrevilege]=useState([])
   };
 
 
-  // useEffect(() => {
-  //   if (searchCollege) {
-
-  //     const filteredResults = CollegeData.filter((college) =>
-  //       college.name.toLowerCase().includes(searchCollege.toLowerCase())
-  //     );
-  //     setFilteredColleges(filteredResults);
-  //   } else {
-  //     setFilteredColleges(initialDropdownColleges);
-  //   }
-  // }, [searchCollege, CollegeData]);
-
+  
 
 
   useEffect(() => {
@@ -384,120 +175,6 @@ const [Previlege,setPrevilege]=useState([])
 
 
 
-
-  // useEffect(() => {
-  //   if (searchPrevilege) {
-
-  //     const filteredResults = privilegeData.filter((college) =>
-  //       college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
-  //     );
-  //     setFilteredPrevilege(filteredResults);
-  //   } else {
-  //     setFilteredPrevilege(initialDropdownPrivilege);
-  //   }
-  // }, [searchPrevilege, privilegeData]);
-
-
-// useEffect(()=>{
-//   const fetchSteps=async()=>{
-//        const result=await fetch(`api/step`);
-//        const res=await result.json()
-//        console.log("resresress",res)
-//   }
-//   fetchSteps()
-// })
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     try {
-//       const stepType = "STAFF"; // Define your stepType here
-//       console.log("setDraggedData");
-//       const url = new URL("/api/step");
-//       url.searchParams.append("stepType", stepType);
-      
-//       const response = await fetch(url);
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       const data = await response.json();
-//       const updatedData = data.map((user) => ({
-//         ...user,
-//         id: user._id,
-//       }));
-//       // setStepData(updatedData);
-//       // setDraggedData(updatedData[0].steps);
-//       console.log("setDraggedData", data);
-//     } catch (error) {
-//       // setStepError(error);
-//     }
-//   };
-
-
-//   fetchData(); // Fetch data once when component mounts
-
-//   // No cleanup or dependency array needed as we only want to fetch data once
-// }, []);
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     try {
-//       const staffStepType = "STAFF"; // Define your stepType here
-//       const studentStepType="STUDENT"
-
-      
-//       const staffUrl = new URL("http://localhost:3000/api/step");
-//       staffUrl.searchParams.append("stepType", staffStepType);
-//       const responseStaff = await fetch(staffUrl);
-// // fetch students step
-//       const studentUrl = new URL("http://localhost:3000/api/step");
-//       studentUrl.searchParams.append("stepType", studentStepType);
-//       const responseStudent = await fetch(studentUrl);
-
-
-//       if (!responseStaff.ok && !responseStudent.ok) {
-//         throw new Error("Network responseStaff was not ok");
-//       }
-//       const staffData = await responseStaff.json();
-//       const updatedStaffData = staffData.map((user) => ({
-//         ...user,
-//         id: user._id,
-//       }));
-
-
-//       const studentData = await responseStudent.json();
-//       const updatedStudentData = studentData.map((user) => ({
-//         ...user,
-//         id: user._id,
-//       }));
-
-//       // Assuming setStepData and setStepError are state updating functions
-//       // setStepData(updatedStaffData);
-//       // setDraggedData(updatedStaffData[0].steps);
-//       const concatenatedArray = [
-//         ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
-//         ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
-//       ];
-
-
-//       previlege = concatenatedArray.map((role, index) => ({
-//         id: (index + 1).toString(),
-//         name: role
-//       }));
-      
-      
-//       console.log("Data fetched successfully:", previlege);
-//      console.log("initialDropdownPrivilege", initialDropdownPrivilege);
-//     } catch (error) {
-//       // Handle errors
-//       console.error("Error fetching data:", error);
-//       // setStepError(error);
-//     }
-//   };
-
-//   fetchData(); // Fetch data once when component mounts
-
-//   // No cleanup or dependency array needed as we only want to fetch data once
-// }, []);
 
 
   useEffect(() => {
@@ -614,6 +291,7 @@ const [Previlege,setPrevilege]=useState([])
           collegeName:data.collegeName,
           departmentName:data.departmentName,
           role: ROLES.STAFF,
+          blockNo:data.blockNo
         }),
       });
 
@@ -856,7 +534,23 @@ const [Previlege,setPrevilege]=useState([])
             </div>
           )}
         </div>
-
+        <div className="w-full sm:w-1/2">
+            <label
+              className="mb-3 block text-sm font-medium text-black dark:text-white"
+              htmlFor="blockNo"
+            >
+             Dorm Block
+            </label>
+            <input
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              type="text"
+              name="blockNo"
+              id="blockNo"
+              placeholder="block No"
+              {...register("blockNo")}
+            />
+            <p>{errors.blockNo?.message}</p>
+          </div>
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
@@ -880,6 +574,5 @@ const [Previlege,setPrevilege]=useState([])
   );
 };
 export default RegisterStaff;
-
 
 

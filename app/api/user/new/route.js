@@ -1,6 +1,7 @@
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
+import StudentClearnceReq from "@/models/studentClearanceRequest";
 
 export const POST = async (req) => {
   const {
@@ -16,7 +17,8 @@ export const POST = async (req) => {
     year,
     role,
     privilege,
-    email
+    email,
+    blockNo
   } = await req.json();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -35,7 +37,8 @@ export const POST = async (req) => {
       year,
       role,
       privilege,
-      email
+      email,
+      blockNo
     });
 
     console.log(
@@ -51,7 +54,8 @@ export const POST = async (req) => {
       year,
       role,
       privilege,
-      email
+      email,
+      blockNo
     );
     await newUser.save();
     return new Response(JSON.stringify(newUser), { status: 201 });
@@ -71,27 +75,44 @@ export const POST = async (req) => {
 // const upload = multer({ storage: storage });
 export const PATCH = async (request) => {
   try {
-    const { objectId, email, userId, password,profilePicture } = await request.json();
-    console.log("profilePic", profilePicture)
+    const { objectId, email, userId, password, profilePicture, blockNo } = await request.json();
+    // console.log("profilePic", profilePicture)
 
     await connectToDB();
-    //     // first fetch the steps
-    // Check if the request contains a file
-    // if (request.files && request.files.length > 0) {
-      // Handle image upload
-      // const imageBuffer = request.files[0].buffer;
-      // Save or process the image buffer as needed
-      // For example, you can save it to a user-specific folder or a cloud storage service
-     // const profilePic = imageBuffer.toString("base64"); // Convert image buffer to base64 string
-   // }
-    console.log("objectId", userId, "userId", userId, "previlege", userId)
+
+    const updatedFields = {};
+
+    //     // Check if there are updated fields
+    if (email) {
+      updatedFields.email = email;
+    }
+    if (password) {
+      updatedFields.password = password;
+    }
+    if (profilePicture) {
+      updatedFields.profilePic = profilePicture;
+    }
+    if (blockNo) {
+      updatedFields.blockNo = blockNo;
+    }
+
+
+    console.log("blockNo", blockNo, "userId", userId, "previlege", userId)
+    //     // Find and update the user document based on userId
+    const updatedUser = await User.findOneAndUpdate({ userId: userId }, { $set: updatedFields }, { new: true });
+    if (blockNo) {
+      const updatedUserRequest = await StudentClearnceReq.findOneAndUpdate({ userId: userId }, { blockNo: blockNo });
+
+    }
+
     // const editUser = await StepSchema.findOne({ userId:userId});
     //   // Fetch the user by userId
 
-    const updatedUser = email ? await User.findOneAndUpdate({ userId: userId }, { email: email })
-      : password ? await User.findOneAndUpdate({ userId: userId }, { password: password })
-        :profilePicture? await User.findOneAndUpdate({ userId: userId }, { profilePic: profilePicture })
-        :await User.find({ userId: userId });
+    // const updatedUser = email ? await User.findOneAndUpdate({ userId: userId }, { email: email })
+    //   : password ? await User.findOneAndUpdate({ userId: userId }, { password: password })
+    //     :profilePicture? await User.findOneAndUpdate({ userId: userId }, { profilePic: profilePicture })
+    //    :blockNo?await User.findOneAndUpdate({ userId: userId }, { blockNo: blockNo })
+    //     :await User.find({ userId: userId });
 
     if (!updatedUser) {
       return new Response("User not found", { status: 404 });
@@ -100,7 +121,7 @@ export const PATCH = async (request) => {
     // Success message (optional)
     console.log(`email updated for user with ID: ${userId}`);
 
-    return new Response("email updated successfully", { status: 200 });
+    return new Response("updated successfully", { status: 200 });
   } catch (error) {
     console.log(error);
     return new Response("Failed to update email", { status: 500 });

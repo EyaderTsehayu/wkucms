@@ -26,7 +26,7 @@ const Setting = () => {
           //   ...user,
           //   id: user._id,
           // }));
-          console.log("parent a ",fetchedData);
+          // console.log("parent a ",fetchedData);
           setUserData(fetchedData);
         } catch (error) {
           console.error("Error fetching user data:", error);

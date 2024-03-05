@@ -50,6 +50,9 @@ const UserSchema = new Schema({
   },
   profilePic:{
     type:String
+  },
+  blockNo:{
+    type:String
   }
 });
 
