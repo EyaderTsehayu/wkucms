@@ -13,7 +13,7 @@ const DropdownUser = () => {
   const { data: session } = useSession();
   const userId = session?.user?.userId
   const Id = session?.user.id;
-  console.log("oooooo",Id);
+    console.log("oooooo",Id);
   //fetch user data
 
   useEffect(() => {

@@ -26,18 +26,18 @@ const DropdownNotification = () => {
     }
   }, [arrivalNotification, user?.id]);
 
-  // useEffect(() => {
-  //   socket.on("getNotification", (data) => {
-  //     // console.log("first unread count on top", unreadCount);
-  //     setArrivalNotification({
-  //       senderId: data.senderId,
-  //       type: data.type,
-  //       notificationId: data.notificationId,
-  //       createdAt: Date.now(),
-  //     });
-  //     setNotifying(true);
-  //   });
-  // }, []);
+  useEffect(() => {
+    socket.on("getNotification", (data) => {
+      // console.log("first unread count on top", unreadCount);
+      setArrivalNotification({
+        senderId: data.senderId,
+        type: data.type,
+        notificationId: data.notificationId,
+        createdAt: Date.now(),
+      });
+      setNotifying(true);
+    });
+  }, []);
 
   //console.log("Internal conversations", conversations);
   useEffect(() => {
