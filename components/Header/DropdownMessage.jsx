@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useSocket } from "@/context/SocketContext";
-// import DropdownConversation from "../conversation/DropdownConversation";
+import DropdownConversation from "../conversation/DropdownConversation";
 import { format } from "timeago.js";
 
 const DropdownMessage = () => {
@@ -17,14 +17,10 @@ const DropdownMessage = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  
   const [lastMessages, setLastMessages] = useState({});
+
   const trigger = useRef(null);
   const dropdown = useRef(null);
-  
-  
-  
- 
 
   useEffect(() => {
     const getConversations = async () => {

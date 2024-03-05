@@ -215,14 +215,17 @@ const Header = (props) => {
                 </div>
               </div>
             )}
-
-            {/* <!-- Notification Menu Area --> */}
-            <DropdownNotification />
-            {/* <!-- Notification Menu Area --> */}
-
-            {/* <!-- Chat Notification Area --> */}
-            <DropdownMessage />
-            {/* <!-- Chat Notification Area --> */}
+            {(pathname == "/user" || pathname.includes("/user")) && (
+              <>
+                {" "}
+                {/* <!-- Notification Menu Area --> */}
+                <DropdownNotification />
+                {/* <!-- Notification Menu Area --> */}
+                {/* <!-- Chat Notification Area --> */}
+                <DropdownMessage />
+                {/* <!-- Chat Notification Area --> */}
+              </>
+            )}
           </ul>
 
           {/* <!-- User Area --> */}
