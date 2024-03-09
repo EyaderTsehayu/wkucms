@@ -11,7 +11,8 @@ export const POST = async (req) => {
     role,
     collegeName,
     departmentName,
-    _userId 
+    _userId ,
+    
   }=await req.json();
   const requests = await StudentClearnceReq.find({ userId: userId });
 
@@ -21,6 +22,10 @@ export const POST = async (req) => {
       { status: 201 }
     );
   }
+
+  // fetch the logged user data for getting the blockNo
+  const fetchStudent=await User.find({ userId: userId });
+    console.log("fetchStudent from dorm",fetchStudent[0].blockNo,privilage);
 
   // Get the current date
   const today = new Date();
@@ -44,6 +49,7 @@ export const POST = async (req) => {
       collegeName,
       departmentName,
       _userId,
+      blockNo:fetchStudent[0].blockNo,
       dateRequested: formattedDate
     });
 

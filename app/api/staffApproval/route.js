@@ -12,8 +12,8 @@ export const GET = async () => {
   const collegeName = session?.user?.collegeName;
   const departmentName = session?.user?.departmentName;
 
-  console.log("privilageprivilage", privilage)
-  console.log("session from studentApproval ", session?.user?.privilege)
+  // console.log("privilageprivilage", privilage)
+  // console.log("session from studentApproval ", session?.user?.privilege)
   try {
 
     await connectToDB();

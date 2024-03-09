@@ -9,7 +9,7 @@ export const loginSchema = yup.object({
 
 
 export const personalInfoSchema = yup.object({
-  email: yup.string().email().required("email is required"),
+ 
 });
 
 export const personalProfilePic = yup.object({

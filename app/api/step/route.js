@@ -12,9 +12,9 @@ export const GET = async (request) => {
 
   const session = await getServerSession(authOptions);
   const privilage = session?.user?.privilege;
-  console.log("sendtoapi", stepType);
+  // console.log("sendtoapi", stepType);
 
-  console.log("session from studentApproval ", session?.user?.privilege)
+  // console.log("session from studentApproval ", session?.user?.privilege)
   try {
 
     await connectToDB();

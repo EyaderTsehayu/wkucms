@@ -37,6 +37,9 @@ const StudentRequestSchema = new Schema({
   _userId:{
     type:String,
   },
+  blockNo:{
+    type:String,
+  },
   dateRequested:{
     type:String,
     required: [true, "Requested date is required!"],
