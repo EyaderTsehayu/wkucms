@@ -53,6 +53,62 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   }
 
+
+
+  // change the status
+  const handleActivateAll = async (selectedRowsData) => {
+    // console.log(
+    //   "Selected Rows to Approve from handle approve:",
+    //   selectedRowsData
+    // );
+    const len = selectedRowsData.length;
+    try {
+      const requests = selectedRowsData.map(async (eachData) => {
+        // console.log("log data", eachData.firstname);
+
+        try {
+          const response = await fetch(`/api/activateUser`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              objectId: eachData._id,
+              arrLength: len,
+            }),
+          });
+
+          if (response.ok) {
+            return await response.text();
+          }
+        } catch (error) {
+          console.log(error);
+          return null;
+        }
+
+      });
+
+      const responses = await Promise.all(requests);
+
+      let toastShown = false;
+
+      responses.forEach((responsedata, index) => {
+        if (responsedata) {
+          if (
+            selectedRowsData.length > 1 &&
+            !toastShown &&
+            index === responses.length - 1
+          ) {
+            toast.success(responsedata);
+            toastShown = true;
+          } else if (selectedRowsData.length === 1) {
+            toast.success("activate Successfully");
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchStaff = async () => {
       try {
@@ -137,9 +193,34 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
 
-          <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
-            Deactivate
-          </button>
+
+          {selectedRows[0]?.status == "active" && (
+            <button
+              onClick={() => handleActivateAll(selectedRows)}
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+              {/* {selectedRows[0]?.status=="active"&&(
+              "Deactivate"
+           )}
+           {selectedRows[0]?.status=="inactive"&&(
+              "Activate" */}
+              Deactivate
+            </button>
+          )}
+
+          {selectedRows[0]?.status == "inactive" && (
+            <button
+              onClick={() => handleActivateAll(selectedRows)}
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-3 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-3 dark:hover:bg-meta-3">
+              {/* {selectedRows[0]?.status=="active"&&(
+              "Deactivate"
+           )}
+           {selectedRows[0]?.status=="inactive"&&(
+              "Activate" */}
+              Activate
+            </button>
+          )}
+
+
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"

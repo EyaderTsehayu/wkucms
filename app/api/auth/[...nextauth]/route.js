@@ -56,7 +56,8 @@ export const authOptions = {
           privilege:user.privilege,
           collegeName:user.collegeName,
           departmentName:user.departmentName,
-          fullName:user.firstname+ user.middlename
+          fullName:user.firstname+ user.middlename,
+          status:user.status
         };
       }
       return token;
@@ -76,7 +77,8 @@ export const authOptions = {
           privilege:token.privilege,
           collegeName:token.collegeName,
           departmentName:token.departmentName,
-          fullName:token.firstname+ token.middlename
+          fullName:token.firstname+ token.middlename,
+          status:token.status
         },
       };
 
