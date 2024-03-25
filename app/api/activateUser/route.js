@@ -1,0 +1,46 @@
+import { connectToDB } from "@/utils/database";
+
+import User from "@/models/user";
+// const studentApproval = STUDENTSTEPS;
+var studentApproval;
+export const PATCH = async (request) => {
+  try {
+    const { objectId, arrLength } = await request.json();
+
+    await connectToDB();
+    // first fetch the steps
+
+    // const steps = await StepSchema.findOne({ stepType: "STUDENT" });
+
+    // studentApproval = steps.steps;
+    // console.log("studentApprovalithink it works", studentApproval)
+    // console.log("ererererr",objectId,"aaaa",arrLength)
+
+    const existingRequest = await User.findById(objectId);
+
+
+
+   
+    if (existingRequest) {
+        console.log("existing",existingRequest)
+    //   const currentIndex = studentApproval.indexOf(existingRequest.status);
+    //     console.log("currentIndex",currentIndex)
+      if (existingRequest.status == "active" ) {
+        existingRequest.status = "inactive";
+      } else {
+        existingRequest.status = "active";
+      }
+
+      await existingRequest.save();
+
+      return new Response(`Approved successfully ${arrLength} requests`, {
+        status: 201,
+      });
+    } else {
+      return new Response("Request not found", { status: 404 });
+    }
+  } catch (error) {
+    console.log(error);
+    return new Response("Failed to update the request status", { status: 500 });
+  }
+};

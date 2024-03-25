@@ -34,7 +34,6 @@ const RegisterAdmin = () => {
           middlename: data.middleName,
           lastname: data.lastName,
           password: password,
-
           officeName: data.officeName,
           role: ROLES.ADMIN,
         }),

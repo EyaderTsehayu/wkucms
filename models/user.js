@@ -53,6 +53,9 @@ const UserSchema = new Schema({
   },
   blockNo:{
     type:String
+  },
+  status:{
+    type:String
   }
 });
 

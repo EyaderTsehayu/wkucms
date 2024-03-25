@@ -8,7 +8,7 @@ import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
 const EditStaff = ({ userData }) => {
- 
+
   const {
     handleSubmit,
     register,
@@ -153,16 +153,21 @@ const EditStaff = ({ userData }) => {
         // setDraggedData(updatedStaffData[0].steps);
         const concatenatedArray = [
           ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
-          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+
+          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED"),
+
         ];
+        let cnt=0;
         const previlege = concatenatedArray.map((role, index) => ({
           id: (index + 1).toString(),
           name: role
         }));
-
+        cnt=previlege.length+1;  
+        previlege.push({ id: ''+`${cnt}`+'', name: "Null" });
         setPrevilege(previlege);
 
-
+        console.log("qaqaqa", previlege);
+        console.log("cnt", cnt);
         //   console.log("Data fetched successfully:", previlege);
         //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
@@ -352,8 +357,8 @@ const EditStaff = ({ userData }) => {
     // const fromFirstName = data.firstName.toLowerCase();
     // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
     // const password = `${fromFirstName}@${fromMiddleName}1234`;
-    console.log("check",data.previlegeName,"and",userData[0].privilege);
-    if (data.previlegeName !== userData[0].privilege && data.previlegeName!=undefined ) {
+    console.log("check", data.previlegeName, "and", userData[0].privilege);
+    if (data.previlegeName !== userData[0].privilege && data.previlegeName != undefined) {
 
       try {
         const response = await fetch(`/api/user/new/staff`, {
