@@ -32,13 +32,25 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
+  // socket.on("sendMessage", ({ senderId, receiverId, text, conversationId }) => {
+  //   const user = getUser(receiverId);
+  //   io.to(user.socketId).emit("getMessage", {
+  //     senderId,
+  //     text,
+  //     conversationId,
+  //   });
+  // });
   socket.on("sendMessage", ({ senderId, receiverId, text, conversationId }) => {
     const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
-      senderId,
-      text,
-      conversationId,
-    });
+    if (user) {
+      io.to(user.socketId).emit("getMessage", {
+        senderId,
+        text,
+        conversationId,
+      });
+    } else {
+      console.log(`User with ID ${receiverId} is not connected.`);
+    }
   });
 
   //send and get notifications
@@ -48,11 +60,14 @@ io.on("connection", (socket) => {
     ({ senderId, receiverId, type, notificationId }) => {
       console.log("reciever in socket", receiverId);
       const receiver = getUser(receiverId);
-      io.to(receiver.socketId).emit("getNotification", {
-        senderId,
-        type,
-        notificationId,
-      });
+      // console.log("notification reciever in socket", receiver);
+      if (receiver) {
+        io.to(receiver.socketId).emit("getNotification", {
+          senderId,
+          type,
+          notificationId,
+        });
+      }
     }
   );
 
