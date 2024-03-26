@@ -1,6 +1,6 @@
 import React from "react";
 
-const ClearanceNums = () => {
+const ClearanceNums = ({ approvedNum }) => {
   return (
     <div>
       <div class="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -31,7 +31,7 @@ const ClearanceNums = () => {
           <div class="flex items-center justify-center gap-2 border-b border-stroke pb-5 dark:border-strokedark xl:border-b-0 xl:border-r xl:pb-0">
             <div>
               <h4 class="mb-0.5 text-xl font-semibold text-black dark:text-white md:text-title-lg">
-                3456
+                {approvedNum}
               </h4>
               <p class="text-sm font-medium">Approved Clearances</p>
             </div>
