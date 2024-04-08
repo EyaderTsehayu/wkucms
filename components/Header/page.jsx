@@ -31,7 +31,7 @@ const Header = (props) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       // Close the dropdown if the click is outside the dropdown
       setShowDropdown(false);
-    } else if (!dropdownRef.current.contains(event.relatedTarget)) {
+    } else if (!dropdownRef.current?.contains(event.relatedTarget)) {
       // Close the dropdown if the mouse leaves the dropdown and doesn't hover over the dropdown button
       setShowDropdown(false);
     }
