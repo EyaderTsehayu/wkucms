@@ -27,8 +27,8 @@ const SignIn = () => {
   const onSubmitHandler = async (data) => {
     const session = await getSession(); // Get the updated session after sign-in
     console.log("Hello Role -- ", session?.user?.role);
-    const role = session.user?.role;
-    const status = session.user?.status;
+    const role = session?.user?.role;
+    const status = session?.user?.status;
 
     console.log("Form Data:", data);
     const userId = data.id;
@@ -39,29 +39,26 @@ const SignIn = () => {
         userId,
         password,
         redirect: false,
-        
       });
 
       if (res.error) {
         toast.error("invalid credentials");
         return;
       } else {
-        if(status=='inactive'){
+        if (status == "inactive") {
           toast.error("You have been banned.");
-        }else{
-
+        } else {
           toast.success("Login Successful!");
           //  router.push("/user");
         }
       }
-     
-      
-      console.log("status",status);
-      if (role == "ADMIN" && status=="active") {
+
+      console.log("status", status);
+      if (role == "ADMIN" && status == "active") {
         router.replace("/admin");
-      } else if (role == "STUDENT" && status=="active") {
+      } else if (role == "STUDENT" && status == "active") {
         router.replace("/user");
-      } else if (role == "STAFF" && status=="active") {
+      } else if (role == "STAFF" && status == "active") {
         router.replace("/user/");
       }
     } catch (error) {
