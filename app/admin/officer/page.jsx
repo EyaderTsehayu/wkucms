@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import AdminContainer from "@/components/Admin/AdminContainer";
 import React from "react";
 import { useState } from "react";
 import RegisterOfficer from "@/components/Modals/RegisterOfficer";
-import useSWR from 'swr';
+import useSWR from "swr";
 
 const columns = [
   { field: "userId", headerName: "ID", width: "100" },
@@ -19,19 +19,27 @@ const rows = [];
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
-  const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id }));
+  const updatedData = data.map((user) => ({
+    ...user,
+    id: user._id,
+    roleId: user._id,
+  }));
   return updatedData;
 };
 
 const ManageOfficer = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
-  const { data: userData, error } = useSWR('http://localhost:3000/api/user/new/officer', fetcher, {
-    initialData: rows,
-    revalidateOnFocus: false,
-    // refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
-  });
+  const { data: userData, error } = useSWR(
+    "http://localhost:3000/api/user/new/officer",
+    fetcher,
+    {
+      initialData: rows,
+      revalidateOnFocus: false,
+      refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+    }
+  );
 
   // Handle loading and fetch errors
   if (!userData && !error) {
@@ -39,13 +47,14 @@ const ManageOfficer = () => {
   }
 
   if (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
 
-  const filteredInfo = userData.filter((info) =>
-    info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    info.roleId.toString().includes(searchTerm)
+  const filteredInfo = userData.filter(
+    (info) =>
+      info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      info.roleId.toString().includes(searchTerm)
   );
 
   const handleSearch = (event) => {
