@@ -1,5 +1,6 @@
 import { connectToDB } from "@/utils/database";
 import StudentClearnceReq from "@/models/studentClearanceRequest";
+import User from "@/models/user";
 
 export const POST = async (req) => {
   const {
@@ -11,9 +12,8 @@ export const POST = async (req) => {
     role,
     collegeName,
     departmentName,
-    _userId ,
-    
-  }=await req.json();
+    _userId,
+  } = await req.json();
   const requests = await StudentClearnceReq.find({ userId: userId });
 
   if (requests.length > 0 && requests != null) {
@@ -24,17 +24,17 @@ export const POST = async (req) => {
   }
 
   // fetch the logged user data for getting the blockNo
-  const fetchStudent=await User.find({ userId: userId });
-    console.log("fetchStudent from dorm",fetchStudent[0].blockNo,privilage);
+  const fetchStudent = await User.find({ userId: userId });
+  // console.log("fetchStudent from dorm", fetchStudent[0].blockNo, privilage);
 
   // Get the current date
   const today = new Date();
 
   // Format the date as "DD/MM/YY"
-  const formattedDate = today.toLocaleDateString('en-US', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
+  const formattedDate = today.toLocaleDateString("en-US", {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
   });
   console.log("formattedDate");
   try {
@@ -49,8 +49,8 @@ export const POST = async (req) => {
       collegeName,
       departmentName,
       _userId,
-      blockNo:fetchStudent[0].blockNo,
-      dateRequested: formattedDate
+      blockNo: fetchStudent[0].blockNo,
+      dateRequested: formattedDate,
     });
 
     await clearanceReq.save();
