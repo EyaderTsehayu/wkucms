@@ -7,6 +7,7 @@ import ChatBox from "@/components/chatBox/ChatBox";
 import Image from "next/image";
 import { io } from "socket.io-client";
 import { useSocket } from "@/context/SocketContext";
+import { useSearchParams } from "next/navigation";
 
 const Message = () => {
   const { data: session } = useSession();
@@ -17,8 +18,24 @@ const Message = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
   const [conversations, setConversations] = useState([]);
-  // const socket = useRef();
+  const [loading, setLoading] = useState(true); // New loading state
+
+  const params = useSearchParams();
+  const chatId = params.get("chatid");
+  const member1 = params.get("member1");
+  const member2 = params.get("member2");
+
   const socket = useSocket();
+  useEffect(() => {
+    if (chatId) {
+      const conv = {
+        _id: chatId,
+        members: [member1, member2],
+      };
+      setCurrentChat(conv);
+    }
+  }, [chatId]);
+
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
@@ -26,7 +43,6 @@ const Message = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
-    // socket.current = io("ws://localhost:8900");
     socket.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -36,39 +52,35 @@ const Message = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   socket.emit("addUser", user?.id);
-  //   socket.on("getUsers", (users) => {
-  //     console.log(users);
-  //   });
-  // }, [user]);
-
   useEffect(() => {
     const getConversations = async () => {
       try {
         const response = await fetch(`/api/conversation/${user?.id}`);
         const data = await response.json();
         setConversations(data);
+        setLoading(false); // Set loading to false after conversations are fetched
       } catch (err) {
         console.log(err);
       }
     };
     getConversations();
   }, [user?.id]);
-  //console.log("Internal conversations", conversations);
+
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const response = await fetch(`/api/message/${currentChat?._id}`);
-        const data = await response.json();
-        setMessages(data);
+        if (currentChat) {
+          // Only fetch messages if currentChat exists
+          const response = await fetch(`/api/message/${currentChat?._id}`);
+          const data = await response.json();
+          setMessages(data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getMessages();
   }, [currentChat]);
-  console.log("Internal messages", messages);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,6 +118,10 @@ const Message = () => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
       <h1 className="mb-2 pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
@@ -117,7 +133,7 @@ const Message = () => {
             {/* ====== Chat List Start  */}
             <div class="sticky border-b border-stroke px-6 py-7.5 dark:border-strokedark">
               <h3 class="text-lg font-medium text-black dark:text-white 2xl:text-xl">
-                Active Conversations
+                Previous Conversations
                 <span class="rounded-md border-[.5px] border-stroke bg-gray-2 px-2 py-0.5 text-base font-medium text-black dark:border-strokedark dark:bg-boxdark-2 dark:text-white 2xl:ml-4">
                   7
                 </span>
