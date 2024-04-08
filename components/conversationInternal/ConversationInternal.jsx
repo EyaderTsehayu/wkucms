@@ -42,7 +42,10 @@ const ConversationInternal = ({ conversation, currentUser }) => {
           <h5 class="text-sm font-medium text-black dark:text-white">
             {user[0]?.firstname} {user[0]?.middlename}
           </h5>
-          <p class="text-sm font-medium">I cam across your profile and...</p>
+          {/* <p class="text-sm font-medium">I cam across your profile and...</p> */}
+          <p class="text-sm font-medium">
+            Check out {user[0]?.firstname}'s chat here
+          </p>
         </div>
       </div>
     </div>

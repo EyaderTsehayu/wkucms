@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useSocket } from "@/context/SocketContext";
-//import DropdownConversation from "../conversation/DropdownConversation";
 import { format } from "timeago.js";
+import { useRouter } from "next/navigation";
 
 const DropdownMessage = () => {
   const socket = useSocket();
@@ -18,7 +18,7 @@ const DropdownMessage = () => {
   const [conversations, setConversations] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [lastMessages, setLastMessages] = useState({});
-
+  const router = useRouter();
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
@@ -50,18 +50,13 @@ const DropdownMessage = () => {
           }
 
           const friendId = conversation.members.find((m) => m !== user.id);
-          console.log("friend id of each user", friendId);
-
           const userResponse = await fetch(`/api/user/${friendId}`);
           const userData = await userResponse.json();
-          console.log("user data from of user", userData);
-
           newFriendUsers[conversation._id] = userData;
         } catch (err) {
           console.log(err);
         }
       }
-
       setLastMessages(newLastMessages);
       setFriendUsers(newFriendUsers);
     };
@@ -97,7 +92,6 @@ const DropdownMessage = () => {
   });
 
   const fetchMessages = async () => {
-    console.log("fetch message called");
     try {
       const response = await fetch(`/api/conversation/${user?.id}`);
       const data = await response.json();
@@ -106,7 +100,7 @@ const DropdownMessage = () => {
       console.log(err);
     }
   };
-
+  console.log("Conversation inside dropdown message ", conversations);
   return (
     <li className="relative">
       <Link
@@ -166,50 +160,81 @@ const DropdownMessage = () => {
         <div className="px-4.5 py-3">
           <h5 className="text-sm font-medium text-bodydark2">Messages</h5>
         </div>
-        {friendUsers != null &&
-          conversations.map((conversation) => (
-            <ul className="flex h-auto flex-col overflow-y-auto">
-              <li>
-                <Link
-                  className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-                  href="/messages"
-                >
-                  <div className="h-12.5 w-12.5 rounded-full">
-                    <Image
-                      width={112}
-                      height={112}
-                      src={"/images/user/user-02.png"}
-                      alt="User"
-                    />
-                  </div>
+        {/* {friendUsers != null && */}
+        {conversations.length > 0 &&
+          conversations
+            .sort((a, b) => {
+              const lastMessageA = lastMessages[a._id];
+              const lastMessageB = lastMessages[b._id];
+              // if (lastMessageA && lastMessageB) {
+              //   return (
+              //     new Date(lastMessageB.createdAt) -
+              //     new Date(lastMessageA.createdAt)
+              //   );
+              // }
 
-                  <div>
-                    {/* {user.length > 0 && ( */}
-                    <h6 className="text-sm font-medium text-black dark:text-white">
-                      {/* {user[0].firstname} {user[0].lastname} */}
-                      {friendUsers[conversation._id]?.[0]?.firstname}
-                    </h6>
-                    {/* )} */}
-                    <p className="text-sm">
-                      {/* {messages.map((m) => ( */}
-                      <div>
-                        {lastMessages[conversation._id]?.text}
-                        <p className="text-xs">
-                          {format(lastMessages[conversation._id]?.createdAt)}
-                        </p>
-                      </div>
-                      {/* ))} */}
-                    </p>
+              if (!lastMessageA && lastMessageB) {
+                return 1; // Place conversation with last message (b) before conversation without (a)
+              } else if (lastMessageA && !lastMessageB) {
+                return -1; // Place conversation with last message (a) before conversation without (b)
+              }
+
+              // If both conversations have no last message, or both have last messages, sort based on timestamps
+              if (lastMessageA && lastMessageB) {
+                return (
+                  new Date(lastMessageB.createdAt) -
+                  new Date(lastMessageA.createdAt)
+                );
+              }
+              return 0;
+            })
+            .map((conversation) => (
+              <ul className="flex h-auto flex-col overflow-y-auto">
+                <li>
+                  <div
+                    className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                    onClick={() => {
+                      router.push(
+                        `/user/message?chatid=${conversation._id}&member1=${conversation.members[0]}&member2=${conversation.members[1]}`
+                      );
+                    }}
+                    // href="/user/message"
+                    // href={{
+                    //   pathname: "/user/message",
+                    //   query: { chatid: conversation._id },
+                    // }}
+                  >
+                    <div className="h-12.5 w-12.5 rounded-full">
+                      <Image
+                        width={112}
+                        height={112}
+                        src={"/images/user/user-02.png"}
+                        alt="User"
+                      />
+                    </div>
+
+                    <div>
+                      {/* {user.length > 0 && ( */}
+                      <h6 className="text-sm font-medium text-black dark:text-white">
+                        {/* {user[0].firstname} {user[0].lastname} */}
+                        {friendUsers[conversation._id]?.[0]?.firstname}
+                      </h6>
+                      {/* )} */}
+                      <p className="text-sm">
+                        {/* {messages.map((m) => ( */}
+                        <div>
+                          {lastMessages[conversation._id]?.text}
+                          <p className="text-xs">
+                            {format(lastMessages[conversation._id]?.createdAt)}
+                          </p>
+                        </div>
+                        {/* ))} */}
+                      </p>
+                    </div>
                   </div>
-                </Link>
-              </li>
-            </ul>
-            // <li key={conversation._id}>
-            //   <p>{`Friend: ${
-            //     friendUsers[conversation._id]?.[0]?.firstname
-            //   }, Text: ${lastMessages[conversation._id]?.text}`}</p>
-            // </li>
-          ))}
+                </li>
+              </ul>
+            ))}
       </div>
       {/* <!-- Dropdown End --> */}
     </li>
