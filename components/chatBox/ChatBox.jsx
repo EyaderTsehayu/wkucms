@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 const ChatBox = ({ message, own, currentUser }) => {
   console.log("message in chat box", message);
+  console.log("message in chat box", message);
   const { data: session } = useSession();
   const [user, setUser] = useState([]);
   const [friendId, setFriendId] = useState(null);
@@ -14,7 +15,7 @@ const ChatBox = ({ message, own, currentUser }) => {
     {
       message.sender !== currentUserId && setFriendId(message.sender);
     }
-    console.log("Frind Id inside chatbox", friendId);
+    console.log("Friend Id inside chatbox", friendId);
 
     const getUser = async () => {
       try {

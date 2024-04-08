@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import RegisterStudent from "@/components/Modals/RegisterStudent";
 import { useState } from "react";
 import { useEffect } from "react";
-import useSWR from 'swr';
+import useSWR from "swr";
 // export const metadata = {
 //   title: "WKUCMS | Admin",
 //   description: "this a clearance management system for Wolkite University",
@@ -28,9 +28,6 @@ const collegeData = [
   // Add more office data here
 ];
 
-
-
-
 const columns = [
   { field: "userId", headerName: "ID", width: "100" },
   { field: "firstname", headerName: "First name", width: "160" },
@@ -41,7 +38,6 @@ const columns = [
   { field: "year", headerName: "year", width: "160" },
   { field: "role", headerName: "Role", width: "160" },
 ];
-
 
 // const rows = [
 //   {
@@ -109,9 +105,6 @@ const columns = [
 //   },
 // ];
 
-
-
-
 // const ManageStudent = () => {
 //   const [userData, setUserData] = useState([]);
 //   const [loading, setLoading] = useState(true);
@@ -132,36 +125,44 @@ const columns = [
 //         setLoading(false);
 //       }
 //     };
-  
+
 //     // Call the fetchData function when the component mounts
 //     fetchData();
 //   }, []); // The empty dependency array ensures that useEffect runs only once, similar to componentDidMount
-  
+
 //   if (loading) {
 //     <p>Loading...</p>;
 //   }
-  
+
 //   if (error) {
 //    <p>{error}</p>;
 //   }
 
-const rows=[];
+const rows = [];
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
-  const updatedData = data.map(user => ({ ...user, id: user._id, roleId: user._id })); // Add id and roleId based on _id
+  const updatedData = data.map((user) => ({
+    ...user,
+    id: user._id,
+    roleId: user._id,
+  })); // Add id and roleId based on _id
   return updatedData;
 };
 
 const ManageStudent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Use SWR to fetch and cache data
-  const { data: userData, error } = useSWR('http://localhost:3000/api/user/new/student', fetcher, {
-    initialData: rows, // Provide initial data (can be an empty array)
-    revalidateOnFocus: false,
-    // refreshInterval: 2000, // Disable automatic revalidation on focus
-  });
+  const { data: userData, error } = useSWR(
+    "http://localhost:3000/api/user/new/student",
+    fetcher,
+    {
+      initialData: rows, // Provide initial data (can be an empty array)
+      revalidateOnFocus: false,
+      refreshInterval: 2000, // Disable automatic revalidation on focus
+    }
+  );
 
   // Handle loading and fetch errors
   if (!userData && !error) {
@@ -169,27 +170,30 @@ const ManageStudent = () => {
   }
 
   if (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
 
-  const filteredInfo = userData.filter((info) =>
-    info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    info.roleId.toString().includes(searchTerm) // Include roleId in filtering
+  const filteredInfo = userData.filter(
+    (info) =>
+      info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      info.roleId.toString().includes(searchTerm) // Include roleId in filtering
   );
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-
-
   return (
     <>
       <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
         <Filter officeData={officeData} collegeData={collegeData} />
 
-        <AdminContainer columns={columns} rows={userData} modal={RegisterStudent} />
+        <AdminContainer
+          columns={columns}
+          rows={userData}
+          modal={RegisterStudent}
+        />
       </div>
     </>
   );

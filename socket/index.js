@@ -48,8 +48,6 @@ io.on("connection", (socket) => {
         text,
         conversationId,
       });
-    } else {
-      console.log(`User with ID ${receiverId} is not connected.`);
     }
   });
 
