@@ -14,7 +14,10 @@ const DropdownUser = () => {
   const userId = session?.user?.userId
   const Id = session?.user.id;
   const Role = session?.user.role;
+  console.log("session user from dropdown", Role)
   //fetch user data
+  
+
   
   useEffect(() => {
     console.log("oooooo",Id);
@@ -128,7 +131,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              href={Role=="admin"?"/user/settings":"/admin/settings"}
+              href={Role=="admin"?"/admin/settings":"/user/settings"}
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg

@@ -46,7 +46,7 @@ const ChangeProfilePic = ({userData}) => {
 
       // console.log("Image profilePic:", userData.profilePic);
       setProfilePic(imageURL);
-
+console.log("selectedImage",selectedImageBase64);
     }
 
   }

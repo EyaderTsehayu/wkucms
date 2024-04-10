@@ -84,7 +84,7 @@ export const PATCH = async (request) => {
     await connectToDB();
 
     const updatedFields = {};
-
+console.log("profilePicture", profilePicture);
     //     // Check if there are updated fields
     if (email) {
       updatedFields.email = email;

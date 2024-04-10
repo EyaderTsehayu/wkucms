@@ -212,6 +212,23 @@ const Header = (props) => {
                       )}
                     </div>
                   )}
+
+                  {/* may change */}
+                  {session?.user?.privilege && (
+                    <div className="relative">
+                      <Link
+                      className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md${
+                        pathname === "/user/myclearance" &&
+                        "py-1 px-3 transition-all border border-primary rounded-full"
+                      }`}
+                      href="/user/ApprovedUsers"
+                    >
+                      Approved users
+                    </Link>
+                      
+                    </div>
+                  )}
+                  {/* may change */}
                 </div>
               </div>
             )}

@@ -129,6 +129,7 @@ export default function PrintClearance({
     const [history, setHistory] = useState([])
     // const [Clearance, setClearanceId] = useState('');
     const clearanceId = searchParams.get('clearanceId');
+    console.log("clearanceId www", clearanceId);
     // useEffect(() => {
     //   // Retrieve the clearanceId parameter from the query object
     //   const { clearanceId } = router.query;
@@ -154,7 +155,7 @@ export default function PrintClearance({
                 //     prompt: data.prompt,
                 //     tag: data.tag,
                 // });
-               console.log(data)
+               console.log("data",data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -162,7 +163,7 @@ export default function PrintClearance({
         getPromptDetails();
     }, []);
 
-
+    console.log("history ", history)
     // console.log("Clearance ", userData)
 
     const downloadPDF = () => {
