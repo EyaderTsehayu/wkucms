@@ -27,12 +27,15 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
     setSearchTerm(event.target.value);
     // Filter rows based on year, department, and college
     const filteredRows = rows.filter((row) => {
-      const userId = row.userId.toLowerCase().includes(searchTerm);
-      const firstname = row.firstname.toLowerCase().includes(searchTerm);
-      const year = row.year.toLowerCase().includes(searchTerm);
-      
+      const userId = row.userId?.toLowerCase().includes(searchTerm);
+      const firstname = row.firstname?.toLowerCase().includes(searchTerm);
+      const year = row.year?.toLowerCase().includes(searchTerm);
+      const privilege = row.privilege?.toLowerCase().includes(searchTerm);
+      const officeId = row.officeId?.toLowerCase().includes(searchTerm);
+      const officeName = row.officeName?.toLowerCase().includes(searchTerm);
+      const location = row.location?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
-      return userId || firstname || year;
+      return userId || firstname || year || privilege || officeId || officeName || location;
     });
   
     // Update the state with the filtered rows

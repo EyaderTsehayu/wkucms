@@ -31,9 +31,9 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
     setSearchTerm(event.target.value);
     // Filter rows based on year, department, and college
     const filteredRows = rows.filter((row) => {
-      const userId = row.userId.toLowerCase().includes(searchTerm);
-      const firstname = row.firstname.toLowerCase().includes(searchTerm);
-      const reason = row.reason.toLowerCase().includes(searchTerm);
+      const userId = row.userId?.toLowerCase().includes(searchTerm);
+      const firstname = row.firstname?.toLowerCase().includes(searchTerm);
+      const reason = row.reason?.toLowerCase().includes(searchTerm);
 
       // Return true if any of the criteria match
       return userId || firstname || reason;

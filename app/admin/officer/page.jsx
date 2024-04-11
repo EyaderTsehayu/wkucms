@@ -11,7 +11,7 @@ const columns = [
   { field: "middlename", headerName: "Middle name", width: "240" },
   { field: "lastname", headerName: "Last name", width: "240" },
   { field: "role", headerName: "Role", width: "240" },
-  { field: "privilege", headerName: "privilege", width: "240" },
+  { field: "privilege", headerName: "previlege", width: "240" },
 ];
 
 const rows = [];
