@@ -66,9 +66,16 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 const Table = ({ columns, rows, setSelectedRows, handleApproveAll, clickableColumns }) => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [filteredRows, setFilteredRows] = useState(rows);
+
   if (!clickableColumns) {
     clickableColumns = [-1];
   }
+
+
+
+
+
   const selectedRowsData = useMemo(
     () => rows.filter((row) => rowSelectionModel.includes(row._id)),
     [rowSelectionModel, rows]
