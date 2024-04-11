@@ -33,6 +33,8 @@ const columns = [
   { field: "middlename", headerName: "Last name", width: "160" },
   { field: "reason", headerName: "Reason", width: "160" },
   { field: "status", headerName: "Status", width: "160" },
+  { field: "dateRequested", headerName: "dateRequested", width: "160" },
+  { field: "dateApproved", headerName: "dateApproved", width: "160" },
 ];
 
 const rows = [
@@ -118,7 +120,7 @@ const ApproveStudent = () => {
 
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/studentApproval",
+    "/api/approvalHistory/approvedHistory",
     fetcher,
     {
       initialData: rows,
@@ -126,6 +128,12 @@ const ApproveStudent = () => {
       refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     }
   );
+
+ 
+  
+  
+
+
   console.log("session from approval ad ", userData);
   // Handle loading and fetch errors
   if (!userData && !error) {
@@ -142,15 +150,14 @@ const ApproveStudent = () => {
       <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
         Approved users
       </h1>
-      <div className="pt-2 px-4 grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
+      <div className="pt-2 px-4 grid grid-cols-12 gap-3 md:gap-6 2xl:gap-4.5">
         <Filter officeData={officeData} collegeData={collegeData} />
-
         <UserContainer
           columns={columns}
           rows={userData}
-          
         />
       </div>
+
     </div>
   );
 };

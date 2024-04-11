@@ -214,7 +214,10 @@ const Header = (props) => {
                   )}
 
                   {/* may change */}
-                  {session?.user?.privilege && (
+                  {((session?.user?.privilege=="Registrar")||
+                  (session?.user?.privilege=="Head")||
+                  (session?.user?.privilege=="Hr"))
+                   && (
                     <div className="relative">
                       <Link
                       className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md${

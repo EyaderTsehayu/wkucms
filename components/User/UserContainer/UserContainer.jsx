@@ -10,8 +10,9 @@ import Table from "../../Admin/Table";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 
-const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
+const UserContainer = ({ columns, rows, modal: OpenedModal,clickableColumns }) => {
   const pathname = usePathname();
+  console.log("pathname", pathname);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -107,7 +108,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   return (
     <div
       className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
-        pathname.includes("student") && "col-span-9"
+        (pathname.includes("student")|| pathname.includes("ApprovedUsers")) && "col-span-9"
       } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
@@ -121,6 +122,8 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
             className=" w-full hidden sm:block px-4 py-2 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
           />
         </div>
+
+        {/* open modal because I don't use these buttons on the approved users page */}
         {       OpenedModal &&(
           <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
           <button
@@ -146,6 +149,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
             rows={rows}
             setSelectedRows={setSelectedRows}
             handleApproveAll={handleApproveAll}
+            clickableColumns={clickableColumns}
           />
         </div>
       </div>
