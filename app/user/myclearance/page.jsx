@@ -15,6 +15,7 @@ import RequestPageOutlinedIcon from "@mui/icons-material/RequestPageOutlined";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
 import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
+import HistoryIcon from '@mui/icons-material/History';
 
 import { useState } from "react";
 import useSWR from "swr";
@@ -124,7 +125,7 @@ export default function LabTabs() {
                 value="2"
                 label={
                   <div className="flex">
-                    <AutorenewOutlinedIcon className="mr-2" /> History
+                    <HistoryIcon className="mr-2" /> History
                   </div>
                 }
               />

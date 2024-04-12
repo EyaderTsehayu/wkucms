@@ -34,9 +34,9 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
       const userId = row.userId?.toLowerCase().includes(searchTerm);
       const firstname = row.firstname?.toLowerCase().includes(searchTerm);
       const reason = row.reason?.toLowerCase().includes(searchTerm);
-
+       const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
-      return userId || firstname || reason;
+      return userId || firstname || reason || dateApproved;
     });
 
     // Update the state with the filtered rows

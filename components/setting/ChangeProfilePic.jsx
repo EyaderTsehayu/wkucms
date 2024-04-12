@@ -7,7 +7,7 @@ import { personalProfilePic } from "../../validations/userValidation";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-const ChangeProfilePic = ({userData}) => {
+const ChangeProfilePic = ({ userData }) => {
   const {
     handleSubmit,
     register,
@@ -46,7 +46,7 @@ const ChangeProfilePic = ({userData}) => {
 
       // console.log("Image profilePic:", userData.profilePic);
       setProfilePic(imageURL);
-console.log("selectedImage",selectedImageBase64);
+      console.log("selectedImage", selectedImageBase64);
     }
 
   }

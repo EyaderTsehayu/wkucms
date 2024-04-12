@@ -1,3 +1,4 @@
+import { Description } from "@mui/icons-material";
 import { string } from "prop-types";
 import * as yup from "yup";
 
@@ -33,4 +34,12 @@ export const changePasswordSchema = yup.object({
     .required("Re enter  your new password")
     .min(8, "New password must be at least 8 characters")
     .max(20, "New password must be at most 20 characters"),
+});
+
+
+export const announcement = yup.object({
+  image: yup.string().required("image is required"),
+  title:yup.string().required("title is required"),
+  description:yup.string().required("description is required"),
+
 });

@@ -37,7 +37,7 @@ const Setting = () => {
     }, [userId,userData])
 
   return (
-    <div className="my-12">
+    <div className="my-12 mx-11">
       <div className="mx-auto max-w-fit">
         <div className="grid grid-cols-12 gap-8">
           <PersonalInfo userData={userData} />
