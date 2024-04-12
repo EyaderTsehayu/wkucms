@@ -5,6 +5,10 @@ const AnnouncementSchema = new Schema({
     type: String,
     required: [true, "Id is required!"],
   },
+  announcerName: {
+    type: String,
+   
+  },
   title: {
     type: String,
     required: [true, "title is required!"],

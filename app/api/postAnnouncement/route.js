@@ -14,7 +14,11 @@ export const POST = async (req) => {
 
   const session = await getServerSession(authOptions);
   const userId = session?.user?.userId;
-
+  const announceFirstName = session?.user?.firstname;
+  const announcerMiddleName = session?.user?.middlename;
+  const announcerLastName = session?.user?.lastname;
+  const announcerName = announceFirstName + " " + announcerMiddleName ;
+  console.log("announcerName",announcerName);
   // Get the current date
   const today = new Date();
 
@@ -30,6 +34,7 @@ export const POST = async (req) => {
     await connectToDB();
     const newAnnouncement = new Announcement({
         userId,
+        announcerName:announcerName,
         title,
         description,
         image,
@@ -38,6 +43,7 @@ export const POST = async (req) => {
 
     console.log(
         userId,
+        announcerName,
         title,
         description,
         formattedDate,
@@ -58,7 +64,7 @@ export const GET=async()=>{
 
     // Fetch all users from the database
     const announcement = await Announcement.find();
-
+// console.log("announcement",announcement);
     // Return a success response with the users data
     return new Response(JSON.stringify(announcement), { status: 200 });
   } catch (error) {
