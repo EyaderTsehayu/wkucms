@@ -7,7 +7,10 @@ export const loginSchema = yup.object({
   password: yup.string().min(8).max(20).required(),
 });
 
+export const forgotPassword = yup.object({
+  email: yup.string().required("Id is required"),
 
+});
 
 export const personalInfoSchema = yup.object({
  

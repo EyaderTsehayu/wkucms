@@ -56,7 +56,27 @@ const UserSchema = new Schema({
   },
   status:{
     type:String
-  }
+  },
+  emailResetPassword:{
+    type:String
+  },
+  emailToken:{
+    type:String
+  },
+  resetToken : {
+    type:String
+  },
+ passwordResetExpires :{
+    type:Date
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const User = models.User || model("User", UserSchema);
