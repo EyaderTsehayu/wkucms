@@ -10,10 +10,18 @@ const StudentRequestSchema = new Schema({
     required: [true, "Reason is required!"],
   },
   status: {
-    type: String,
+    type: [String],
     required: [true, "Status is required!"],
   },
-
+  approvals: [
+    {
+      role: String,
+      time: Date,
+    },
+  ],
+  rejections: {
+    type: Array,
+  },
   firstname: {
     type: String,
     required: [true, "firstname is required!"],
@@ -26,22 +34,22 @@ const StudentRequestSchema = new Schema({
     type: String,
     required: [true, "role is required!"],
   },
-  collegeName:{
+  collegeName: {
     type: String,
     // required: [true, "collegeId is required!"],
   },
-  departmentName:{
+  departmentName: {
     type: String,
     // required: [true, "departmentId is required!"],
   },
-  _userId:{
-    type:String,
+  _userId: {
+    type: String,
   },
-  blockNo:{
-    type:String,
+  blockNo: {
+    type: String,
   },
-  dateRequested:{
-    type:String,
+  dateRequested: {
+    type: String,
     required: [true, "Requested date is required!"],
   },
 });
