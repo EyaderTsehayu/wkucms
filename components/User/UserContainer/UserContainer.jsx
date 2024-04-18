@@ -1,11 +1,7 @@
 "use client";
 import { useState } from "react";
-import Box from "@mui/material/Box";
-
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Table from "../../Admin/Table";
-// import RegisterStudent from "../Modals/RegisterStudent";
 
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
@@ -14,7 +10,11 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
   const pathname = usePathname();
   console.log("pathname", pathname);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = async (selectedRowsData) => {
+    if (selectedRowsData.length > 0) {
+      setOpen(true);
+    }
+  };
   const handleClose = () => setOpen(false);
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -50,71 +50,68 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
   // };
 
   const handleApproveAll = async (selectedRowsData) => {
-    // console.log(
-    //   "Selected Rows to Approve from handle approve:",
-    //   selectedRowsData
-    // );
-    const len = selectedRowsData.length;
-    try {
-      const requests = selectedRowsData.map(async (eachData) => {
-        // console.log("log data", eachData.firstname);
-        if (eachData.role == "STUDENT") {
-          try {
-            const response = await fetch(`/api/approveStudentReq`, {
-              method: "PATCH",
-              body: JSON.stringify({
-                objectId: eachData._id,
-                arrLength: len,
-              }),
-            });
+    if (selectedRowsData.length > 0) {
+      const len = selectedRowsData.length;
+      try {
+        const requests = selectedRowsData.map(async (eachData) => {
+          if (eachData.role == "STUDENT") {
+            try {
+              const response = await fetch(`/api/approveStudentReq`, {
+                method: "PATCH",
+                body: JSON.stringify({
+                  objectId: eachData._id,
+                  arrLength: len,
+                }),
+              });
 
-            if (response.ok) {
-              return await response.text();
+              if (response.ok) {
+                return await response.text();
+              }
+            } catch (error) {
+              console.log(error);
+              return null;
             }
-          } catch (error) {
-            console.log(error);
-            return null;
-          }
-        } else if (eachData.role == "STAFF") {
-          try {
-            const response = await fetch(`/api/approveStaffReq`, {
-              method: "PATCH",
-              body: JSON.stringify({
-                objectId: eachData._id,
-                arrLength: len,
-              }),
-            });
+          } else if (eachData.role == "STAFF") {
+            try {
+              const response = await fetch(`/api/approveStaffReq`, {
+                method: "PATCH",
+                body: JSON.stringify({
+                  objectId: eachData._id,
+                  arrLength: len,
+                }),
+              });
 
-            if (response.ok) {
-              return await response.text();
+              if (response.ok) {
+                return await response.text();
+              }
+            } catch (error) {
+              console.log(error);
+              return null;
             }
-          } catch (error) {
-            console.log(error);
-            return null;
           }
-        }
-      });
+        });
 
-      const responses = await Promise.all(requests);
+        const responses = await Promise.all(requests);
 
-      let toastShown = false;
+        let toastShown = false;
 
-      responses.forEach((responsedata, index) => {
-        if (responsedata) {
-          if (
-            selectedRowsData.length > 1 &&
-            !toastShown &&
-            index === responses.length - 1
-          ) {
-            toast.success(responsedata);
-            toastShown = true;
-          } else if (selectedRowsData.length === 1) {
-            toast.success("Approved Successfully");
+        responses.forEach((responsedata, index) => {
+          if (responsedata) {
+            if (
+              selectedRowsData.length > 1 &&
+              !toastShown &&
+              index === responses.length - 1
+            ) {
+              toast.success(responsedata);
+              toastShown = true;
+            } else if (selectedRowsData.length === 1) {
+              toast.success("Approved Successfully");
+            }
           }
-        }
-      });
-    } catch (error) {
-      console.log(error);
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -147,8 +144,9 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
         {OpenedModal && (
           <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
             <button
-              onClick={handleOpen}
-              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+              // onClick={handleOpen}
+              onClick={() => handleOpen(selectedRows)}
+            className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
             >
               Reject
             </button>
@@ -183,7 +181,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
           onClick={handleOverlayClick}
           class="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <OpenedModal selectedUser={selectedRows} />
+          <OpenedModal selectedUser={selectedRows} onCancel={handleClose} />
         </div>
       </Modal>
     </div>
