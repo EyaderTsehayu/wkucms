@@ -8,7 +8,7 @@ export const GET = async (request, { params }) => {
   try {
     await connectToDB();
     const user = await User.find({
-      _id: params.id,
+      userId: params.id,
     });
 
     return new Response(JSON.stringify(user), { status: 200 });

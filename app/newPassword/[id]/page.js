@@ -1,32 +1,15 @@
-"use client";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { changePasswordSchema } from "../validations/userValidation";
-// import { useForm } from "react-hook-form";
-// import { toast } from "react-toastify";
-import { getSession, useSession } from "next-auth/react";
+"use client"
+import React from 'react'
 
-
-import { useRouter } from "next/navigation";
-import { usePathname, useSearchParams } from "next/navigation";
+import NewPassword from "@/components/auth/NewPassword";
 import { useState } from "react";
 import { useEffect } from "react";
-import Verify from "@/components/auth/Verify";
-
-
-const ChangePassword = () => {
+import { usePathname, useSearchParams } from "next/navigation";
+const page = () => {
   const [userData, setUserData] = useState([]);
-
-  // const session = useSession();
-  // const Id = session?.user?.id;
-  // const userId = session?.user?.userId;
- 
   const pathname = usePathname();
   const parts = pathname.split("/");
   const userId = parts[parts.length - 1];
-
-  
-
-  
 
   useEffect(() => {
     // console.log("oooooo",userId);
@@ -46,14 +29,11 @@ const ChangePassword = () => {
     fetchUserData();
   }, [userId, userData]);
 
-
-
-
- 
-
   return (
-   <Verify userData={userData}/>
-  );
-};
+    <div>
+        <NewPassword userData={userData}/>
+    </div>
+  )
+}
 
-export default ChangePassword;
+export default page

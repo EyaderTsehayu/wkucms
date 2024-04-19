@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 const userEmail = process.env.EMAIL_USER;
 const password = process.env.EMAIL_PASSWORD;
-
+var globalEmail ="";
 const transporter = nodemailer.createTransport({
   service:"gmail",
   //  port: 587,
@@ -34,7 +34,8 @@ export async function sendVerificationEmail(email, token) {
 export async function sendPasswordResetEmail(email, token) {
     console.log("emailk",email);
     console.log("tokenn",token);
-
+    globalEmail =email;
+    console.log("globalEmail",globalEmail);
     try {
       const testResult =await transporter.verify();
       console.log("Connected to email server",testResult);
@@ -52,11 +53,17 @@ export async function sendPasswordResetEmail(email, token) {
 }
 
 export async function sendNewPasswordEmail(email, newPassword) {
+  // if (!globalEmail) {
+  //   console.error("Global email is not set.");
+  //   // Handle the error condition appropriately
+  //   return;
+  // }
+  // console.log("globalEmailnew",globalEmail);
   await transporter.sendMail({
     from: userEmail,
     to: email,
     subject: "Your New Password",
-    html: `Your password has been reset. Here is your new password: <strong>${newPassword}</strong>. It is recommended to change this password after logging in.`,
+    html: `Your password has been reset. Here is your verification code: <strong>${newPassword}</strong>. you can generate a new password`,
   });
 
 

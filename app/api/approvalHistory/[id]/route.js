@@ -7,7 +7,7 @@ export const GET = async (request, { params }) => {
     // Get the user session
     // const session = await getServerSession();
     // console.log("session from studentApproval", session?.user?.privilege);
-    console.log("params", params.id);
+    // console.log("params", params.id);
     await connectToDB();
 
     // Uncomment the following line if you want to use clearanceId from params

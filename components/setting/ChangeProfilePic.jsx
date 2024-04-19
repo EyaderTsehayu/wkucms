@@ -46,7 +46,7 @@ const ChangeProfilePic = ({ userData }) => {
 
       // console.log("Image profilePic:", userData.profilePic);
       setProfilePic(imageURL);
-      console.log("selectedImage", selectedImageBase64);
+      // console.log("selectedImage", selectedImageBase64);
     }
 
   }
@@ -80,7 +80,7 @@ const ChangeProfilePic = ({ userData }) => {
         });
 
         if (response.ok) {
-          console.log("profile Pic updated Successfully!");
+          // console.log("profile Pic updated Successfully!");
           toast.success("profile Pic updated Successfully!");
         }
       } catch (error) {

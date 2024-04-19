@@ -50,18 +50,18 @@ export const changePasswordSchema = yup.object({
     .string()
     .required("Old password required")
     .min(8, "Incorrect password")
-    .max(20, "Incorrect password"),
+    .max(50, "Incorrect password"),
 
   newPassword: yup
     .string()
     .required("Enter new password")
     .min(8, "New password must be at least 8 characters")
-    .max(20, "New password must be at most 20 characters"),
+    .max(50, "New password must be at most 20 characters"),
   confirmPassword: yup
     .string()
     .required("Re enter  your new password")
     .min(8, "New password must be at least 8 characters")
-    .max(20, "New password must be at most 20 characters"),
+    .max(50, "New password must be at most 20 characters"),
 });
 
 export const rejectReasonSchema = yup.object({

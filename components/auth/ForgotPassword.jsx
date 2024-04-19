@@ -9,13 +9,14 @@ export const metadata = {
   // other metadata
 };
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
+//  import {  useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { getSession, signIn } from "next-auth/react";
-
+// import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 const page = () => {
-  const router = useRouter();
-
+  // const router = useRouter();
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -26,30 +27,46 @@ const page = () => {
   });
 
   const onSubmitHandler = async (data) => {
-  
-  try {
-    const response = await fetch('/api/auth/resetPassword', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-      
-    });
 
-    if (!response.ok) {
-      throw new Error('There was an error sending the reset password email.');
+    try {
+      const response = await fetch('/api/auth/resetPassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+
+      });
+
+      if (!response.ok) {
+        throw new Error('There was an error sending the reset password email.');
+      }
+      console.log("response", response);
+      // Show success message and possibly redirect
+      toast.success('If the email is associated with an account, a password reset email will be sent.');
+      // Optionally, redirect to the login page or a page that says 'Check your email'
+      // Redirect to the reset password page with parameters
+
+
+      router.replace(`/resetPassword/${data.userId}`)
+      // router.replace({
+      //   pathname: '/resetPassword', // Specify the pathname
+      //   query: { userId: data.userId }, // Specify the query parameters
+      // });
+      // router.push('/resetPassword', { email: data.email })
+      // router.push({
+      //   pathname: '/resetPassword',
+      //   query: { email: data.email  }, // Add your query parameters here
+      // });
+      // Redirect to the reset password page with parameters
+      //redirect({ url: `/resetpassword?email=${encodeURIComponent(data.email)}` });
+
+    } catch (error) {
+      toast.error(error.message || 'Failed to send reset password email.');
     }
-     console.log("response",response);
-    // Show success message and possibly redirect
-    toast.success('If the email is associated with an account, a password reset email will be sent.');
-    // Optionally, redirect to the login page or a page that says 'Check your email'
-  } catch (error) {
-    toast.error(error.message || 'Failed to send reset password email.');
-  }
 
-  
-}
+
+  }
 
 
   return (
@@ -61,7 +78,7 @@ const page = () => {
           </h1>
 
           <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <div className="mb-4">
+            <div className="mb-4">
               <label className="mb-2.5 block font-medium text-black dark:text-white">
                 User Id
               </label>
@@ -129,20 +146,20 @@ const page = () => {
               <p>{errors.id?.message}</p>
             </div>
 
-           
+
             <div className="mb-5">
               <button
                 type="submit"
                 className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
               >
-               Submit
+                Reset
               </button>
             </div>
 
             <div className="mt-6 text-right">
               <p>
                 <Link href="/signIn" className="text-primary">
-                Sign In ?
+                  Sign In ?
                 </Link>
               </p>
             </div>

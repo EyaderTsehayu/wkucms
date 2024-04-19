@@ -60,15 +60,12 @@ const UserSchema = new Schema({
   emailResetPassword:{
     type:String
   },
-  emailToken:{
-    type:String
+ verificationCode: {
+    type: String,
   },
-  resetToken : {
-    type:String
-  },
- passwordResetExpires :{
-    type:Date
-  },
+ 
+  passwordResetTokenExpires: { type: Date, default: null },
+
   createdAt: {
     type: Date,
     default: Date.now,

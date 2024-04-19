@@ -12,7 +12,7 @@ const mockData = {
   department: "Software Engineering",
 };
 const PersonalInfo = ({userData}) => {
-  console.log("from parent ",userData);
+  // console.log("from parent ",userData);
   const {
     handleSubmit,
     register,
@@ -64,7 +64,7 @@ const PersonalInfo = ({userData}) => {
     // const fromFirstName = data.firstName.toLowerCase();
     // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
     // const password = `${fromFirstName}@${fromMiddleName}1234`;
-    console.log("check",data.email,"and",userData.userId);
+    // console.log("check",data.email,"and",userData.userId);
     if (data.email !== userData.email || data.blockNo!==userData.blockNo ) {
     updatedEmail=data.email?data.email:userData.email?userData.email:" ";
       try {

@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const ChangePassword = () => {
+const ChangePassword = ({ userData }) => {
   const {
     handleSubmit,
     register,

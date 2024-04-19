@@ -19,7 +19,8 @@ export const POST = async (req) => {
     privilege,
     email,
     blockNo,
-    status
+    status,
+    verificationCode
   } = await req.json();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -40,7 +41,8 @@ export const POST = async (req) => {
       privilege,
       email,
       blockNo,
-      status:"active"
+      status:"active",
+      verificationCode
     });
 
     console.log(
@@ -58,7 +60,8 @@ export const POST = async (req) => {
       privilege,
       email,
       blockNo,
-      status
+      status,
+      verificationCode
     );
     await newUser.save();
     return new Response(JSON.stringify(newUser), { status: 201 });
@@ -84,7 +87,7 @@ export const PATCH = async (request) => {
     await connectToDB();
 
     const updatedFields = {};
-console.log("profilePicture", profilePicture);
+console.log("password", password,"userId",userId);
     //     // Check if there are updated fields
     if (email) {
       updatedFields.email = email;
