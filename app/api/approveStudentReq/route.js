@@ -1,8 +1,8 @@
 import { connectToDB } from "@/utils/database";
 import StudentClearnceReq from "@/models/studentClearanceRequest";
-
-import { STUDENTSTEPS } from "@/utils/constants";
+import History from "@/models/history";
 import StepSchema from "@/models/step";
+import { STUDENTSTEPS } from "@/utils/constants";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 // const studentApproval = STUDENTSTEPS;
@@ -68,6 +68,31 @@ export const PATCH = async (request) => {
       }
 
       await existingRequest.save();
+
+      console.log("EXISTING REQUEST from approval", existingRequest.status);
+      // Create new document in History collection if status is APPROVED
+      if (existingRequest.status.includes("APPROVED")) {
+        console.log("EXISTING REQUEST GET IN");
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString("en-US", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        });
+
+        const clearanceReq = new History({
+          userId: existingRequest.userId,
+          firstname: existingRequest.firstname,
+          middlename: existingRequest.middlename,
+          reason: existingRequest.reason,
+          status: "Approved",
+          role: existingRequest.role,
+          dateApproved: formattedDate,
+          dateRequested: existingRequest.dateRequested,
+          clearanceId: existingRequest._id,
+        });
+        await clearanceReq.save();
+      }
 
       return new Response(`Approved successfully ${arrLength} requests`, {
         status: 201,
