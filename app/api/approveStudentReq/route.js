@@ -69,10 +69,8 @@ export const PATCH = async (request) => {
 
       await existingRequest.save();
 
-      console.log("EXISTING REQUEST from approval", existingRequest.status);
       // Create new document in History collection if status is APPROVED
       if (existingRequest.status.includes("APPROVED")) {
-        console.log("EXISTING REQUEST GET IN");
         const today = new Date();
         const formattedDate = today.toLocaleDateString("en-US", {
           year: "2-digit",
