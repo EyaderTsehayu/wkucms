@@ -1,5 +1,7 @@
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+
 const metadata = {
   title: "Alerts Page | Next.js E-commerce Dashboard Template",
   description: "This is Alerts page for TailAdmin Next.js",
@@ -55,7 +57,6 @@ const fetcher = async (url) => {
   return updatedData;
 };
 const History = () => {
-  // Use SWR to fetch and cache data with automatic refresh every 10 seconds
   const { data: userData, error } = useSWR(
     "http://localhost:3000/api/approvalHistory",
     fetcher,
@@ -70,7 +71,7 @@ const History = () => {
   if (!userData && !error) {
     return <p>Loading...</p>;
   }
-  console.log(userData);
+  //console.log(userData);
   if (error) {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
@@ -85,6 +86,31 @@ const History = () => {
 
   return (
     <div>
+      {userData.length == 0 && (
+        <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+          <div class="mx-auto max-w-[490px]">
+            <div class="mt-7.5 mb-3 text-center">
+              <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">
+                Sorry, you have not any clearance history yet!
+              </h2>
+              <p class="font-medium font-satoshi">
+                The page you were looking for appears when you finish a full
+                clearance process and it presents the histories of your previous
+                clearances.
+              </p>
+            </div>{" "}
+            <Image
+              alt="illustration"
+              loading="lazy"
+              width="400"
+              height="200"
+              decoding="async"
+              data-nimg="1"
+              src="/images/illustration/illustration-01.svg"
+            />
+          </div>
+        </div>
+      )}
       {userData.map((his) => (
         <div
           key={his._id}
