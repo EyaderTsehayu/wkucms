@@ -7,6 +7,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { toast } from "react-toastify";
 import { object } from "prop-types";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const steps = {
   Head: ["College Dean"],
@@ -46,6 +48,7 @@ const Status = () => {
     }
   );
 
+  const router = useRouter();
   const [requestStatus, setRequestStatus] = useState([]);
 
   useEffect(() => {
@@ -94,74 +97,122 @@ const Status = () => {
       toast.success("Your clearance is reinitiated successfully");
     }
   };
+  const handlePrintClearance = () => {
+    // Navigate to the /user/PrintClearance route
+    router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
+  };
 
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      <div className="flex flex-col ">
-        <div className="grid  rounded-sm bg-gray-2 dark:bg-meta-4 grid-cols-2">
-          <div className="p-2.5 sm:ml-16  text-center xl:p-3">
-            <h5 className="text-sm text-black-2 dark:text-whiter font-medium  xsm:text-xl">
-              Offices
-            </h5>
-          </div>
-          <div className="p-2.5 sm:ml-16  text-left xl:p-3">
-            <h5 className="text-sm text-black-2  dark:text-whiter font-medium  xsm:text-xl">
-              Status
-            </h5>
+    <>
+      {userData[0].status != "APPROVED" && (
+        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+          <div className="flex flex-col ">
+            <div className="grid  rounded-sm bg-gray-2 dark:bg-meta-4 grid-cols-2">
+              <div className="p-2.5 sm:ml-16  text-center xl:p-3">
+                <h5 className="text-sm text-black-2 dark:text-whiter font-medium  font-satoshi xsm:text-xl">
+                  Offices
+                </h5>
+              </div>
+              <div className="p-2.5 sm:ml-16  text-left xl:p-3">
+                <h5 className="text-sm text-black-2  dark:text-whiter font-medium  font-satoshi  xsm:text-xl">
+                  Status
+                </h5>
+              </div>
+            </div>
+
+            {requestStatus.map((request, key) => (
+              <div
+                className={`grid grid-cols-2  ${
+                  key === requestStatus.length - 1
+                    ? ""
+                    : "border-b border-stroke dark:border-strokedark"
+                }`}
+                key={key}
+              >
+                <div className="flex items-center  justify-center sm:ml-16 p-2.5 xl:p-5">
+                  <p className="text-left text-black  bg-gray-2 dark:bg-body/20 dark:text-white text-base font-semibold font-satoshi">
+                    {request.name}
+                  </p>
+                </div>
+
+                <div className="flex items-center sm:ml-16  justify-start p-2.5 xl:p-5">
+                  {request.status === "Approved" ? (
+                    <button className="bg-body/90 cursor-default text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white">
+                      <BeenhereIcon fontSize="small" />{" "}
+                      <div className="hidden md:block font-satoshi">
+                        Approved
+                      </div>
+                    </button>
+                  ) : request.status === "Rejected" ? (
+                    <div className="flex gap-2 ">
+                      <button className="bg-meta-1 cursor-default text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white">
+                        <ThumbDownAltIcon fontSize="small" />
+                        <div className="hidden md:block font-satoshi">
+                          Rejected
+                        </div>
+                      </button>
+                      <button
+                        onClick={() => handleReinitate(key)}
+                        className="bg-meta-6/90 text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white"
+                      >
+                        <RestartAltIcon fontSize="small" />
+                        <div className="hidden md:block font-satoshi">
+                          Reinitiate
+                        </div>
+                      </button>
+                    </div>
+                  ) : request.status === "Pending" ? (
+                    <button className="bg-meta-1/60 dark:bg-warning cursor-default dark:bg-meta-6/60 text-base px-3 py-1 rounded-lg flex gap-2 items-center text-white">
+                      <PendingActionsIcon fontSize="small" />{" "}
+                      <div className="hidden md:block font-satoshi">
+                        Pending
+                      </div>
+                    </button>
+                  ) : (
+                    <button className="bg-primary/70  cursor-default text-base  px-3 py-1 rounded-lg flex gap-2 items-center text-white">
+                      <NotStartedIcon fontSize="medium" />{" "}
+                      <div className="hidden md:block font-satoshi">
+                        Not Started
+                      </div>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-
-        {requestStatus.map((request, key) => (
-          <div
-            className={`grid grid-cols-2  ${
-              key === requestStatus.length - 1
-                ? ""
-                : "border-b border-stroke dark:border-strokedark"
-            }`}
-            key={key}
-          >
-            <div className="flex items-center  justify-center sm:ml-16 p-2.5 xl:p-5">
-              <p className="text-left text-black  bg-gray-2 dark:bg-body/20 dark:text-white text-base">
-                {request.name}
+      )}
+      {userData[0].status == "APPROVED" && (
+        <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+          <div class="mx-auto max-w-[490px]">
+            <div class="mt-7.5 mb-3 text-center">
+              <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">
+                Your Clearance Is Approved Successfully!
+              </h2>
+              <p class="font-medium font-satoshi">
+                Thank you so much for choosing us. Download the certificate of
+                clearance here for further use related with clearance process.
               </p>
-            </div>
-
-            <div className="flex items-center sm:ml-16  justify-start p-2.5 xl:p-5">
-              {request.status === "Approved" ? (
-                <button className="bg-body/90 cursor-default text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white">
-                  <BeenhereIcon fontSize="small" />{" "}
-                  <div className="hidden md:block">Approved</div>
-                </button>
-              ) : request.status === "Rejected" ? (
-                <div className="flex gap-2 ">
-                  <button className="bg-meta-1 cursor-default text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white">
-                    <ThumbDownAltIcon fontSize="small" />
-                    <div className="hidden md:block">Rejected</div>
-                  </button>
-                  <button
-                    onClick={() => handleReinitate(key)}
-                    className="bg-meta-6/90 text-base px-3 py-1 rounded-lg flex gap-1 items-center text-white"
-                  >
-                    <RestartAltIcon fontSize="small" />
-                    <div className="hidden md:block">Reinitiate</div>
-                  </button>
-                </div>
-              ) : request.status === "Pending" ? (
-                <button className="bg-meta-1/60 dark:bg-warning cursor-default dark:bg-meta-6/60 text-base px-3 py-1 rounded-lg flex gap-2 items-center text-white">
-                  <PendingActionsIcon fontSize="small" />{" "}
-                  <div className="hidden md:block">Pending</div>
-                </button>
-              ) : (
-                <button className="bg-primary/70  cursor-default text-base  px-3 py-1 rounded-lg flex gap-2 items-center text-white">
-                  <NotStartedIcon fontSize="medium" />{" "}
-                  <div className="hidden md:block">Not Started</div>
-                </button>
-              )}
-            </div>
+              <button
+                onClick={handlePrintClearance}
+                class="mt-7.5 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 font-medium font-satoshi text-white hover:bg-opacity-90"
+              >
+                Print Certificate Of Clearance
+              </button>
+            </div>{" "}
+            <Image
+              alt="illustration"
+              loading="lazy"
+              width="400"
+              height="200"
+              decoding="async"
+              data-nimg="1"
+              src="/images/illustration/illustration-02.svg"
+            />
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
