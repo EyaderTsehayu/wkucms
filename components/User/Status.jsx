@@ -47,6 +47,13 @@ const Status = () => {
       refreshInterval: 2000,
     }
   );
+  if (!userData && !error) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    console.error("Error fetching data:", error);
+    return <p>Failed to fetch data</p>;
+  }
 
   const router = useRouter();
   const [requestStatus, setRequestStatus] = useState([]);
@@ -104,7 +111,7 @@ const Status = () => {
 
   return (
     <>
-      {userData[0].status != "APPROVED" && (
+      {userData && userData.length > 0 && userData[0].status != "APPROVED" && (
         <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex flex-col ">
             <div className="grid  rounded-sm bg-gray-2 dark:bg-meta-4 grid-cols-2">
@@ -182,7 +189,7 @@ const Status = () => {
           </div>
         </div>
       )}
-      {userData[0].status == "APPROVED" && (
+      {userData && userData.length > 0 && userData[0].status == "APPROVED" && (
         <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
           <div class="mx-auto max-w-[490px]">
             <div class="mt-7.5 mb-3 text-center">
