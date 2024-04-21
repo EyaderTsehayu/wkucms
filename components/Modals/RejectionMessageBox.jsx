@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useSocket } from "@/context/SocketContext";
 import { v4 as uuidv4 } from "uuid";
 
-const RejectionMessageBox = ({ selectedUser }) => {
+const RejectionMessageBox = ({ selectedUser, onCancel }) => {
   const socket = useSocket();
   const { data: session } = useSession();
   const user = session?.user;
@@ -92,10 +92,72 @@ const RejectionMessageBox = ({ selectedUser }) => {
     getMessages();
   }, [currentChat]);
 
+  const rejectRequest = async () => {
+    const len = selectedUser.length;
+    try {
+      const requests = selectedUser.map(async (eachData) => {
+        if (eachData.role == "STUDENT") {
+          try {
+            const response = await fetch(`/api/rejectStudentReq`, {
+              method: "PATCH",
+              body: JSON.stringify({
+                objectId: eachData._id,
+                arrLength: len,
+              }),
+            });
+
+            if (response.ok) {
+              return await response.text();
+            }
+          } catch (error) {
+            console.log(error);
+            return null;
+          }
+        } else if (eachData.role == "STAFF") {
+          try {
+            const response = await fetch(`/api/rejectStaffReq`, {
+              method: "PATCH",
+              body: JSON.stringify({
+                objectId: eachData._id,
+                arrLength: len,
+              }),
+            });
+
+            if (response.ok) {
+              return await response.text();
+            }
+          } catch (error) {
+            console.log(error);
+            return null;
+          }
+        }
+      });
+
+      const responses = await Promise.all(requests);
+
+      let toastShown = false;
+
+      responses.forEach((responsedata, index) => {
+        if (responsedata) {
+          if (
+            selectedUser.length > 1 &&
+            !toastShown &&
+            index === responses.length - 1
+          ) {
+            toast.success(responsedata);
+            toastShown = true;
+          } else if (selectedUser.length === 1) {
+            toast.success("Rejected Successfully");
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
-      // ... (existing code)
-
       // Check if currentChat is not null before accessing its members property
       if (currentChat && currentChat.members) {
         const receiverId = currentChat.members.find(
@@ -158,6 +220,9 @@ const RejectionMessageBox = ({ selectedUser }) => {
 
         console.log("Rejected successfully");
         reset();
+        rejectRequest();
+
+        handleCancel();
       } else {
         // Create a new conversation and set it as the current chat
         const createConversations = async () => {
@@ -227,8 +292,9 @@ const RejectionMessageBox = ({ selectedUser }) => {
               console.log("Failed to save the notification");
             }
 
-            console.log("Rejected successfully");
+            rejectRequest();
             reset();
+            handleCancel();
           } catch (error) {
             console.log(error);
           }
@@ -240,7 +306,9 @@ const RejectionMessageBox = ({ selectedUser }) => {
       console.log(error);
     }
   };
-
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
     <div class="w-full max-w-142.5 rounded-lg bg-white py-6 px-6  dark:bg-boxdark md:py-8 md:px-8.5">
       <div className="flex flex-row place-content-between justify-center items-center">
@@ -279,7 +347,7 @@ const RejectionMessageBox = ({ selectedUser }) => {
             </button>
           </div>
 
-          <div class="w-full px-3 2xsm:w-1/2">
+          <div onClick={handleCancel} class="w-full px-3 2xsm:w-1/2">
             <button class="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
