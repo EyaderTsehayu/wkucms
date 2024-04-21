@@ -135,6 +135,7 @@ const ManageStaffOffices = () => {
     //     setStepError(error); // Corrected from `error` to `stepError`
     //   }
     // };
+    
     const fetchData = async () => {
       try {
         const stepType = "STAFF"; // Define your stepType here
@@ -293,7 +294,7 @@ const ManageStaffOffices = () => {
             ))}
 
             {/* 2xsm:w-1/2 */}
-            <div className="w-60 w-full px-1 ">
+            <div className=" w-full px-1 ">
               <button
                 onClick={modifySteps}
                 className="block  w-full rounded border border-primary bg-primary py-2 text-center font-medium text-white transition hover:bg-opacity-90"

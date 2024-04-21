@@ -44,6 +44,7 @@ const columns = [
   { field: "middlename", headerName: "Last name", width: "160" },
   { field: "reason", headerName: "Reason", width: "160" },
   { field: "status", headerName: "Status", width: "160" },
+  { field: "attachedFile", headerName: "Attachement", width: "160" },
 ];
 
 const fetcher = async (url) => {
@@ -108,7 +109,7 @@ const ApproveStudent = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
-
+  const clickableColumns = [5];
   return (
     <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
       <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
@@ -121,6 +122,7 @@ const ApproveStudent = () => {
           columns={columns}
           rows={previlage !== "Head" ? filteredData : userData}
           modal={RejectionMessageBox}
+          clickableColumns={clickableColumns}
         />
       </div>
     </div>

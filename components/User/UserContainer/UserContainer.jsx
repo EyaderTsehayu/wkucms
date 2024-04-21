@@ -6,8 +6,9 @@ import Table from "../../Admin/Table";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 
-const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
+const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) => {
   const pathname = usePathname();
+  console.log("pathname", pathname);
   const [open, setOpen] = useState(false);
   const handleOpen = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {
@@ -22,10 +23,31 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   };
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredRows, setFilteredRows] = useState(rows);
 
+  // start searching 
   const handleSearch = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
     setSearchTerm(event.target.value);
+    // Filter rows based on year, department, and college
+    const filteredRows = rows.filter((row) => {
+      const userId = row.userId?.toLowerCase().includes(searchTerm);
+      const firstname = row.firstname?.toLowerCase().includes(searchTerm);
+      const reason = row.reason?.toLowerCase().includes(searchTerm);
+       const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
+      // Return true if any of the criteria match
+      return userId || firstname || reason || dateApproved;
+    });
+
+    // Update the state with the filtered rows
+    setFilteredRows(filteredRows);
   };
+  // end searching
+
+
+  // const handleSearch = (event) => {
+  //   setSearchTerm(event.target.value);
+  // };
 
   const handleApproveAll = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {
@@ -103,9 +125,8 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
   // }
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
-        pathname.includes("student") && "col-span-9"
-      } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${(pathname.includes("student") || pathname.includes("ApprovedUsers")) && "col-span-9"
+        } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -119,29 +140,34 @@ const UserContainer = ({ columns, rows, modal: OpenedModal }) => {
           />
         </div>
 
-        <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          <button
-            // onClick={handleOpen}
-            onClick={() => handleOpen(selectedRows)}
-            className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
-          >
-            Reject
-          </button>
-          <button
-            onClick={() => handleApproveAll(selectedRows)}
-            className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
-          >
-            Approve
-          </button>
-        </div>
+        {/* open modal because I don't use these buttons on the approved users page */}
+        {OpenedModal && (
+          <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
+            <button
+              onClick={() => handleOpen(selectedRows)}
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+            >
+              Reject
+            </button>
+            <button
+              onClick={() => handleApproveAll(selectedRows)}
+              className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
+            >
+              Approve
+            </button>
+          </div>
+        )
+        }
+
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <Table
             columns={columns}
-            rows={rows}
+            rows={filteredRows}
             setSelectedRows={setSelectedRows}
             handleApproveAll={handleApproveAll}
+            clickableColumns={clickableColumns}
           />
         </div>
       </div>

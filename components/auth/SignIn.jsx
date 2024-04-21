@@ -31,6 +31,7 @@ const SignIn = () => {
     const status = session?.user?.status;
 
     console.log("Form Data:", data);
+    console.log("status:", status);
     const userId = data.id;
     const password = data.password;
 
@@ -41,26 +42,36 @@ const SignIn = () => {
         redirect: false,
       });
 
-      if (res.error) {
-        toast.error("invalid credentials");
+      if (res.error || status == "inactive") {
+        if(res.error){  toast.error("invalid credentials");}
+        else if(status == "inactive"){ toast.error("You have been banned.");}
         return;
       } else {
-        if (status == "inactive") {
-          toast.error("You have been banned.");
-        } else {
-          toast.success("Login Successful!");
-          //  router.push("/user");
-        }
-      }
 
-      console.log("status", status);
-      if (role == "ADMIN" && status == "active") {
-        router.replace("/admin");
-      } else if (role == "STUDENT" && status == "active") {
-        router.replace("/user");
-      } else if (role == "STAFF" && status == "active") {
-        router.replace("/user/");
-      }
+          console.log("status", status);
+          if (role === "ADMIN") {
+            toast.success("Login Successful!");
+            router.replace("/admin");
+          } else if (role === "STUDENT") {
+            toast.success("Login Successful!");
+            router.replace("/user");
+          } else if (role === "STAFF") {
+            toast.success("Login Successful!");
+            router.replace("/user/");
+          }
+         
+          //  router.push("/user");
+       
+
+
+      // console.log("status", status);
+      // if (role == "ADMIN" && status == "active") {
+      //   router.replace("/admin");
+      // } else if (role == "STUDENT" && status == "active") {
+      //   router.replace("/user");
+      // } else if (role == "STAFF" && status == "active") {
+      //   router.replace("/user/");
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +169,7 @@ const SignIn = () => {
 
             <div className="mt-6 text-right">
               <p>
-                <Link href="/auth/signup" className="text-primary">
+                <Link href="/forget-password" className="text-primary">
                   Forgot password ?
                 </Link>
               </p>

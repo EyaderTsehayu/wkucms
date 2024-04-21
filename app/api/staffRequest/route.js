@@ -4,13 +4,16 @@ import StaffRequestSchema from "@/models/staffClearanceRequest";
 export const POST = async (req) => {
   const { userId,
     reason,
+    attachedFile,
     status,
     firstname,
     middlename,
     role,
     collegeName,
     departmentName,
-    _userId
+    _userId,
+     
+
   } = await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
   console.log("pkyrsf", status);
@@ -37,6 +40,7 @@ export const POST = async (req) => {
     const clearanceReq = new StaffRequestSchema({
       userId,
       reason,
+      attachedFile,
       status,
       firstname,
       middlename,
