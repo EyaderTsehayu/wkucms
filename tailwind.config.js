@@ -11,6 +11,8 @@ module.exports = {
   theme: {
     fontFamily: {
       satoshi: ["Satoshi", "sans-serif"],
+      // montserrat: ["var(--montserrat-font)"],
+      // poppins: ["var(--poppins-font)"],
     },
     colors: {
       current: "currentColor",
