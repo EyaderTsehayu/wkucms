@@ -135,6 +135,7 @@ const ManageStaffOffices = () => {
     //     setStepError(error); // Corrected from `error` to `stepError`
     //   }
     // };
+    
     const fetchData = async () => {
       try {
         const stepType = "STAFF"; // Define your stepType here
