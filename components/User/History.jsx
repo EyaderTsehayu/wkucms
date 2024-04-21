@@ -2,49 +2,6 @@ import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const metadata = {
-  title: "Alerts Page | Next.js E-commerce Dashboard Template",
-  description: "This is Alerts page for TailAdmin Next.js",
-};
-
-const history = [
-  {
-    clearanceId: "#6723oiuyat",
-    dateRequested: "02/03/16",
-    dateApproved: "03/03/16",
-    reason: "Vacation",
-    status: "Approved",
-  },
-  {
-    clearanceId: "#6723oiuyat",
-    dateRequested: "02/03/16",
-    dateApproved: "03/03/16",
-    reason: "Vacation",
-    status: "Approved",
-  },
-  {
-    clearanceId: "#6723oiuyat",
-    dateRequested: "02/03/16",
-    dateApproved: "03/03/16",
-    reason: "Vacation",
-    status: "Approved",
-  },
-  {
-    clearanceId: "#6723oiuyat",
-    dateRequested: "02/03/16",
-    dateApproved: "03/03/16",
-    reason: "Vacation",
-    status: "Approved",
-  },
-  {
-    clearanceId: "#6723oiuyat",
-    dateRequested: "02/03/16",
-    dateApproved: "03/03/16",
-    reason: "Vacation",
-    status: "Approved",
-  },
-];
-
 const rows = [];
 const fetcher = async (url) => {
   const response = await fetch(url);
