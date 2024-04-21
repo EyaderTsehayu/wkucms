@@ -6,18 +6,16 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import PrintClearance from "@/components/User/PrintClearance";
 import Status from "@/components/User/Status";
 import RequestClearance from "@/components/User/RequestClearance";
 import History from "@/components/User/History";
 
-import RequestPageOutlinedIcon from "@mui/icons-material/RequestPageOutlined";
-import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
-import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
-import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
-
+import HistoryIcon from "@mui/icons-material/History";
+import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
+import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
 import { useState } from "react";
 import useSWR from "swr";
+import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
 const iconStyle = {
   marginRight: "8px", // Adjust the margin as needed
@@ -34,10 +32,6 @@ const fetcher = async (url) => {
 };
 
 export default function LabTabs() {
-  // var index="1"
-  // if(!userData[0].status){
-  //   index="2"
-  // }
   const [value, setValue] = useState("3");
 
   const handleChange = (event, newValue) => {
@@ -52,25 +46,26 @@ export default function LabTabs() {
     {
       initialData: a,
       revalidateOnFocus: false,
-      refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+      refreshInterval: 2000,
     }
   );
-  console.log("session from approval ad ", userData);
+
   // Handle loading and fetch errors
   if (!userData && !error) {
     return <p>Loading...</p>;
   }
 
   if (error) {
-    console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
 
   return (
     <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
-      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
-        My Clearance
-      </h1>
+      <Breadcrumb
+        title="My Clearance"
+        mainRoute="Dashboard"
+        subRoute="Clearance"
+      />
       <Box
         sx={{
           typography: "body1",
@@ -100,9 +95,12 @@ export default function LabTabs() {
                   className="dark:text-white"
                   value="1"
                   label={
-                    <div className="flex">
-                      <RequestPageOutlinedIcon className="mr-2" /> Request
-                      Clearance
+                    <div className="flex font-satoshi">
+                      <InventoryOutlinedIcon
+                        fontSize="small"
+                        className="mr-2"
+                      />{" "}
+                      Request Clearance
                     </div>
                   }
                 />
@@ -112,8 +110,9 @@ export default function LabTabs() {
                 className=" dark:text-white  "
                 value="3"
                 label={
-                  <div className="flex">
-                    <AutorenewOutlinedIcon className="mr-2" /> Status
+                  <div className="flex font-satoshi ">
+                    <RuleOutlinedIcon fontSize="small" className="mr-2" />{" "}
+                    Status
                   </div>
                 }
               />
@@ -123,20 +122,11 @@ export default function LabTabs() {
                 className=" dark:text-white  "
                 value="2"
                 label={
-                  <div className="flex">
-                    <AutorenewOutlinedIcon className="mr-2" /> History
+                  <div className="flex font-satoshi">
+                    <HistoryIcon fontSize="small" className="mr-2 " /> History
                   </div>
                 }
               />
-              {/* <Tab sx={{ textTransform: 'none', color: "black", fontSize: "1rem" }}
-                className=' dark:text-white  '
-                value="4"
-                label={
-                  <div className="flex">
-                    <LocalPrintshopOutlinedIcon className='mr-2' /> Print Clearance
-                  </div>
-                }
-              /> */}
             </TabList>
           </Box>
 
@@ -150,9 +140,6 @@ export default function LabTabs() {
             <TabPanel value="3">
               <Status />
             </TabPanel>
-            {/* <TabPanel value="4">
-              <PrintClearance />
-            </TabPanel> */}
           </>
         </TabContext>
       </Box>
