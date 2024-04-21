@@ -1,13 +1,18 @@
-
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Montserrat, Poppins } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./provider";
 
-
-const inter = Inter({ subsets: ["latin"] });
-
+const montserrat = Montserrat({
+  variable: "--montserrat-font",
+  subsets: ["latin"],
+});
+// const poppins = Poppins({
+//   variable: "--poppins-font",
+//   weight: ["100", "300", "400", "500", "700", "900"],
+//   subsets: ["latin"],
+// });
 export const metadata = {
   title: "WKUCMS",
   description:
@@ -16,11 +21,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    // <html lang="en" className={`${montserrat.variable} ${poppins.variable} `}>
     <html lang="en">
       <AuthProvider>
-      
-
-        <body className={inter.className}>
+        <body className={montserrat.className}>
           {children}{" "}
           <ToastContainer
             position="top-right"
@@ -35,7 +39,6 @@ export default function RootLayout({ children }) {
             theme="colored"
           />
         </body>
-        
       </AuthProvider>
     </html>
   );
