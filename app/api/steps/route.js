@@ -12,17 +12,26 @@ export const POST = async (req) => {
     //     description,
     //     image,
     //   } = await req.json();
-    const { steps, stepType } = await req.json(); // Extract the 'steps' array from the request body
+    const { steps, stepType, key, value } = await req.json(); // Extract the 'steps' array from the request body
     console.log("steps", steps);
 
     // Iterate over each step and create a document for each one
-    const keys = Object.keys(steps);
-    const values = Object.values(steps);
+    if (steps) {
+      const keys = Object.keys(steps);
+      const values = Object.values(steps);
 
-    const len = keys.length;
-    //   const newStep = new DynamicSteps({ steps: newSteps });
-    await populateSteps(steps, stepType);
-
+      const len = keys.length;
+      //   const newStep = new DynamicSteps({ steps: newSteps });
+      await populateSteps(steps, stepType);
+    } else if (key && value) {
+      console.log("key", key, ">value", value);
+      const currentStep = new DynamicSteps({
+        name: key,
+        nextSteps: value,
+        stepType,
+      });
+      await currentStep.save();
+    }
     return new Response(`Request sent Successfully!`, {
       status: 201,
     });
@@ -87,13 +96,16 @@ export const GET = async (request) => {
 export const PATCH = async (request) => {
   try {
     const { key, value, stepType } = await request.json();
-    console.log("key", key,"value",value);
+    console.log("key", key, "value", value);
     await connectToDB();
 
-    const updateSteps = await DynamicSteps.findOne({ stepType: stepType });
+    const updateSteps = await DynamicSteps.findOne({
+      // stepType: stepType,
+      name: key,
+    });
 
     if (updateSteps) {
-      updateSteps.name = key;
+      // updateSteps.name = key;
       updateSteps.nextSteps = value;
 
       await updateSteps.save();

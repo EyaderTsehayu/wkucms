@@ -72,7 +72,7 @@ const SignIn = () => {
       // } else if (role == "STAFF" && status == "active") {
       //   router.replace("/user/");
       // }
-    } catch (error) {
+    } }catch (error) {
       console.log(error);
     }
   };

@@ -144,9 +144,8 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
         {OpenedModal && (
           <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
             <button
-              // onClick={handleOpen}
               onClick={() => handleOpen(selectedRows)}
-            className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
             >
               Reject
             </button>
@@ -159,6 +158,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
           </div>
         )
         }
+
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
