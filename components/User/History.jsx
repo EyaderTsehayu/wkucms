@@ -75,10 +75,12 @@ const History = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
+
   const handlePrintClearance = (id) => {
     // Navigate to the /user/PrintClearance route
     console.log("userData[0]?._id",id);
     router.push(`/user/PrintClearance?clearanceId=${id}`);
+
   };
 
   return (
@@ -141,6 +143,7 @@ const History = () => {
               </span>{" "}
               {his.status}
             </p>
+
             <button
               onClick={()=> handlePrintClearance(his.clearanceId)}
               // href=""
@@ -148,6 +151,7 @@ const History = () => {
             >
               Print Clearance
             </button>
+
           </div>
         </div>
       ))}

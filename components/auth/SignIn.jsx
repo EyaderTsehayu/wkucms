@@ -47,6 +47,7 @@ const SignIn = () => {
         else if(status == "inactive"){ toast.error("You have been banned.");}
         return;
       } else {
+
           console.log("status", status);
           if (role === "ADMIN") {
             toast.success("Login Successful!");
@@ -61,7 +62,7 @@ const SignIn = () => {
          
           //  router.push("/user");
        
-      }
+
 
       // console.log("status", status);
       // if (role == "ADMIN" && status == "active") {

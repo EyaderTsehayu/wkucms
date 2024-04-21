@@ -14,7 +14,9 @@ export const POST = async (req) => {
     collegeName,
     departmentName,
     _userId,
+
   } = await req.json() ;
+
   const requests = await StudentClearnceReq.find({ userId: userId });
   if (requests.length > 0 && requests != null) {
     return new Response(
