@@ -8,14 +8,16 @@ export const POST = async (req) => {
     firstname,
     middlename,
     reason,
+    attachedFile,
     status,
     role,
     collegeName,
     departmentName,
     _userId,
-  } = await req.json();
-  const requests = await StudentClearnceReq.find({ userId: userId });
 
+  } = await req.json() ;
+
+  const requests = await StudentClearnceReq.find({ userId: userId });
   if (requests.length > 0 && requests != null) {
     return new Response(
       `Cannot request clearance. An active request is already in progress`,
@@ -44,6 +46,7 @@ export const POST = async (req) => {
       firstname,
       middlename,
       reason,
+      attachedFile,
       status,
       role,
       collegeName,
@@ -52,6 +55,7 @@ export const POST = async (req) => {
       blockNo: fetchStudent[0].blockNo,
       dateRequested: formattedDate,
     });
+    console.log("attachedFile", attachedFile);
 
     await clearanceReq.save();
     return new Response(`Request sent Successfully!`, {
@@ -64,6 +68,8 @@ export const POST = async (req) => {
     });
   }
 };
+
+
 
 // export const GET = async () => {
 //   try {

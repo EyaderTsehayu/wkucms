@@ -75,9 +75,12 @@ const History = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
-  const handlePrintClearance = () => {
+
+  const handlePrintClearance = (id) => {
     // Navigate to the /user/PrintClearance route
-    router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
+    console.log("userData[0]?._id",id);
+    router.push(`/user/PrintClearance?clearanceId=${id}`);
+
   };
 
   return (
@@ -140,13 +143,15 @@ const History = () => {
               </span>{" "}
               {his.status}
             </p>
-            {/* <button
-                            onClick={handlePrintClearance}
-                            // href=""
-                            className="absolute lg:bottom-0 bottom-5 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
-                        >
-                            Print Clearance
-                        </button> */}
+
+            <button
+              onClick={()=> handlePrintClearance(his.clearanceId)}
+              // href=""
+              className="absolute lg:bottom-0 bottom-5 right-10 text-primary dark:text-white text-lg font-bold py-3 px-8 transition-all border border-primary rounded-full hover:bg-primary hover:text-white"
+            >
+              Print Clearance
+            </button>
+
           </div>
         </div>
       ))}

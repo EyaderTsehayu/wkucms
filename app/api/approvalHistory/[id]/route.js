@@ -7,7 +7,7 @@ export const GET = async (request, { params }) => {
     // Get the user session
     // const session = await getServerSession();
     // console.log("session from studentApproval", session?.user?.privilege);
-
+    // console.log("params", params.id);
     await connectToDB();
 
     // Uncomment the following line if you want to use clearanceId from params
@@ -19,7 +19,7 @@ export const GET = async (request, { params }) => {
     // Log the clearanceId
     // console.log("clearanceId", clearanceId);
 
-    const requests = await History.find({ clearanceId: params.id });
+    const requests = await History.find({clearanceId: params.id });
 
     // Return a success response with the users data
     return new Response(JSON.stringify(requests), { status: 200 });

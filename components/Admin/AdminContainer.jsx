@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-
+import { toast } from "react-toastify";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Table from "./Table";
@@ -17,6 +17,34 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
   const [editOpen, setEditOpen] = useState(false);
 
   const [userId, setUserData] = useState();
+
+
+  const [filteredRows, setFilteredRows] = useState(rows);
+
+  // start searching 
+  const handleSearch = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    setSearchTerm(event.target.value);
+    // Filter rows based on year, department, and college
+    const filteredRows = rows.filter((row) => {
+      const userId = row.userId?.toLowerCase().includes(searchTerm);
+      const firstname = row.firstname?.toLowerCase().includes(searchTerm);
+      const year = row.year?.toLowerCase().includes(searchTerm);
+      const privilege = row.privilege?.toLowerCase().includes(searchTerm);
+      const officeId = row.officeId?.toLowerCase().includes(searchTerm);
+      const officeName = row.officeName?.toLowerCase().includes(searchTerm);
+      const location = row.location?.toLowerCase().includes(searchTerm);
+      // Return true if any of the criteria match
+      return userId || firstname || year || privilege || officeId || officeName || location;
+    });
+  
+    // Update the state with the filtered rows
+    setFilteredRows(filteredRows);
+  };
+  // end searching
+
+
+
 
   const handleOpen = () => setOpen(true);
 
@@ -170,9 +198,9 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
   //   rows = filteredInfo;
   // }
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
+  // const handleSearch = (event) => {
+  //   setSearchTerm(event.target.value);
+  // };
 
   return (
     <div
@@ -244,7 +272,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <Table
             columns={columns}
-            rows={rows}
+            rows={filteredRows}
             setSelectedRows={setSelectedRows}
           />
         </div>

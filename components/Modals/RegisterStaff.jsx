@@ -291,7 +291,7 @@ const [Previlege,setPrevilege]=useState([])
           collegeName:data.collegeName,
           departmentName:data.departmentName,
           role: ROLES.STAFF,
-          blockNo:data.blockNo
+          blockNo:""
         }),
       });
 
@@ -534,7 +534,7 @@ const [Previlege,setPrevilege]=useState([])
             </div>
           )}
         </div>
-        <div className="w-full sm:w-1/2">
+        {/* <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
               htmlFor="blockNo"
@@ -550,7 +550,7 @@ const [Previlege,setPrevilege]=useState([])
               {...register("blockNo")}
             />
             <p>{errors.blockNo?.message}</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">

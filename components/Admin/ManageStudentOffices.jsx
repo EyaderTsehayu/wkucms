@@ -278,7 +278,7 @@ const ManageStudentOffices = () => {
                   setDraggedData={setDraggedData} />
               </div>
             ))}
-            <div className="w-60 w-full px-1 ">
+            <div className=" w-full px-1 ">
               <button
                 onClick={modifySteps}
                 className="block w-full rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"

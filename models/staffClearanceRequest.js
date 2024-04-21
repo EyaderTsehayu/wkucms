@@ -9,6 +9,7 @@ const StaffRequestSchema = new Schema({
     type: String,
     required: [true, "Reason is required!"],
   },
+  attachedFile: { type: String },
   status: {
     type: String,
     required: [true, "Status is required!"],
