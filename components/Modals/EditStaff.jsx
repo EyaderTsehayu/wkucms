@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
@@ -7,8 +7,7 @@ import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const EditStaff = ({ userData }) => {
-
+const EditStaff = ({ userData, onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -20,8 +19,6 @@ const EditStaff = ({ userData }) => {
   // userData && userData.forEach((user) => {
   //   console.log(user.privilege); // Output: Head (or the privilege for each user)
   // })
-
-
 
   console.log("sera mesel", userData[0]);
   // userData && userData[0].map((data)=>console.log(data));
@@ -50,8 +47,7 @@ const EditStaff = ({ userData }) => {
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-  const [Previlege, setPrevilege] = useState([])
-
+  const [Previlege, setPrevilege] = useState([]);
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -71,7 +67,6 @@ const EditStaff = ({ userData }) => {
     }
   };
 
-
   const handleSearchPrevilegeFocus = () => {
     if (searchPrevilege) {
       setShowPrevilegeDropdown(true);
@@ -81,11 +76,8 @@ const EditStaff = ({ userData }) => {
     }
   };
 
-
   //  fetch from staff by id
   useEffect(() => {
-
-
     const fetchData = async () => {
       try {
         const stepType = "STUDENT"; // Define your stepType here
@@ -113,15 +105,13 @@ const EditStaff = ({ userData }) => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
-
-  // 
+  //
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType = "STUDENT"
-
+        const studentStepType = "STUDENT";
 
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
@@ -131,7 +121,6 @@ const EditStaff = ({ userData }) => {
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
 
-
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");
         }
@@ -140,7 +129,6 @@ const EditStaff = ({ userData }) => {
           ...user,
           id: user._id,
         }));
-
 
         const studentData = await responseStudent.json();
         const updatedStudentData = studentData.map((user) => ({
@@ -152,18 +140,17 @@ const EditStaff = ({ userData }) => {
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
         const concatenatedArray = [
-          ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
+          ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
 
-          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED"),
-
+          ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
         ];
-        let cnt=0;
+        let cnt = 0;
         const previlege = concatenatedArray.map((role, index) => ({
           id: (index + 1).toString(),
-          name: role
+          name: role,
         }));
-        cnt=previlege.length+1;  
-        previlege.push({ id: ''+`${cnt}`+'', name: "Null" });
+        cnt = previlege.length + 1;
+        previlege.push({ id: "" + `${cnt}` + "", name: "Null" });
         setPrevilege(previlege);
 
         console.log("qaqaqa", previlege);
@@ -179,10 +166,7 @@ const EditStaff = ({ userData }) => {
 
     fetchData(); // Fetch data once when component mounts
 
-
-
     if (searchCollege) {
-
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
@@ -192,7 +176,6 @@ const EditStaff = ({ userData }) => {
     }
 
     if (searchTerm) {
-
       const filteredResults = DepartmentData.filter((college) =>
         college.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -200,7 +183,6 @@ const EditStaff = ({ userData }) => {
     } else {
       setFilteredOffices(initialDropdownItems);
     }
-
 
     if (searchPrevilege) {
       // console.log("concatPrevilegeenatedArray",Previlege);
@@ -215,16 +197,12 @@ const EditStaff = ({ userData }) => {
     // }
   }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
 
-
-
-
-
-
-
-
   useEffect(() => {
     function handleClickOutside(event) {
-      if (collegeDropdownRef.current && !collegeDropdownRef.current.contains(event.target)) {
+      if (
+        collegeDropdownRef.current &&
+        !collegeDropdownRef.current.contains(event.target)
+      ) {
         setShowCollegeDropdown(false);
       }
     }
@@ -234,7 +212,6 @@ const EditStaff = ({ userData }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -257,7 +234,8 @@ const EditStaff = ({ userData }) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        (previlegeDropdownRef.current && !previlegeDropdownRef.current.contains(event.target)) ||
+        (previlegeDropdownRef.current &&
+          !previlegeDropdownRef.current.contains(event.target)) ||
         (previlegeDropdownRef.current &&
           !previlegeDropdownRef.current.contains(event.target))
       ) {
@@ -272,19 +250,15 @@ const EditStaff = ({ userData }) => {
     };
   }, []);
 
-
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
   };
 
-
   const handleSearchPrevilegeChange = (event) => {
     setSearchPrevilege(event.target.value);
     setShowDropdown(true);
   };
-
-
 
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
@@ -318,7 +292,6 @@ const EditStaff = ({ userData }) => {
     setShowCollegeDropdown(false);
   };
 
-
   // useEffect(()=>{
   //   const fetchStaff=async()=>{
   //       try {
@@ -345,21 +318,21 @@ const EditStaff = ({ userData }) => {
   //     console.error("Error:", error);
   //   }
 
-
   //   }
   //   if(userId){
   //     fetchStaff();
   //   }
   // },[])
 
-
   const onSubmit = async (data) => {
     // const fromFirstName = data.firstName.toLowerCase();
     // const fromMiddleName = data.middleName.charAt(0).toLowerCase();
     // const password = `${fromFirstName}@${fromMiddleName}1234`;
     console.log("check", data.previlegeName, "and", userData[0].privilege);
-    if (data.previlegeName !== userData[0].privilege && data.previlegeName != undefined) {
-
+    if (
+      data.previlegeName !== userData[0].privilege &&
+      data.previlegeName != undefined
+    ) {
       try {
         const response = await fetch(`/api/user/new/staff`, {
           method: "PATCH",
@@ -367,7 +340,6 @@ const EditStaff = ({ userData }) => {
             objectId: userData[0]._id,
             userId: userData[0].userId,
             privilege: data.previlegeName,
-
           }),
         });
 
@@ -375,7 +347,6 @@ const EditStaff = ({ userData }) => {
           toast.success("Officer Updated Successfully!");
         }
       } catch (error) {
-
         console.log(error);
       }
       setSearchCollege("");
@@ -384,7 +355,9 @@ const EditStaff = ({ userData }) => {
       toast.error("First update the previlege before updating!");
     }
   };
-
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
     <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <div className="flex flex-row place-content-between">
@@ -394,8 +367,6 @@ const EditStaff = ({ userData }) => {
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
-
-
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -485,7 +456,6 @@ const EditStaff = ({ userData }) => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               College
@@ -500,7 +470,7 @@ const EditStaff = ({ userData }) => {
               onFocus={handleSearchCollegeFocus}
               onChange={handleSearchCollegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //   {...register("collegeName")}
+              //   {...register("collegeName")}
             />
             <input
               type="hidden"
@@ -529,9 +499,6 @@ const EditStaff = ({ userData }) => {
             )}
           </div>
 
-
-
-
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -549,7 +516,7 @@ const EditStaff = ({ userData }) => {
               onFocus={handleSearchInputFocus}
               onChange={handleSearchInputChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //  {...register("departmentName")}
+              //  {...register("departmentName")}
             />
             <input
               type="hidden"
@@ -580,7 +547,6 @@ const EditStaff = ({ userData }) => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               Previlege
@@ -594,7 +560,7 @@ const EditStaff = ({ userData }) => {
               onFocus={handleSearchPrevilegeFocus}
               onChange={handleSearchPrevilegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //   {...register("collegeName")}
+              //   {...register("collegeName")}
             />
             {/* <input
           type="hidden"
@@ -622,7 +588,6 @@ const EditStaff = ({ userData }) => {
               </div>
             )}
           </div>
-
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
@@ -635,7 +600,7 @@ const EditStaff = ({ userData }) => {
             </button>
           </div>
 
-          <div className="w-full px-3 2xsm:w-1/2">
+          <div onClick={handleCancel} className="w-full px-3 2xsm:w-1/2">
             <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
@@ -646,6 +611,3 @@ const EditStaff = ({ userData }) => {
   );
 };
 export default EditStaff;
-
-
-

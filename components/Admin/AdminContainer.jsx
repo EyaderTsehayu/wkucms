@@ -231,7 +231,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <OpenedModal />
+          <OpenedModal onCancel={handleClose} />
         </div>
       </Modal>
 
@@ -247,7 +247,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
             onClick={handleOverlayClick}
             className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
           >
-            <EditStaff userData={selectedRows} />
+            <EditStaff userData={selectedRows} onCancel={handleEditClose} />
           </div>
         </Modal>
       )}

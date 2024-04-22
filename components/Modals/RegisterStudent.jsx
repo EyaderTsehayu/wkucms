@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterStudent = () => {
+const RegisterStudent = ({ onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -121,7 +121,7 @@ const RegisterStudent = () => {
   const onSubmit = async (data) => {
     const fromFirstName = data.firstName.toLowerCase();
     const fromMiddleName = data.middleName.charAt(0).toLowerCase();
-    
+
     // Generate a random number between 100 and 999
 
     const password = `${fromFirstName}@${fromMiddleName}1234`;
@@ -194,9 +194,30 @@ const RegisterStudent = () => {
       }
     };
   };
+  const handleCancel = () => {
+    onCancel();
+  };
+
+  const handleDownload = () => {
+    // Constructing a temporary link element
+    const link = document.createElement("a");
+    link.href = "/files/studentsTrial.xlsx";
+    link.setAttribute("download", "studentsTrial.xlsx");
+    // Simulating a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
-    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+    <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <button
+        onClick={handleDownload}
+        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+      >
+        Get Importing Format
+      </button>
+
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -209,7 +230,7 @@ const RegisterStudent = () => {
           <div className="flex flex-row gap-3">
             <label
               htmlFor="file-upload"
-              className="flex flex-row gap-3 rounded border border-primary bg-primary px-6 py-2 text-center font-medium text-white transition hover:bg-opacity-90"
+              className="flex flex-row gap-3 rounded-md border border-primary bg-primary px-6 py-2 text-center font-medium text-white transition hover:bg-opacity-90"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -467,7 +488,7 @@ const RegisterStudent = () => {
             </button>
           </div>
 
-          <div className="w-full px-3 2xsm:w-1/2">
+          <div onClick={handleCancel} className="w-full px-3 2xsm:w-1/2">
             <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>

@@ -6,7 +6,12 @@ import Table from "../../Admin/Table";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 
-const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) => {
+const UserContainer = ({
+  columns,
+  rows,
+  modal: OpenedModal,
+  clickableColumns,
+}) => {
   const pathname = usePathname();
   console.log("pathname", pathname);
   const [open, setOpen] = useState(false);
@@ -25,7 +30,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
 
-  // start searching 
+  // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     setSearchTerm(event.target.value);
@@ -34,7 +39,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
       const userId = row.userId?.toLowerCase().includes(searchTerm);
       const firstname = row.firstname?.toLowerCase().includes(searchTerm);
       const reason = row.reason?.toLowerCase().includes(searchTerm);
-       const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
+      const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
       return userId || firstname || reason || dateApproved;
     });
@@ -42,12 +47,6 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
   };
-  // end searching
-
-
-  // const handleSearch = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
 
   const handleApproveAll = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {
@@ -115,18 +114,12 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
     }
   };
 
-  // search
-  // const filteredInfo = rows.filter((info) =>
-  //   info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
-  // if (filteredInfo) {
-  //   rows = filteredInfo;
-  // }
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${(pathname.includes("student") || pathname.includes("ApprovedUsers")) && "col-span-9"
-        } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
+        (pathname.includes("student") || pathname.includes("ApprovedUsers")) &&
+        "col-span-9"
+      } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -156,9 +149,7 @@ const UserContainer = ({ columns, rows, modal: OpenedModal, clickableColumns }) 
               Approve
             </button>
           </div>
-        )
-        }
-
+        )}
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">

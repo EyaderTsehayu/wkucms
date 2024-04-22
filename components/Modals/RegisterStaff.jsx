@@ -1,13 +1,13 @@
-"use client"
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {CollegeData, DepartmentData, ROLES } from "@/utils/constants";
+import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterStaff = () => {
+const RegisterStaff = ({ onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -15,7 +15,6 @@ const RegisterStaff = () => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
-
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
@@ -42,8 +41,7 @@ const RegisterStaff = () => {
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-const [Previlege,setPrevilege]=useState([])
-
+  const [Previlege, setPrevilege] = useState([]);
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -63,7 +61,6 @@ const [Previlege,setPrevilege]=useState([])
     }
   };
 
-
   const handleSearchPrevilegeFocus = () => {
     if (searchPrevilege) {
       setShowPrevilegeDropdown(true);
@@ -73,26 +70,20 @@ const [Previlege,setPrevilege]=useState([])
     }
   };
 
-
-  
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType="STUDENT"
-  
-        
+        const studentStepType = "STUDENT";
+
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
         const responseStaff = await fetch(staffUrl);
-  // fetch students step
+        // fetch students step
         const studentUrl = new URL("http://localhost:3000/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
-  
-  
+
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");
         }
@@ -101,44 +92,39 @@ const [Previlege,setPrevilege]=useState([])
           ...user,
           id: user._id,
         }));
-  
-  
+
         const studentData = await responseStudent.json();
         const updatedStudentData = studentData.map((user) => ({
           ...user,
           id: user._id,
         }));
-  
+
         // Assuming setStepData and setStepError are state updating functions
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
         const concatenatedArray = [
-          ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
-          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+          ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
+          ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
         ];
-        const  previlege = concatenatedArray.map((role, index) => ({
+        const previlege = concatenatedArray.map((role, index) => ({
           id: (index + 1).toString(),
-          name: role
+          name: role,
         }));
-        
+
         setPrevilege(previlege);
-  
-        
-      //   console.log("Data fetched successfully:", previlege);
-      //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+
+        //   console.log("Data fetched successfully:", previlege);
+        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
         // setStepError(error);
       }
     };
-  
+
     fetchData(); // Fetch data once when component mounts
 
-
-
     if (searchCollege) {
-
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
@@ -148,7 +134,6 @@ const [Previlege,setPrevilege]=useState([])
     }
 
     if (searchTerm) {
-
       const filteredResults = DepartmentData.filter((college) =>
         college.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -157,10 +142,9 @@ const [Previlege,setPrevilege]=useState([])
       setFilteredOffices(initialDropdownItems);
     }
 
-
     if (searchPrevilege) {
-// console.log("concatPrevilegeenatedArray",Previlege);
-// console.log("privilegeData",privilegeData);
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
       const filteredResults = Previlege.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
@@ -169,17 +153,14 @@ const [Previlege,setPrevilege]=useState([])
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-  }, [searchTerm, DepartmentData,searchCollege,searchPrevilege]);
-
-
-
-
-
-
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (collegeDropdownRef.current && !collegeDropdownRef.current.contains(event.target)) {
+      if (
+        collegeDropdownRef.current &&
+        !collegeDropdownRef.current.contains(event.target)
+      ) {
         setShowCollegeDropdown(false);
       }
     }
@@ -189,7 +170,6 @@ const [Previlege,setPrevilege]=useState([])
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -212,7 +192,8 @@ const [Previlege,setPrevilege]=useState([])
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        (previlegeDropdownRef.current && !previlegeDropdownRef.current.contains(event.target)) ||
+        (previlegeDropdownRef.current &&
+          !previlegeDropdownRef.current.contains(event.target)) ||
         (previlegeDropdownRef.current &&
           !previlegeDropdownRef.current.contains(event.target))
       ) {
@@ -227,19 +208,15 @@ const [Previlege,setPrevilege]=useState([])
     };
   }, []);
 
-
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
   };
 
-
   const handleSearchPrevilegeChange = (event) => {
     setSearchPrevilege(event.target.value);
     setShowDropdown(true);
   };
-  
-
 
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
@@ -288,10 +265,10 @@ const [Previlege,setPrevilege]=useState([])
           lastname: data.lastName,
           password: password,
           privilege: data.previlegeName,
-          collegeName:data.collegeName,
-          departmentName:data.departmentName,
+          collegeName: data.collegeName,
+          departmentName: data.departmentName,
           role: ROLES.STAFF,
-          blockNo:""
+          blockNo: "",
         }),
       });
 
@@ -299,16 +276,34 @@ const [Previlege,setPrevilege]=useState([])
         toast.success("Officer registered Successfully!");
       }
     } catch (error) {
-
       console.log(error);
     }
     setSearchCollege("");
     reset();
   };
 
+  const handleCancel = () => {
+    onCancel();
+  };
 
+  const handleDownload = () => {
+    // Constructing a temporary link element
+    const link = document.createElement("a");
+    link.href = "/files/studentsTrial.xlsx";
+    link.setAttribute("download", "studentsTrial.xlsx");
+    // Simulating a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
-    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+    <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <button
+        onClick={handleDownload}
+        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+      >
+        Get Importing Format
+      </button>
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -316,8 +311,6 @@ const [Previlege,setPrevilege]=useState([])
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
-
-
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -399,51 +392,47 @@ const [Previlege,setPrevilege]=useState([])
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-            <div className="w-full sm:w-1/2">
-              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                College
-              </label>
-              <input
-                type="text"
-                name="collegeName"
-                id="collegeName"
-                placeholder="Search for a college..."
-                value={searchCollege}
-                onFocus={handleSearchCollegeFocus}
-                onChange={handleSearchCollegeChange}
-                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              College
+            </label>
+            <input
+              type="text"
+              name="collegeName"
+              id="collegeName"
+              placeholder="Search for a college..."
+              value={searchCollege}
+              onFocus={handleSearchCollegeFocus}
+              onChange={handleSearchCollegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               //   {...register("collegeName")}
-              />
-              {/* <input
+            />
+            {/* <input
               type="hidden"
               name="collegeId"
               id="collegeId"
               value={selectedCollege ? selectedCollege.id : ""}
             /> */}
 
-              <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-              {showCollegeDropdown && (
-                <div
-                  ref={collegeDropdownRef} // Use the college dropdown ref
-                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                >
-                  {filteredColleges.map((college) => (
-                    <div
-                      key={college.id}
-                      onClick={() => handleDropdownCollegeClick(college)}
-                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                    >
-                      {college.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-
-        
+            {showCollegeDropdown && (
+              <div
+                ref={collegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredColleges.map((college) => (
+                  <div
+                    key={college.id}
+                    onClick={() => handleDropdownCollegeClick(college)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {college.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="w-full sm:w-1/2">
             <label
@@ -461,7 +450,7 @@ const [Previlege,setPrevilege]=useState([])
               onFocus={handleSearchInputFocus}
               onChange={handleSearchInputChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //  {...register("departmentName")}
+              //  {...register("departmentName")}
             />
             <input
               type="hidden"
@@ -492,65 +481,66 @@ const [Previlege,setPrevilege]=useState([])
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-        <div className="w-full sm:w-1/2">
-          <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-            Previlege
-          </label>
-          <input
-            type="text"
-            name="previlegeName"
-            id="previlegeName"
-            placeholder="Search for a previlege..."
-            value={searchPrevilege}
-            onFocus={handleSearchPrevilegeFocus}
-            onChange={handleSearchPrevilegeChange}
-            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-          //   {...register("collegeName")}
-          />
-          {/* <input
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Previlege
+            </label>
+            <input
+              type="text"
+              name="previlegeName"
+              id="previlegeName"
+              placeholder="Search for a previlege..."
+              value={searchPrevilege}
+              onFocus={handleSearchPrevilegeFocus}
+              onChange={handleSearchPrevilegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              //   {...register("collegeName")}
+            />
+            {/* <input
           type="hidden"
           name="collegeId"
           id="collegeId"
           value={selectedCollege ? selectedCollege.id : ""}
         /> */}
 
-          <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-          {showPrevilegeDropdown && (
-            <div
-              ref={previlegeDropdownRef} // Use the college dropdown ref
-              className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            >
-              {filteredPrevilege.map((previlege) => (
-                <div
-                  key={previlege.id}
-                  onClick={() => handleDropdownPrevilegeItemClick(previlege)}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                >
-                  {previlege.name}
-                </div>
-              ))}
+            {showPrevilegeDropdown && (
+              <div
+                ref={previlegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredPrevilege.map((previlege) => (
+                  <div
+                    key={previlege.id}
+                    onClick={() => handleDropdownPrevilegeItemClick(previlege)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {previlege.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {searchPrevilege && searchPrevilege == "Dormitory" && (
+            <div className="w-full sm:w-1/2">
+              <label
+                className="mb-3 block text-sm font-medium text-black dark:text-white"
+                htmlFor="blockNo"
+              >
+                Dorm Block
+              </label>
+              <input
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                type="text"
+                name="blockNo"
+                id="blockNo"
+                placeholder="block No"
+                {...register("blockNo")}
+              />
+              <p>{errors.blockNo?.message}</p>
             </div>
           )}
-        </div>
-        {/* <div className="w-full sm:w-1/2">
-            <label
-              className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="blockNo"
-            >
-             Dorm Block
-            </label>
-            <input
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              type="text"
-              name="blockNo"
-              id="blockNo"
-              placeholder="block No"
-              {...register("blockNo")}
-            />
-            <p>{errors.blockNo?.message}</p>
-          </div> */}
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
@@ -563,7 +553,7 @@ const [Previlege,setPrevilege]=useState([])
             </button>
           </div>
 
-          <div className="w-full px-3 2xsm:w-1/2">
+          <div onClick={handleCancel} className="w-full px-3 2xsm:w-1/2">
             <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
@@ -574,5 +564,3 @@ const [Previlege,setPrevilege]=useState([])
   );
 };
 export default RegisterStaff;
-
-
