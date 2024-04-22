@@ -66,7 +66,7 @@ const ManageStaff = () => {
   return (
     <>
       <AdminBreadcrumb
-        title="Manage Staff"
+        title="Manage Staffs"
         mainRoute="Admin"
         subRoute="Staff"
       />
