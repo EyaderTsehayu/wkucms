@@ -80,9 +80,8 @@ const ManageStudent = () => {
 
   return (
     <>
-      {/* <Breadcrumb title="Manage Admin" mainRoute="Admin" subRoute="Student" /> */}
       <AdminBreadcrumb
-        title="Manage Student"
+        title="Manage Students"
         mainRoute="Admin"
         subRoute="Student"
       />

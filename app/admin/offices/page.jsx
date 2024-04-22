@@ -14,27 +14,27 @@ const columns = [
   { field: "items", headerName: "Items", width: "300" },
 ];
 
-const row = [
-  {
-    officeId: "100",
-    officeName: "eyob",
-    location: "dejen",
-    items: "qwer",
-  },
-  {
-    officeId: "101",
-    officeName: "eyob",
-    location: "dejen",
-    items: "qwer",
-  },
-  {
-    officeId: "102",
-    officeName: "eyob",
-    location: "dejen",
-    items: "qwer",
-  },
-];
-
+// const row = [
+//   {
+//     officeId: "100",
+//     officeName: "eyob",
+//     location: "dejen",
+//     items: "qwer",
+//   },
+//   {
+//     officeId: "101",
+//     officeName: "eyob",
+//     location: "dejen",
+//     items: "qwer",
+//   },
+//   {
+//     officeId: "102",
+//     officeName: "eyob",
+//     location: "dejen",
+//     items: "qwer",
+//   },
+// ];
+const row = [];
 const ManageOffices = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -78,7 +78,7 @@ const ManageOffices = () => {
     <>
       {" "}
       <AdminBreadcrumb
-        title="Manage Office"
+        title="Manage Offices"
         mainRoute="Admin"
         subRoute="Office"
       />
