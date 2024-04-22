@@ -6,15 +6,13 @@ import { toast } from "react-toastify";
 import { registerAdminSchema } from "@/validations/registrationValidation";
 import { ROLES } from "@/utils/constants";
 
-const RegisterAdmin = () => {
+const RegisterAdmin = ({ onCancel }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
   } = useForm({ resolver: yupResolver(registerAdminSchema) });
-
- 
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -27,7 +25,6 @@ const RegisterAdmin = () => {
     const password = `${fromFirstName}@${fromMiddleName}1234`;
 
     try {
-
       const response = await fetch("/api/user/new", {
         method: "POST",
         body: JSON.stringify({
@@ -46,13 +43,13 @@ const RegisterAdmin = () => {
       }
     } catch (error) {
       toast.error("Admin Not registered Successfully!");
-
-
     }
 
     reset();
   };
-
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
     <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -166,8 +163,8 @@ const RegisterAdmin = () => {
             </button>
           </div>
 
-          <div className="w-full px-3 2xsm:w-1/2">
-            <button  className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+          <div onClick={handleCancel} className="w-full px-3 2xsm:w-1/2">
+            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
           </div>
