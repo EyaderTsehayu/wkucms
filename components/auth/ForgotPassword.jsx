@@ -52,27 +52,8 @@ const page = () => {
       console.log("response", response);
       // Show success message and possibly redirect
       toast.success('If the email is associated with an account, a password reset email will be sent.');
-      // Optionally, redirect to the login page or a page that says 'Check your email'
-      // Redirect to the reset password page with parameters
 
-
-
-
-
-
-
-      // const session = useSession();
-      // const Id = session?.user?.id;
-      // const userId = session?.user?.userId;
-
-      // const pathname = usePathname();
-      // const parts = pathname.split("/");
-      // const userId = parts[parts.length - 1];
       const userId = data.userId;
-
-
-
-
       if (response.ok) {
         try {
           const response = await fetch(`/api/user/byUserId/${userId}`);
