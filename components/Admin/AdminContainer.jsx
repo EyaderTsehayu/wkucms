@@ -18,10 +18,9 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   const [userId, setUserData] = useState();
 
-
   const [filteredRows, setFilteredRows] = useState(rows);
 
-  // start searching 
+  // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     setSearchTerm(event.target.value);
@@ -35,60 +34,32 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       const officeName = row.officeName?.toLowerCase().includes(searchTerm);
       const location = row.location?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
-      return userId || firstname || year || privilege || officeId || officeName || location;
+      return (
+        userId ||
+        firstname ||
+        year ||
+        privilege ||
+        officeId ||
+        officeName ||
+        location
+      );
     });
-  
+
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
   };
   // end searching
 
-
-
-
   const handleOpen = () => setOpen(true);
 
   const handleEditOpen = () => {
-
     // setUserId(selectedRowsData[0]._id)
     setEditOpen(true); // Assuming this state update is still needed
     // const len = selectedRowsData.length;
-
-    // try {
-    //   //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
-    //   const ur=`/api/user/new/staff/${selectedRowsData[0]._id}`
-    //   const response = await fetch(ur);
-
-    //   if (response.ok) {
-    //     const responseData = await response.text();
-    //     let toastShown = false;
-
-    //     if (responseData) {
-    //       if (selectedRowsData.length > 1) {
-    //         toast.success(responseData);
-    //         toastShown = true;
-    //       } else {
-    //         toast.success("Approved Successfully");
-    //       }
-    //     }
-    //   } else {
-    //     console.error("Error fetching data:", response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
-
-
-  }
-
-
+  };
 
   // change the status
   const handleActivateAll = async (selectedRowsData) => {
-    // console.log(
-    //   "Selected Rows to Approve from handle approve:",
-    //   selectedRowsData
-    // );
     const len = selectedRowsData.length;
     try {
       const requests = selectedRowsData.map(async (eachData) => {
@@ -110,7 +81,6 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
           console.log(error);
           return null;
         }
-
       });
 
       const responses = await Promise.all(requests);
@@ -136,12 +106,11 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
     }
   };
 
-
   useEffect(() => {
     const fetchStaff = async () => {
       try {
         //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
-        const ur = `/api/user/new/staff/${selectedRows[0]._id}`
+        const ur = `/api/user/new/staff/${selectedRows[0]._id}`;
         const response = await fetch(ur);
 
         if (response.ok) {
@@ -162,21 +131,11 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       } catch (error) {
         console.error("Error:", error);
       }
-
-
-    }
+    };
     if (selectedRows) {
       fetchStaff();
     }
-  }, [selectedRows])
-
-
-
-
-
-
-
-
+  }, [selectedRows]);
 
   const handleClose = () => setOpen(false);
   const handleEditClose = () => setEditOpen(false);
@@ -187,25 +146,13 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
       handleEditClose();
     }
   };
-  // console.log("selectedRows",selectedRows[0].privilege);
-  // search
   const [searchTerm, setSearchTerm] = useState("");
-  // const filteredInfo = rows.filter((info) =>
-  //   info.firstname.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
-  // if (filteredInfo) {
-  //   rows = filteredInfo;
-  // }
-
-  // const handleSearch = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
 
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${pathname.includes("student") && "col-span-9"
-        } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
+        pathname.includes("student") && "col-span-12"
+      } col-span-12  `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -220,12 +167,11 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-
-
           {selectedRows[0]?.status == "active" && (
             <button
               onClick={() => handleActivateAll(selectedRows)}
-              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+            >
               {/* {selectedRows[0]?.status=="active"&&(
               "Deactivate"
            )}
@@ -238,7 +184,8 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
           {selectedRows[0]?.status == "inactive" && (
             <button
               onClick={() => handleActivateAll(selectedRows)}
-              className="rounded-lg  justify-center  bg-gray hover:bg-meta-3 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-3 dark:hover:bg-meta-3">
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-3 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-3 dark:hover:bg-meta-3"
+            >
               {/* {selectedRows[0]?.status=="active"&&(
               "Deactivate"
            )}
@@ -248,23 +195,19 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
             </button>
           )}
 
-
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
           >
             Register
           </button>
-          {(pathname == "/admin/staff" && selectedRows[0]?.privilege) && (
-
-
+          {pathname == "/admin/staff" && selectedRows[0]?.privilege && (
             <button
               onClick={handleEditOpen}
               className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
             >
               Edit
             </button>
-
           )}
         </div>
       </div>
@@ -277,7 +220,6 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
           />
         </div>
       </div>
-
 
       <Modal
         open={open}
