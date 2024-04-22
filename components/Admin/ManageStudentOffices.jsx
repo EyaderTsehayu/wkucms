@@ -118,7 +118,7 @@ const ManageStudentOffices = () => {
 
 
   const list = [];
-  console.log("stepData[0].name", stepData[0].name);
+  // console.log("stepData[0].name", stepData[0].name);
   // for (let index = 0; index < stepData[0].length; index++) {
   //     const key =stepData[0].name;
   //     list.push(key);
@@ -174,6 +174,8 @@ const ManageStudentOffices = () => {
 
 
 
+console.log("keyValuePairs for approved", keyValuePairs);
+console.log("keyValuePairs for approved", key,">>",value);
 
     try {
       const response = await fetch("/api/steps", {
@@ -187,7 +189,7 @@ const ManageStudentOffices = () => {
       if (response.ok) {
         toast.success("Steps updated successfully!")
         console.log("Steps updated successfully!");
-        console.log("keyValuePairs", keyValuePairs);
+        // console.log("keyValuePairs", keyValuePairs);
         // Optionally, you can redirect or show a success message here
       } else {
         console.error("Failed to create steps");
@@ -206,26 +208,6 @@ const ManageStudentOffices = () => {
   });
 
 
-  // const addItem = (key, value) => {
-  //     if (key !== value && key !== "Select a Step") {
-  //         {
-
-  //             const updatedSteps = { ...prevSteps };
-  //             updatedSteps[key] = [...updatedSteps[key], value];
-  //             return updatedSteps;
-  //             // keyValuePairs?.map((data, index) => (
-
-  //             //     setSteps((prevSteps) => ({
-  //             //         ...prevSteps,
-  //             //         [key]: [...prevSteps[key], value],
-  //             //     }))
-  //             // ))
-  //         }
-
-
-  //     }
-  // };
-
   const addItem = (key, value) => {
     keyValuePairs[key].push(value)
     // console.log("ttttttttttttttttttttt","yyy",value);
@@ -236,7 +218,7 @@ const ManageStudentOffices = () => {
         return updatedPairs;
       });
     }
-    // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
+    
   };
 
 
@@ -249,203 +231,23 @@ const ManageStudentOffices = () => {
   };
 
 
-  console.log("steps", steps);
+  // console.log("steps", steps);
 
 
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    console.log("Key:", key);
-    console.log("Value:", value);
+    // console.log("Key:", key);
+    // console.log("Value:", value);
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
-  // const dragPerson = useRef(0);
-  // const draggedOverPerson = useRef(0);
-  // const [selectedRows, setSelectedRows] = useState([]);
-  // const [open, setOpen] = useState(false);
-  // const [searchTerm, setSearchTerm] = useState("");
-  // // fetch the steps from db
-  // const [stepData, setStepData] = useState(null);
-  // const [stepError, setStepError] = useState(null);
-  // const [updateSteps, setUpdateSteps] = useState();
-  // const [draggedData,setDraggedData]=useState();
-
-
-
-
-  // const PersonItem = ({ person, index, draggedData, setDraggedData }) => {
-  //   const SwapDecreamentally = () => {
-
-
-  //     if ((index < draggedData.length - 1) && (index != 0)) {
-
-  //       const updatedData = [...draggedData];
-  //       // Swap the items
-  //       const temp = updatedData[index];
-  //       updatedData[index] = updatedData[index - 1];
-  //       updatedData[index - 1] = temp;
-  //       // Update the state
-  //       setDraggedData(updatedData);
-  //       console.log("wwww", updatedData)
-  //       setUpdateSteps(updatedData);
-  //     } else if (index == 0) {
-  //       const updatedData = [...draggedData];
-  //       // Swap the items
-  //       const temp = updatedData[index];
-  //       updatedData[index] = updatedData[draggedData.length - 2];
-  //       updatedData[draggedData.length - 2] = temp;
-  //       // Update the state
-  //       setDraggedData(updatedData);
-
-  //       setUpdateSteps(updatedData);
-  //     }
-  //   };
-
-  //   const SwapIncreamentally = () => {
-
-
-  //     if (index < draggedData.length - 2) {
-
-  //       const updatedData = [...draggedData];
-  //       // Swap the items
-  //       const temp = updatedData[index];
-  //       updatedData[index] = updatedData[index + 1];
-  //       updatedData[index + 1] = temp;
-  //       // Update the state
-  //       setDraggedData(updatedData);
-  //       console.log("wwww", updatedData)
-  //       setUpdateSteps(updatedData);
-  //     } else if (index == draggedData.length - 2) {
-  //       const updatedData = [...draggedData];
-  //       // Swap the items
-  //       const temp = updatedData[index];
-  //       updatedData[index] = updatedData[0];
-  //       updatedData[0] = temp;
-  //       // Update the state
-  //       setDraggedData(updatedData);
-
-  //       setUpdateSteps(updatedData);
-  //     }
-  //   };
-
-
-  //   return (
-  //     <>
-  //       {person !== "APPROVED" && (
-  //         <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
-  //           <KeyboardDoubleArrowUpIcon onClick={SwapDecreamentally} />
-
-  //           <p onClick={() => console.log(`${index + 1}`)}>{index + 1}</p>
-  //           <p>{person}</p>
-  //           <div class="flex flex-1 justify-end">
-  //             <KeyboardDoubleArrowDownIcon onClick={SwapIncreamentally} />
-  //           </div>
-  //         </div>
-  //       )}
-  //     </>
-  //   );
-  // };
-
-
-
-  // useEffect(() => {
-
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const stepType = "STUDENT"; // Define your stepType here
-  //       const url = new URL("http://localhost:3000/api/step");
-  //       url.searchParams.append("stepType", stepType);
-
-  //       const response = await fetch(url);
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const data = await response.json();
-  //       const updatedData = data.map((user) => ({
-  //         ...user,
-  //         id: user._id,
-  //       }));
-  //       setStepData(updatedData);
-  //       setDraggedData(updatedData[0].steps);
-  //       console.log("setDraggedData", draggedData);
-  //     } catch (error) {
-  //       setStepError(error);
-  //     }
-  //   };
-  //   fetchData(); // Fetch data once when component mounts
-
-  //   // No cleanup or dependency array needed as we only want to fetch data once
-  // }, []);
-
-  // if (stepData) {
-
-  //   console.log("stepData ", stepData)
-  // }
-
-  // // Render loading state
-  // if (!stepData && !stepError) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // // Render error state
-  // if (stepError) {
-  //   console.error("Error fetching data:", stepError);
-  //   return <p>Failed to fetch data</p>;
-  // }
-
-
-
-
-
-  // function handleSort() {
-  //   const peopleClone = [...stepData[0].steps];
-  //   const temp = peopleClone[dragPerson.current];
-  //   peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
-  //   peopleClone[draggedOverPerson.current] = temp;
-  //   console.log("peopleClone",peopleClone)
-  //   setDraggedData(peopleClone);
-  //   console.log("setDraggedData",draggedData);
-  //   setUpdateSteps(peopleClone);
-  // }
-
-
-
-  // // modify the steps
-  // const modifySteps = async () => {
-  //   console.log("updateStepsss", updateSteps);
-  //   try {
-  //     const response = await fetch(`/api/step`, {
-  //       method: "PATCH",
-  //       body: JSON.stringify({
-  //         stepType: "STUDENT",
-  //         updatedSteps: updateSteps,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       // Check if response status is not in the range 200-299 (successful)
-  //       throw new Error('Failed to fetch data. Server returned ' + response.status);
-  //     }
-  //     toast.success("update Successful!");
-  //     // Optionally, you can handle the response here if needed
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     // Handle error appropriately, perhaps by displaying an error message to the user
-  //   }
-  // };
-
-
-  // const pathname = usePathname();
-
-
-
-  // const handleSearch = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
-  // ${pathname.includes("student") && "col-span-9"
-
+  
+  const Approved = {
+    key: "APPROVED",
+    name: "APPROVED",
+    nextSteps: []
+  }
   return (
     <div
       className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  
@@ -480,23 +282,7 @@ const ManageStudentOffices = () => {
 
 
           <main className="flex min-h-screen flex-col items-center space-y-4">
-            {/* <h1 className="text-xl font-bold mt-4">List</h1> */}
-            {/* {stepData[0]?.steps?.map((person, index) => ( */}
-            {/* {draggedData.map((person, index) => (
-              <div key={index}
-                draggable
-                onDragStart={() => (dragPerson.current = index)}
-                onDragEnter={() => (draggedOverPerson.current = index)}
-                onDragEnd={handleSort}
-                onDragOver={(e) => e.preventDefault()}
-              >
-                 <PersonItem index={index}
-                  person={person}
-                  draggedData={draggedData}
-                  setDraggedData={setDraggedData} />
-              </div>
-            ))} */}
-
+            
             <select class="ml-1 mr-15  bg-primary text-white  inline-flex items-center gap-2.5 rounded-md dark:bg-boxdark px-5.5 py-3 font-medium  dark:border-strokedark dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
 
               <option value={null}>Select a Step</option>
@@ -517,6 +303,7 @@ const ManageStudentOffices = () => {
                   {Object.entries(keyValuePairs).map(([key, value]) => (
                     (key !== selectedKey && !keyValuePairs[selectedKey]?.includes(key)) && (
                       <div key={key}>
+
                         <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
                           <div className="justify-center">{key}</div>
                           <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, key)}>
@@ -524,10 +311,27 @@ const ManageStudentOffices = () => {
                             <AddIcon />
                           </button>
                         </li>
+
+
+
                       </div>
                     )
                   ))}
+                  {selectedKey?.toUpperCase() === "REGISTRAR" && !keyValuePairs[selectedKey]?.includes(Approved.name) && (
+                    <div key={Approved.name}>
 
+                      <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
+                        <div className="justify-center">{Approved.name}</div>
+                        <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, Approved.name)}>
+                          {/* <ArrowCircleRightIcon /> */}
+                          <AddIcon />
+                        </button>
+                      </li>
+
+
+
+                    </div>
+                  )}
                 </ul>
               </div>
               {/* rounded-md border border-stroke bg-white shadow-default dark:border-black dark:bg-black */}

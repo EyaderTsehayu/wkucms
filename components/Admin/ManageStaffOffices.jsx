@@ -403,7 +403,7 @@ const ManageStudentOffices = () => {
     console.log("ooooo");
     const fetchData = async () => {
       try {
-        const stepType = "STUDENT"; // Define your stepType here
+        const stepType = "STAFF"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/steps");
         url.searchParams.append("stepType", stepType);
 
@@ -440,12 +440,7 @@ const ManageStudentOffices = () => {
     return <p>Loading...</p>;
   }
 
-  // Render error state
-  //   if (stepError) {
-  //     console.error("Error fetching data:", stepError);
-  //     return <p>Failed to fetch data</p>;
-  //   }
-
+ 
 
 
 
@@ -538,27 +533,6 @@ const ManageStudentOffices = () => {
     keyValuePairs[data.name] = data.nextSteps;
   });
 
-
-  // const addItem = (key, value) => {
-  //     if (key !== value && key !== "Select a Step") {
-  //         {
-
-  //             const updatedSteps = { ...prevSteps };
-  //             updatedSteps[key] = [...updatedSteps[key], value];
-  //             return updatedSteps;
-  //             // keyValuePairs?.map((data, index) => (
-
-  //             //     setSteps((prevSteps) => ({
-  //             //         ...prevSteps,
-  //             //         [key]: [...prevSteps[key], value],
-  //             //     }))
-  //             // ))
-  //         }
-
-
-  //     }
-  // };
-
   const addItem = (key, value) => {
     keyValuePairs[key].push(value)
     // console.log("ttttttttttttttttttttt","yyy",value);
@@ -594,7 +568,11 @@ const ManageStudentOffices = () => {
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
 
-
+  const Approved = {
+    key: "APPROVED",
+    name: "APPROVED",
+    nextSteps: []
+  }
   return (
     <div
       className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  
@@ -642,6 +620,7 @@ const ManageStudentOffices = () => {
                   {Object.entries(keyValuePairs).map(([key, value]) => (
                     (key !== selectedKey && !keyValuePairs[selectedKey]?.includes(key)) && (
                       <div key={key}>
+
                         <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
                           <div className="justify-center">{key}</div>
                           <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, key)}>
@@ -649,10 +628,27 @@ const ManageStudentOffices = () => {
                             <AddIcon />
                           </button>
                         </li>
+
+
+
                       </div>
                     )
                   ))}
+                  {selectedKey?.toUpperCase() === "HR" && !keyValuePairs[selectedKey]?.includes(Approved.name) && (
+                    <div key={Approved.name}>
 
+                      <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
+                        <div className="justify-center">{Approved.name}</div>
+                        <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, Approved.name)}>
+                          {/* <ArrowCircleRightIcon /> */}
+                          <AddIcon />
+                        </button>
+                      </li>
+
+
+
+                    </div>
+                  )}
                 </ul>
               </div>
               {/* rounded-md border border-stroke bg-white shadow-default dark:border-black dark:bg-black */}

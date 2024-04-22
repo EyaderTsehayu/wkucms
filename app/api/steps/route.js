@@ -81,7 +81,7 @@ export const GET = async (request) => {
   try {
     await connectToDB();
 
-    const requests = await DynamicSteps.find({});
+    const requests = await DynamicSteps.find({stepType: stepType});
 
     // Return a success response with the users data
     return new Response(JSON.stringify(requests), { status: 200 });
@@ -96,7 +96,7 @@ export const GET = async (request) => {
 export const PATCH = async (request) => {
   try {
     const { key, value, stepType } = await request.json();
-    console.log("key", key, "value", value);
+    console.log("key", key, "value", value, "stepType", stepType);
     await connectToDB();
 
     const updateSteps = await DynamicSteps.findOne({
@@ -107,7 +107,7 @@ export const PATCH = async (request) => {
     if (updateSteps) {
       // updateSteps.name = key;
       updateSteps.nextSteps = value;
-
+       updateSteps.stepType = stepType;
       await updateSteps.save();
 
       return new Response(`Staff updated successfully`, {
