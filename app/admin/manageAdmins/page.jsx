@@ -4,9 +4,10 @@ import React from "react";
 import { useState } from "react";
 import RegisterAdmin from "@/components/Modals/RegisterAdmins";
 import useSWR from "swr";
+import AdminBreadcrumb from "@/components/Breadcrumb/adminBreadcrumb";
 
 const columns = [
-  { field: "userId", headerName: "ID", width: "100" },
+  { field: "userId", headerName: "ID", width: "120" },
   { field: "firstname", headerName: "First name", width: "240" },
   { field: "middlename", headerName: "Middle name", width: "240" },
   { field: "lastname", headerName: "Last name", width: "240" },
@@ -62,6 +63,11 @@ const ManageAdmin = () => {
 
   return (
     <>
+      <AdminBreadcrumb
+        title="Manage Admins"
+        mainRoute="Admin"
+        subRoute="Manage"
+      />
       <input
         type="text"
         placeholder="Search office requirement here"
