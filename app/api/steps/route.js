@@ -80,11 +80,17 @@ export const GET = async (request) => {
   // console.log("session from studentApproval ", session?.user?.privilege)
   try {
     await connectToDB();
-
-    const requests = await DynamicSteps.find({stepType: stepType});
+    if(stepType){
+      const requests = await DynamicSteps.find({stepType: stepType});
+      return new Response(JSON.stringify(requests), { status: 200 });
+    }else{
+      const requests = await DynamicSteps.find();
+      return new Response(JSON.stringify(requests), { status: 200 });
+    }
+    
 
     // Return a success response with the users data
-    return new Response(JSON.stringify(requests), { status: 200 });
+    // return new Response(JSON.stringify(requests), { status: 200 });
   } catch (error) {
     console.error("Error fetching requests:", error);
 
