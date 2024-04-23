@@ -14,6 +14,11 @@ const RegisterAdmin = ({ onCancel }) => {
     reset,
   } = useForm({ resolver: yupResolver(registerAdminSchema) });
 
+  const cancel = () => {
+    reset(); // Reset form data
+    handleCloseModal(); // Close the modal
+  };
+
   const onSubmit = async (data) => {
     console.log(data);
 
