@@ -535,7 +535,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   </li>
 
                   {/* steppppp */}
-                  <li>
+                  {/* <li>
                     <Link
                       href="/admin/step"
                       className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("step") && "bg-gray dark:bg-meta-4"
@@ -544,7 +544,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       <HomeWorkOutlinedIcon />
                       Step
                     </Link>
-                  </li>
+                  </li> */}
                   {/* stepp */}
                   {/* <!-- Menu offices  --> */}
 

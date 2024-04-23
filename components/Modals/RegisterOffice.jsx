@@ -67,8 +67,9 @@ const RegisterOffice = () => {
       
       
       
-      
+      console.log("ddddddd");
       if (response.ok) {
+        console.log("ddddddd");
         // push to step
         // const UpdatedSteps = [...stepData, data.officeName];
         
@@ -78,12 +79,16 @@ const RegisterOffice = () => {
 
         // Insert data.officeName at the specified index
         UpdatedSteps.splice(insertIndex, 0, data.officeName);
+       console.log("data.officeName",data.officeName);
 
-        const response = await fetch(`/api/step`, {
-          method: "PATCH",
+       
+        const response = await fetch(`/api/steps`, {
+          method: "POST",
           body: JSON.stringify({
+            key:data.officeName,
+            value:[],
             stepType: stepType,
-            updatedSteps: UpdatedSteps,
+            // updatedSteps: UpdatedSteps,
           }),
 
         // setStepData(...stepData,data.officeName)
