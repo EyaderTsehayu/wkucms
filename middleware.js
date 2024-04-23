@@ -54,5 +54,13 @@ export const config = {
 
     "/admin/student",
     "/admin/manageAdmins",
+    "/admin/manageOffices",
+    "/admin/offices",
+    "/admin/student",
+    "/admin/staff",
+    "/admin/report",
+    "/admin/announcement",
+    "/user/ApprovedUsers"
+
   ],
 };
