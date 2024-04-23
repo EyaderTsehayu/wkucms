@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {CollegeData, DepartmentData, ROLES } from "@/utils/constants";
+import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
 const RegisterStaff = () => {
@@ -15,7 +15,7 @@ const RegisterStaff = () => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
-
+  let keys = [];
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
@@ -42,7 +42,7 @@ const RegisterStaff = () => {
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-const [Previlege,setPrevilege]=useState([])
+  const [Previlege, setPrevilege] = useState([])
 
 
   const handleSearchInputFocus = () => {
@@ -74,25 +74,46 @@ const [Previlege,setPrevilege]=useState([])
   };
 
 
-  
+
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType="STUDENT"
-  
-        
+        const studentStepType = "STUDENT"
+
+
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
         const responseStaff = await fetch(staffUrl);
-  // fetch students step
+        // fetch students step
         const studentUrl = new URL("http://localhost:3000/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
-  
-  
+
+
+
+      // fetch steps data for the dropdown of privilege
+
+        try {
+          const fetchedData = await fetch(`/api/steps`);
+          if (!fetchedData.ok) {
+            throw new Error(`Failed to fetch data. Status: ${fetchedData.status}`);
+          }
+          const data = await fetchedData.json();
+          const keyValuePairs = {};
+          data.forEach((item) => {
+            keyValuePairs[item.name] = item.nextSteps;
+          });
+           keys = Object.keys(keyValuePairs);
+          const values = Object.values(keyValuePairs);
+          console.log("keys fetch", keys, ">> values", values);
+        } catch (error) {
+          console.error('Error fetching or processing data:', error);
+        }
+
+
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");
         }
@@ -101,14 +122,14 @@ const [Previlege,setPrevilege]=useState([])
           ...user,
           id: user._id,
         }));
-  
-  
+
+
         const studentData = await responseStudent.json();
         const updatedStudentData = studentData.map((user) => ({
           ...user,
           id: user._id,
         }));
-  
+
         // Assuming setStepData and setStepError are state updating functions
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
@@ -116,23 +137,23 @@ const [Previlege,setPrevilege]=useState([])
           ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
           ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
         ];
-        const  previlege = concatenatedArray.map((role, index) => ({
+        const previlege = keys.map((role, index) => ({
           id: (index + 1).toString(),
           name: role
         }));
-        
+
         setPrevilege(previlege);
-  
-        
-      //   console.log("Data fetched successfully:", previlege);
-      //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
+
+
+        //   console.log("Data fetched successfully:", previlege);
+        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
         // setStepError(error);
       }
     };
-  
+
     fetchData(); // Fetch data once when component mounts
 
 
@@ -159,8 +180,8 @@ const [Previlege,setPrevilege]=useState([])
 
 
     if (searchPrevilege) {
-// console.log("concatPrevilegeenatedArray",Previlege);
-// console.log("privilegeData",privilegeData);
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
       const filteredResults = Previlege.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
@@ -169,7 +190,7 @@ const [Previlege,setPrevilege]=useState([])
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-  }, [searchTerm, DepartmentData,searchCollege,searchPrevilege]);
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
 
 
 
@@ -238,7 +259,7 @@ const [Previlege,setPrevilege]=useState([])
     setSearchPrevilege(event.target.value);
     setShowDropdown(true);
   };
-  
+
 
 
   const handleDropdownItemClick = (office) => {
@@ -288,10 +309,10 @@ const [Previlege,setPrevilege]=useState([])
           lastname: data.lastName,
           password: password,
           privilege: data.previlegeName,
-          collegeName:data.collegeName,
-          departmentName:data.departmentName,
+          collegeName: data.collegeName,
+          departmentName: data.departmentName,
           role: ROLES.STAFF,
-          blockNo:""
+          blockNo: ""
         }),
       });
 
@@ -399,51 +420,51 @@ const [Previlege,setPrevilege]=useState([])
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-            <div className="w-full sm:w-1/2">
-              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                College
-              </label>
-              <input
-                type="text"
-                name="collegeName"
-                id="collegeName"
-                placeholder="Search for a college..."
-                value={searchCollege}
-                onFocus={handleSearchCollegeFocus}
-                onChange={handleSearchCollegeChange}
-                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
-              />
-              {/* <input
+
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              College
+            </label>
+            <input
+              type="text"
+              name="collegeName"
+              id="collegeName"
+              placeholder="Search for a college..."
+              value={searchCollege}
+              onFocus={handleSearchCollegeFocus}
+              onChange={handleSearchCollegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //   {...register("collegeName")}
+            />
+            {/* <input
               type="hidden"
               name="collegeId"
               id="collegeId"
               value={selectedCollege ? selectedCollege.id : ""}
             /> */}
 
-              <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-              {showCollegeDropdown && (
-                <div
-                  ref={collegeDropdownRef} // Use the college dropdown ref
-                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                >
-                  {filteredColleges.map((college) => (
-                    <div
-                      key={college.id}
-                      onClick={() => handleDropdownCollegeClick(college)}
-                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                    >
-                      {college.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {showCollegeDropdown && (
+              <div
+                ref={collegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredColleges.map((college) => (
+                  <div
+                    key={college.id}
+                    onClick={() => handleDropdownCollegeClick(college)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {college.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
 
-        
+
 
           <div className="w-full sm:w-1/2">
             <label
@@ -492,49 +513,49 @@ const [Previlege,setPrevilege]=useState([])
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-        
-        <div className="w-full sm:w-1/2">
-          <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-            Previlege
-          </label>
-          <input
-            type="text"
-            name="previlegeName"
-            id="previlegeName"
-            placeholder="Search for a previlege..."
-            value={searchPrevilege}
-            onFocus={handleSearchPrevilegeFocus}
-            onChange={handleSearchPrevilegeChange}
-            className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-          //   {...register("collegeName")}
-          />
-          {/* <input
+
+          <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+              Previlege
+            </label>
+            <input
+              type="text"
+              name="previlegeName"
+              id="previlegeName"
+              placeholder="Search for a previlege..."
+              value={searchPrevilege}
+              onFocus={handleSearchPrevilegeFocus}
+              onChange={handleSearchPrevilegeChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //   {...register("collegeName")}
+            />
+            {/* <input
           type="hidden"
           name="collegeId"
           id="collegeId"
           value={selectedCollege ? selectedCollege.id : ""}
         /> */}
 
-          <p>{errors.collegeName?.message}</p>
+            <p>{errors.collegeName?.message}</p>
 
-          {showPrevilegeDropdown && (
-            <div
-              ref={previlegeDropdownRef} // Use the college dropdown ref
-              className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            >
-              {filteredPrevilege.map((previlege) => (
-                <div
-                  key={previlege.id}
-                  onClick={() => handleDropdownPrevilegeItemClick(previlege)}
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                >
-                  {previlege.name}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        {/* <div className="w-full sm:w-1/2">
+            {showPrevilegeDropdown && (
+              <div
+                ref={previlegeDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredPrevilege.map((previlege) => (
+                  <div
+                    key={previlege.id}
+                    onClick={() => handleDropdownPrevilegeItemClick(previlege)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {previlege.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
               htmlFor="blockNo"
