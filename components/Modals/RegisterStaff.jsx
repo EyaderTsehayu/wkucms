@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterStaff = () => {
+const RegisterStaff = ({handleCloseModal}) => {
   const {
     handleSubmit,
     register,
@@ -44,6 +44,12 @@ const RegisterStaff = () => {
   // let previlege={};
   const [Previlege, setPrevilege] = useState([])
 
+
+  
+  const cancel = () => {
+    reset(); // Reset form data
+    handleCloseModal(); // Close the modal
+  };
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -585,7 +591,7 @@ const RegisterStaff = () => {
           </div>
 
           <div className="w-full px-3 2xsm:w-1/2">
-            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+            <button onClick={cancel} className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
           </div>

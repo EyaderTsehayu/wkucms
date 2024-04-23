@@ -140,6 +140,9 @@ const ManageStudentOffices = () => {
   }
   const values = stepData[0].nextSteps;
 
+  const handleCloseModal = () => {
+    setOpen(false); // Close the modal
+  };
 
 
   // const keys = Object.keys(steps);
@@ -171,7 +174,7 @@ const ManageStudentOffices = () => {
     //     console.error("Error creating steps:", error);
     //     // Handle any unexpected errors
     // }
-
+    
 
 
 console.log("keyValuePairs for approved", keyValuePairs);
@@ -380,7 +383,7 @@ console.log("keyValuePairs for approved", key,">>",value);
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <RegisterOffice />
+          <RegisterOffice handleCloseModal={handleCloseModal} />
         </div>
       </Modal>
 
