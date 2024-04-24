@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { registerAdminSchema } from "@/validations/registrationValidation";
 import { ROLES } from "@/utils/constants";
 
-const RegisterAdmin = ({handleCloseModal}) => {
+const RegisterAdmin = () => {
   const {
     handleSubmit,
     register,
@@ -14,10 +14,7 @@ const RegisterAdmin = ({handleCloseModal}) => {
     reset,
   } = useForm({ resolver: yupResolver(registerAdminSchema) });
 
-  const cancel = () => {
-    reset(); // Reset form data
-    handleCloseModal(); // Close the modal
-  };
+ 
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -170,7 +167,7 @@ const RegisterAdmin = ({handleCloseModal}) => {
           </div>
 
           <div className="w-full px-3 2xsm:w-1/2">
-            <button onClick={cancel} className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+            <button  className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
           </div>
