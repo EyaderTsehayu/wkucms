@@ -15,10 +15,7 @@ const RegisterOffice = ({ onCancel }) => {
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
   const programs = ["STUDENT", "STAFF"];
-  const cancel = () => {
-    reset(); // Reset form data
-    handleCloseModal(); // Close the modal
-  };
+ 
 
   const onSubmit = async (data) => {
     const fromFirstName = data.officeName.toLowerCase();

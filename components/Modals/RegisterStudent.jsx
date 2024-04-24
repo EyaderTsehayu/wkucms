@@ -37,11 +37,6 @@ const RegisterStudent = ({ onCancel }) => {
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
 
-  const cancel = () => {
-    reset(); // Reset form data
-    handleCloseModal(); // Close the modal
-  };
-
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
