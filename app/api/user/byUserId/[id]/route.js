@@ -4,7 +4,7 @@ import { connectToDB } from "@/utils/database";
 // GEt
 
 export const GET = async (request, { params }) => {
-  // console.log("params", params);
+ console.log("params", params.id);
   try {
     await connectToDB();
     const user = await User.find({

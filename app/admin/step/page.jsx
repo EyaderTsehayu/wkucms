@@ -229,7 +229,7 @@ const StepsComponent = () => {
                 body: JSON.stringify({
                     key,
                     value,
-                    stepType: "STUDENT"
+                    // stepType: "STAFF"
                 }),
             });
             if (response.ok) {
@@ -276,7 +276,7 @@ const StepsComponent = () => {
 
     const addItem = (key, value) => {
         keyValuePairs[key].push(value)
-        console.log("ttttttttttttttttttttt","yyy",value);
+        // console.log("ttttttttttttttttttttt","yyy",value);
         if (key !== value && key !== "Select a Step") {
             setKeyValuePairs(prevKeyValuePairs => {
                 const updatedPairs = { ...prevKeyValuePairs };
@@ -284,7 +284,7 @@ const StepsComponent = () => {
                 return updatedPairs;
             });
         }
-        console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
+        // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
     };
     
 
@@ -318,7 +318,7 @@ const StepsComponent = () => {
                 <div class="p-4 sm:p-6 xl:p-10">
                     <div class="relative mb-50 inline-block">
 
-                        <select class="ml-7  inline-flex items-center gap-2.5 rounded-md dark:bg-boxdark px-5.5 py-3 font-medium text-white dark:border-strokedark dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
+                        <select class="ml-7 bg-black text-black  inline-flex items-center gap-2.5 rounded-md dark:bg-boxdark px-5.5 py-3 font-medium  dark:border-strokedark dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
                             <option value={null}>Select a Step</option>
                             {stepData.map((data, key) => (
                                 <option key={key} value={data.name}>
@@ -327,7 +327,7 @@ const StepsComponent = () => {
                                 </option>
                             ))}
                         </select>
-                        <div className="flex gap-15 sm:flex sm:flex-col">
+                        <div className="flex flex-col gap-15 md:flex-row">
 
                             {/* && !stepData[selectedKey]?.includes(value.name )  */}
 

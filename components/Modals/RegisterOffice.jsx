@@ -23,7 +23,6 @@ const RegisterOffice = ({ onCancel }) => {
 
     const password = `${fromFirstName}@office`;
 
-    // console.log(data);
     try {
       // first fetch the steps from step model start
 
@@ -60,32 +59,22 @@ const RegisterOffice = ({ onCancel }) => {
       });
 
       if (response.ok) {
-        // push to step
-        // const UpdatedSteps = [...stepData, data.officeName];
-
-        // console.log("erekoy eskieee",stepData)
-        // Calculate the index to insert data.officeName
         const insertIndex = UpdatedSteps.length - 1;
 
         // Insert data.officeName at the specified index
         UpdatedSteps.splice(insertIndex, 0, data.officeName);
+       console.log("data.officeName",data.officeName);
 
-        const response = await fetch(`/api/step`, {
-          method: "PATCH",
+       
+        const response = await fetch(`/api/steps`, {
+          method: "POST",
           body: JSON.stringify({
+            key:data.officeName,
+            value:[],
             stepType: stepType,
-            updatedSteps: UpdatedSteps,
+            // updatedSteps: UpdatedSteps,
           }),
 
-          // setStepData(...stepData,data.officeName)
-          // console.log("i think is working",UpdatedSteps)
-          // const stepResponse = await fetch("/api/step", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //       // id: "65c4891df9228bec3acfe3a0",
-          //       steps:UpdatedSteps,
-          //       stepType:stepType
-          //   }),
         });
 
         // Check if step insertion was successful

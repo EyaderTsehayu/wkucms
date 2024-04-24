@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-
 import { useForm } from "react-hook-form";
 import { loginSchema } from "../../validations/userValidation";
 export const metadata = {
@@ -12,10 +11,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { getSession, signIn } from "next-auth/react";
+import { useState } from "react";
 
 const SignIn = () => {
   const router = useRouter();
-
+  let status, role;
   const {
     register,
     handleSubmit,
@@ -26,15 +26,31 @@ const SignIn = () => {
   });
   const onSubmitHandler = async (data) => {
     const session = await getSession(); // Get the updated session after sign-in
-    console.log("Hello Role -- ", session?.user?.role);
-    const role = session?.user?.role;
-    const status = session?.user?.status;
-
-    console.log("Form Data:", data);
-    console.log("status:", status);
     const userId = data.id;
     const password = data.password;
+    // fetch the status of user
 
+    try {
+
+      //const response = await fetch(`/api/user/byUserId/${userId}`);
+      const url = new URL("http://localhost:3000/api/user/byUserId");
+      url.searchParams.append("userId", userId);
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const fetchedData = await response.json();
+      console.log("fetchedData", fetchedData);
+      console.log("status", fetchedData[0].status);
+      status = fetchedData[0].status;
+      role = fetchedData[0].role;
+      // setStatus(fetchedData[0].status ); 
+
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+    console.log("status:", status);
     try {
       const res = await signIn("credentials", {
         userId,
@@ -43,14 +59,12 @@ const SignIn = () => {
       });
 
       if (res.error || status == "inactive") {
-        if (res.error) {
-          toast.error("invalid credentials");
-        } else if (status == "inactive") {
-          toast.error("You have been banned.");
-        }
+        if (res.error) { toast.error("invalid credentials"); }
+        else if (status == "inactive") { toast.error("You have been banned."); }
         return;
       } else {
-        console.log("status", status);
+
+        console.log("status status", status);
         if (role === "ADMIN") {
           toast.success("Login Successful!");
           router.replace("/admin");
@@ -62,15 +76,6 @@ const SignIn = () => {
           router.replace("/user/");
         }
 
-        //  router.push("/user");
-
-        // console.log("status", status);
-        // if (role == "ADMIN" && status == "active") {
-        //   router.replace("/admin");
-        // } else if (role == "STUDENT" && status == "active") {
-        //   router.replace("/user");
-        // } else if (role == "STAFF" && status == "active") {
-        //   router.replace("/user/");
       }
     } catch (error) {
       console.log(error);

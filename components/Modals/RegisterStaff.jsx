@@ -16,6 +16,8 @@ const RegisterStaff = ({ onCancel }) => {
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
 
+  let keys = [];
+
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedPrevilege, setSelectedPrevilege] = useState(null);
@@ -41,7 +43,8 @@ const RegisterStaff = ({ onCancel }) => {
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-  const [Previlege, setPrevilege] = useState([]);
+
+  const [Previlege, setPrevilege] = useState([])
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -74,7 +77,8 @@ const RegisterStaff = ({ onCancel }) => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType = "STUDENT";
+
+        const studentStepType = "STUDENT"
 
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
@@ -83,6 +87,26 @@ const RegisterStaff = ({ onCancel }) => {
         const studentUrl = new URL("http://localhost:3000/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
+
+      // fetch steps data for the dropdown of privilege
+
+        try {
+          const fetchedData = await fetch(`/api/steps`);
+          if (!fetchedData.ok) {
+            throw new Error(`Failed to fetch data. Status: ${fetchedData.status}`);
+          }
+          const data = await fetchedData.json();
+          const keyValuePairs = {};
+          data.forEach((item) => {
+            keyValuePairs[item.name] = item.nextSteps;
+          });
+           keys = Object.keys(keyValuePairs);
+          const values = Object.values(keyValuePairs);
+          console.log("keys fetch", keys, ">> values", values);
+        } catch (error) {
+          console.error('Error fetching or processing data:', error);
+        }
+
 
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");
@@ -106,15 +130,15 @@ const RegisterStaff = ({ onCancel }) => {
           ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
           ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
         ];
-        const previlege = concatenatedArray.map((role, index) => ({
+
+        const previlege = keys.map((role, index) => ({
+
           id: (index + 1).toString(),
           name: role,
         }));
 
         setPrevilege(previlege);
 
-        //   console.log("Data fetched successfully:", previlege);
-        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
@@ -243,7 +267,6 @@ const RegisterStaff = ({ onCancel }) => {
 
   const handleDropdownCollegeClick = (college) => {
     setValue("collegeName", college.name);
-    // toast.success("rerrrrr!",college.name," ",college.id);
     setValue("collegeId", college.id);
     setSelectedCollege(college);
     setSearchCollege(college.name);
@@ -268,7 +291,9 @@ const RegisterStaff = ({ onCancel }) => {
           collegeName: data.collegeName,
           departmentName: data.departmentName,
           role: ROLES.STAFF,
-          blockNo: "",
+
+          blockNo: ""
+
         }),
       });
 
@@ -392,6 +417,7 @@ const RegisterStaff = ({ onCancel }) => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               College
@@ -405,14 +431,8 @@ const RegisterStaff = ({ onCancel }) => {
               onFocus={handleSearchCollegeFocus}
               onChange={handleSearchCollegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
+
             />
-            {/* <input
-              type="hidden"
-              name="collegeId"
-              id="collegeId"
-              value={selectedCollege ? selectedCollege.id : ""}
-            /> */}
 
             <p>{errors.collegeName?.message}</p>
 
@@ -433,6 +453,7 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
+
 
           <div className="w-full sm:w-1/2">
             <label
@@ -481,6 +502,7 @@ const RegisterStaff = ({ onCancel }) => {
         </div>
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               Previlege
@@ -494,14 +516,9 @@ const RegisterStaff = ({ onCancel }) => {
               onFocus={handleSearchPrevilegeFocus}
               onChange={handleSearchPrevilegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
+
             />
-            {/* <input
-          type="hidden"
-          name="collegeId"
-          id="collegeId"
-          value={selectedCollege ? selectedCollege.id : ""}
-        /> */}
+
 
             <p>{errors.collegeName?.message}</p>
 
@@ -522,6 +539,7 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
+
           {searchPrevilege && searchPrevilege == "Dormitory" && (
             <div className="w-full sm:w-1/2">
               <label
@@ -541,6 +559,7 @@ const RegisterStaff = ({ onCancel }) => {
               <p>{errors.blockNo?.message}</p>
             </div>
           )}
+
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">

@@ -1,80 +1,121 @@
-import React from 'react'
-
-
-import { useForm } from "react-hook-form";
-import { verficationSchema } from "@/validations/userValidation";
-import { yupResolver } from "@hookform/resolvers/yup";
-import bcrypt from "bcryptjs";
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
+import bcrypt from "bcryptjs";
+import NewPassword from './NewPassword';
+
 const Verify = ({ userData }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-      } = useForm({
-        resolver: yupResolver(verficationSchema),
+  const [verificationCodes, setVerificationCodes] = useState(['', '', '', '']);
+  const [loading, setLoading] = useState(false);
+  const [resend, setResend] = useState(false);
+  const [resendUserData, setResendUserData] = useState([]);
+  let passwordMatch;
+  const router = useRouter();
+
+  const handleCodeChange = (index, value) => {
+    const updatedCodes = [...verificationCodes];
+    updatedCodes[index] = value;
+    setVerificationCodes(updatedCodes);
+  };
+
+  const resendHandler = async (event) => {
+    event.preventDefault(); // Prevent form submission
+    try {
+      const response = await fetch('/api/auth/resetPassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userData[0].email,
+          userId: userData[0].userId
+        }),
       });
 
-      const router = useRouter();
-      const onSubmitHandler = async (data) => {
-         // Get the updated session after sign-in
-        // console.log("Hello Role -- ", session?.user?.role);
-        // const role = session?.user?.role;
-    
-        // router.push('/resetPassword', { email: data.email })
-        console.log("userVerfica", userData[0].verificationCode);
-        console.log("userData", data.verificationCode);
-        const passwordMatch = await bcrypt.compare(
-          data.verificationCode,
-          userData[0].verificationCode
-        );
-    
-        console.log("Password Matched", passwordMatch);
-        if (passwordMatch ) {
-         
-           router.replace("/newPassword/"+userData[0].userId);
+      if (!response.ok) {
+        throw new Error('There was an error sending the reset password email.');
+      }
+
+
+      // fetch the resend button
+      try {
+        const response = await fetch(`/api/user/byUserId/${userData[0].userId}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-      };
+        const fetchedData = await response.json();
+        setResendUserData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+      setResend(true);
+      toast.success('If the email is associated with an account, a password reset email will be sent.');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    const enteredCode = verificationCodes.join('');
+    if (resend) { 
+      passwordMatch = await bcrypt.compare(enteredCode,  resendUserData[0]?.verificationCode);
+    } else {  
+      passwordMatch = await bcrypt.compare(enteredCode,  userData[0]?.verificationCode);
+    }
+    
+    if (passwordMatch) {
+      setLoading(true);
+      setResend(false);
+    } else {
+      toast.error("Verification code is incorrect.");
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center  dark:bg-boxdark-2 dark:text-bodydark">
-    <div className=" mt-35 w-1/3 h-1/3 rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
-        <h3 className="font-lg  font-semibold text-primary dark:text-white">
-          Reset Password
-        </h3>
-      </div>
+    <>
+      {loading ? <NewPassword userData={userData} /> : (
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          <div className="overflow-hidden px-4 dark:bg-boxdark-2 sm:px-8">
+            <div className="flex h-screen flex-col items-center justify-center overflow-hidden">
+              <div className="no-scrollbar overflow-y-auto py-20">
+                <div className="mx-auto w-full max-w-[480px]">
+                  <div className="text-center">
+                    <div className="rounded-xl bg-white p-4 shadow-14 dark:bg-boxdark lg:p-7.5 xl:p-12.5">
+                      <h1 className="mb-2.5 text-3xl font-black leading-[48px] text-black dark:text-white">Verify Your Account</h1>
+                      <p className="mb-7.5 font-medium">Enter the 4 digit code sent to the registered email id.</p>
+                      <form onSubmit={onSubmitHandler}>
+                        <div className="flex items-center gap-4.5">
+                          {[0, 1, 2, 3].map(index => (
+                            <input
+                              key={index}
+                              value={verificationCodes[index]}
+                              onChange={e => handleCodeChange(index, e.target.value)}
+                              className="w-full rounded-md border-[1.5px] border-stroke bg-transparent p-3 text-center text-2xl font-medium text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                              type="text"
+                              maxLength={1}
+                            />
+                          ))}
+                        </div>
+                        <p className="mb-5 mt-4 text-left font-medium text-black dark:text-white">Did not receive a code?
+                        <button onClick={resendHandler} className="text-primary">Resend</button></p>
+                        <button type='submit' className="flex w-full justify-center rounded-md
+                         bg-primary p-[13px] font-bold text-gray hover:bg-opacity-90">Verify
 
-      <div className="p-7">
-        <h1>
-          Please check your emails for a message with your code. Your code is
-          6 numbers long.
-        </h1>
-        {/* <h1> {email}</h1> */}
-        <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <div className="relative">
-            <input
-              type="text"
-              id="id"
-              placeholder="Enter your verification code"
-              {...register("verificationCode")}
-              className="w-full rounded-lg border border-stroke bg-transparent my-5 py-4 pl-6  pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            />
+                         </button>
+                        <span className="mt-5 block text-red">Don’t share the verification code with anyone!</span>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-end gap-4.5">
-            <button
-              className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-95"
-              type="submit"
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  )
-}
+        </div>
+      )};
+    </>
 
-export default Verify
+  );
+};
+
+export default Verify;
