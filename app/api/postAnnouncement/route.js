@@ -6,19 +6,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export const POST = async (req) => {
-  const {
-    title,
-    description,
-    image,
-  } = await req.json();
+  const { title, description, image } = await req.json();
 
   const session = await getServerSession(authOptions);
   const userId = session?.user?.userId;
   const announceFirstName = session?.user?.firstname;
   const announcerMiddleName = session?.user?.middlename;
   const announcerLastName = session?.user?.lastname;
-  const announcerName = announceFirstName + " " + announcerMiddleName ;
-  console.log("announcerName",announcerName);
+  const announcerName = announceFirstName + " " + announcerMiddleName;
   // Get the current date
   const today = new Date();
 
@@ -28,43 +23,33 @@ export const POST = async (req) => {
     month: "2-digit",
     day: "2-digit",
   });
-//   const hashedPassword = await bcrypt.hash(password, 10);
+  //   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
     await connectToDB();
     const newAnnouncement = new Announcement({
-        userId,
-        announcerName:announcerName,
-        title,
-        description,
-        image,
-        announcementDate:formattedDate,
+      userId,
+      announcerName: announcerName,
+      title,
+      description,
+      image,
+      announcementDate: formattedDate,
     });
 
-    console.log(
-        userId,
-        announcerName,
-        title,
-        description,
-        formattedDate,
-    );
     await newAnnouncement.save();
     return new Response(JSON.stringify(newAnnouncement), { status: 201 });
   } catch (error) {
-    console.error('Error creating a new announcement:', error);
     return new Response("Failed to create a new announcement", { status: 500 });
   }
 };
 
-
-export const GET=async()=>{
+export const GET = async () => {
   try {
     // Connect to the database
     await connectToDB();
 
     // Fetch all users from the database
     const announcement = await Announcement.find();
-// console.log("announcement",announcement);
     // Return a success response with the users data
     return new Response(JSON.stringify(announcement), { status: 200 });
   } catch (error) {
@@ -73,4 +58,4 @@ export const GET=async()=>{
     // Return an error response
     return new Response("Failed to fetch announcement", { status: 500 });
   }
-}
+};
