@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterStaff = () => {
+const RegisterStaff = ({ onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -15,6 +15,7 @@ const RegisterStaff = () => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
+
   let keys = [];
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -42,8 +43,8 @@ const RegisterStaff = () => {
   // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
   // let previlege={};
-  const [Previlege, setPrevilege] = useState([])
 
+  const [Previlege, setPrevilege] = useState([])
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -63,7 +64,6 @@ const RegisterStaff = () => {
     }
   };
 
-
   const handleSearchPrevilegeFocus = () => {
     if (searchPrevilege) {
       setShowPrevilegeDropdown(true);
@@ -73,16 +73,12 @@ const RegisterStaff = () => {
     }
   };
 
-
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType = "STUDENT"
 
+        const studentStepType = "STUDENT"
 
         const staffUrl = new URL("http://localhost:3000/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
@@ -91,8 +87,6 @@ const RegisterStaff = () => {
         const studentUrl = new URL("http://localhost:3000/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
-
-
 
       // fetch steps data for the dropdown of privilege
 
@@ -123,7 +117,6 @@ const RegisterStaff = () => {
           id: user._id,
         }));
 
-
         const studentData = await responseStudent.json();
         const updatedStudentData = studentData.map((user) => ({
           ...user,
@@ -134,19 +127,18 @@ const RegisterStaff = () => {
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
         const concatenatedArray = [
-          ...updatedStaffData[0].steps.filter(step => step !== "APPROVED"),
-          ...updatedStudentData[0].steps.filter(step => step !== "APPROVED")
+          ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
+          ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
         ];
+
         const previlege = keys.map((role, index) => ({
+
           id: (index + 1).toString(),
-          name: role
+          name: role,
         }));
 
         setPrevilege(previlege);
 
-
-        //   console.log("Data fetched successfully:", previlege);
-        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
@@ -156,10 +148,7 @@ const RegisterStaff = () => {
 
     fetchData(); // Fetch data once when component mounts
 
-
-
     if (searchCollege) {
-
       const filteredResults = CollegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
@@ -169,7 +158,6 @@ const RegisterStaff = () => {
     }
 
     if (searchTerm) {
-
       const filteredResults = DepartmentData.filter((college) =>
         college.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -177,7 +165,6 @@ const RegisterStaff = () => {
     } else {
       setFilteredOffices(initialDropdownItems);
     }
-
 
     if (searchPrevilege) {
       // console.log("concatPrevilegeenatedArray",Previlege);
@@ -192,15 +179,12 @@ const RegisterStaff = () => {
     // }
   }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
 
-
-
-
-
-
-
   useEffect(() => {
     function handleClickOutside(event) {
-      if (collegeDropdownRef.current && !collegeDropdownRef.current.contains(event.target)) {
+      if (
+        collegeDropdownRef.current &&
+        !collegeDropdownRef.current.contains(event.target)
+      ) {
         setShowCollegeDropdown(false);
       }
     }
@@ -210,7 +194,6 @@ const RegisterStaff = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -233,7 +216,8 @@ const RegisterStaff = () => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        (previlegeDropdownRef.current && !previlegeDropdownRef.current.contains(event.target)) ||
+        (previlegeDropdownRef.current &&
+          !previlegeDropdownRef.current.contains(event.target)) ||
         (previlegeDropdownRef.current &&
           !previlegeDropdownRef.current.contains(event.target))
       ) {
@@ -248,19 +232,15 @@ const RegisterStaff = () => {
     };
   }, []);
 
-
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
   };
 
-
   const handleSearchPrevilegeChange = (event) => {
     setSearchPrevilege(event.target.value);
     setShowDropdown(true);
   };
-
-
 
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
@@ -287,7 +267,6 @@ const RegisterStaff = () => {
 
   const handleDropdownCollegeClick = (college) => {
     setValue("collegeName", college.name);
-    // toast.success("rerrrrr!",college.name," ",college.id);
     setValue("collegeId", college.id);
     setSelectedCollege(college);
     setSearchCollege(college.name);
@@ -312,7 +291,9 @@ const RegisterStaff = () => {
           collegeName: data.collegeName,
           departmentName: data.departmentName,
           role: ROLES.STAFF,
+
           blockNo: ""
+
         }),
       });
 
@@ -320,16 +301,34 @@ const RegisterStaff = () => {
         toast.success("Officer registered Successfully!");
       }
     } catch (error) {
-
       console.log(error);
     }
     setSearchCollege("");
     reset();
   };
 
+  const handleCancel = () => {
+    onCancel();
+  };
 
+  const handleDownload = () => {
+    // Constructing a temporary link element
+    const link = document.createElement("a");
+    link.href = "/files/studentsTrial.xlsx";
+    link.setAttribute("download", "studentsTrial.xlsx");
+    // Simulating a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
-    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+    <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <button
+        onClick={handleDownload}
+        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+      >
+        Get Importing Format
+      </button>
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -337,8 +336,6 @@ const RegisterStaff = () => {
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
-
-
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -434,14 +431,8 @@ const RegisterStaff = () => {
               onFocus={handleSearchCollegeFocus}
               onChange={handleSearchCollegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //   {...register("collegeName")}
+
             />
-            {/* <input
-              type="hidden"
-              name="collegeId"
-              id="collegeId"
-              value={selectedCollege ? selectedCollege.id : ""}
-            /> */}
 
             <p>{errors.collegeName?.message}</p>
 
@@ -464,8 +455,6 @@ const RegisterStaff = () => {
           </div>
 
 
-
-
           <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -482,7 +471,7 @@ const RegisterStaff = () => {
               onFocus={handleSearchInputFocus}
               onChange={handleSearchInputChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //  {...register("departmentName")}
+              //  {...register("departmentName")}
             />
             <input
               type="hidden"
@@ -527,14 +516,9 @@ const RegisterStaff = () => {
               onFocus={handleSearchPrevilegeFocus}
               onChange={handleSearchPrevilegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-            //   {...register("collegeName")}
+
             />
-            {/* <input
-          type="hidden"
-          name="collegeId"
-          id="collegeId"
-          value={selectedCollege ? selectedCollege.id : ""}
-        /> */}
+
 
             <p>{errors.collegeName?.message}</p>
 
@@ -555,23 +539,27 @@ const RegisterStaff = () => {
               </div>
             )}
           </div>
-          {/* <div className="w-full sm:w-1/2">
-            <label
-              className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="blockNo"
-            >
-             Dorm Block
-            </label>
-            <input
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              type="text"
-              name="blockNo"
-              id="blockNo"
-              placeholder="block No"
-              {...register("blockNo")}
-            />
-            <p>{errors.blockNo?.message}</p>
-          </div> */}
+
+          {searchPrevilege && searchPrevilege == "Dormitory" && (
+            <div className="w-full sm:w-1/2">
+              <label
+                className="mb-3 block text-sm font-medium text-black dark:text-white"
+                htmlFor="blockNo"
+              >
+                Dorm Block
+              </label>
+              <input
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                type="text"
+                name="blockNo"
+                id="blockNo"
+                placeholder="block No"
+                {...register("blockNo")}
+              />
+              <p>{errors.blockNo?.message}</p>
+            </div>
+          )}
+
         </div>
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
@@ -584,7 +572,7 @@ const RegisterStaff = () => {
             </button>
           </div>
 
-          <div className="w-full px-3 2xsm:w-1/2">
+          <div onClick={handleCancel} className="w-full px-3 2xsm:w-1/2">
             <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
               Cancel
             </button>
@@ -595,5 +583,3 @@ const RegisterStaff = () => {
   );
 };
 export default RegisterStaff;
-
-

@@ -1,9 +1,11 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import { announcement } from "@/validations/userValidation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AdminBreadcrumb from "@/components/Breadcrumb/adminBreadcrumb";
+import { toast } from "react-toastify";
 
 const ManageAnnouncement = () => {
   const {
@@ -15,46 +17,36 @@ const ManageAnnouncement = () => {
     resolver: yupResolver(announcement),
   });
 
-
-  const [selectedImage, setProfilePic] = useState(null)
-  const [selectedImageBase64, setImageBase64] = useState(null)
-
+  const [selectedImage, setProfilePic] = useState(null);
+  const [selectedImageBase64, setImageBase64] = useState(null);
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
-    // console.log("Image selectedImage:", selectedFile);
+
     if (selectedFile) {
       const imageURL = URL.createObjectURL(selectedFile);
 
       const base64 = await convertToBase64(selectedFile);
-      // console.log("base64",base64)
       setImageBase64(base64);
-
-      // console.log("Image profilePic:", userData.profilePic);
       setProfilePic(imageURL);
-      console.log("selectedImage", selectedImageBase64);
     }
-
-  }
+  };
 
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
       fileReader.onload = () => {
-        resolve(fileReader.result)
+        resolve(fileReader.result);
       };
       fileReader.onerror = (error) => {
-        reject(error)
-      }
-    })
+        reject(error);
+      };
+    });
   }
 
   const onSubmit = async (data) => {
-    console.log(selectedImageBase64, "title", data.title, "description", data.description);
-    // console.log("Submit button clicked", data.profilePic);
-    // if (selectedImage) {
-
+    if (data.title && data.description && selectedImageBase64) {
       try {
         const response = await fetch("/api/postAnnouncement", {
           method: "POST",
@@ -67,40 +59,50 @@ const ManageAnnouncement = () => {
         });
 
         if (response.ok) {
-          console.log(" Announcement posted Successfully!");
           toast.success("Announcement posted  Successfully!");
-          
+          reset();
+          setProfilePic(null); // Reset selected image state
+          setImageBase64(null); // Reset selected image base64 state
         } else {
-          toast.error("First fill all the requied before posting!");
+          toast.error(
+            "Some Error occured while posting announcements please retry!"
+          );
         }
       } catch (error) {
-
         console.log(error);
       }
-
-      reset();
-    
-    // Now imageURL contains the link to the picked image.
-  }
-
+    } else {
+      toast.error("First fill all the requied before posting!");
+    }
+  };
 
   return (
     <div className="col-span-12 xl:col-span-3">
-      <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
-          <h3 className="font-lg  font-semibold text-primary dark:text-white">
-            Your Announcement
-          </h3>
-        </div>
-        <div className="p-7">
-          {/* <form action="#"> */}
-          <form onSubmit={handleSubmit(onSubmit)}>
-
-
-
-
-            <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="relative z-20 h-35 md:h-65">
+      <AdminBreadcrumb
+        title="Post Announcements"
+        mainRoute="Admin"
+        subRoute="Announcement"
+      />
+      <div className="rounded-lg p-8 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div class="mb-5">
+            <label
+              for="taskImg"
+              class="mb-2.5 block font-medium text-black dark:text-white"
+            >
+              Add Image
+            </label>
+            <div>
+              <div
+                id="FileUpload"
+                class="relative block w-full appearance-none rounded-sm border border-dashed border-stroke bg-white px-4 py-4 dark:border-strokedark dark:bg-boxdark sm:py-14"
+              >
+                <input
+                  accept="image/*"
+                  class="absolute inset-0 z-50 m-0 h-full w-full p-0 opacity-0 outline-none"
+                  type="file"
+                  {...register("image", { onChange: handleFileChange })}
+                />
                 {selectedImage && (
                   <Image
                     className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
@@ -109,45 +111,49 @@ const ManageAnnouncement = () => {
                     height={260}
                     alt="User"
                   />
-                )
-
-                }
-
+                )}
                 {!selectedImage && (
-                  <Image
-                    src={"/images/cover/cover-01.png"}
-                    alt="profile cover"
-                    className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
-                    width={970}
-                    height={260}
-                    style={{
-                      width: "auto",
-                      height: "auto",
-                    }}
-                  />
-                )
-
-                }
+                  <div class="flex flex-col items-center justify-center space-y-3">
+                    <span class="flex h-11.5 w-11.5 items-center justify-center rounded-full border border-stroke bg-primary/5 dark:border-strokedark">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_75_12841)">
+                          <path
+                            d="M2.5 15.8333H17.5V17.5H2.5V15.8333ZM10.8333 4.85663V14.1666H9.16667V4.85663L4.1075 9.91663L2.92917 8.73829L10 1.66663L17.0708 8.73746L15.8925 9.91579L10.8333 4.85829V4.85663Z"
+                            fill="#3C50E0"
+                          ></path>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_75_12841">
+                            <rect width="20" height="20" fill="white"></rect>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    <p class="text-xs">
+                      <span class="text-primary">Click to upload</span> or drag
+                      and drop
+                    </p>
+                  </div>
+                )}
                 <div className="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
                   <label
                     htmlFor="cover"
                     className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
                   >
-                    {/* <input
-                  type="file"
-                  name="cover"
-                  id="cover"
-                  className="sr-only"
-                /> */}
                     <input
                       type="file"
                       accept="image/*"
                       className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
-                     // onChange={handleFileChange}
-                    // {...register("profilePic")}
-                       
+                      // onChange={handleFileChange}
+                      // {...register("profilePic")}
 
-                     {...register("image", { onChange: handleFileChange })}
+                      {...register("image", { onChange: handleFileChange })}
                     />
                     <span>
                       <svg
@@ -172,77 +178,73 @@ const ManageAnnouncement = () => {
                         />
                       </svg>
                     </span>
-                    {selectedImage?( <span>Edit</span>):
-                    (<span>Pic</span>)
-              }
+                    {selectedImage ? <span>Edit</span> : <span>Pic</span>}
                   </label>
                 </div>
               </div>
-
-
             </div>
-
-
-            <div>
-              <label className="mt-5 mb-3 block text-sm font-medium text-black dark:text-white">
-                Title
-              </label>
-              <input
-                type="text"
-                name="title"
-                id="title"
-                placeholder="Write title"
-                className="w-full rounded-lg border-[1.5px] border-primary bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
-                {...register("title")}
-             />
-            </div>
-
-            <div>
-              <label className="mt-5 mb-3 block text-sm font-medium text-black dark:text-white">
-                Description
-              </label>
-              <textarea
-               name="description"
-               id="description"
-                rows={6}
-                placeholder="Write description"
-                className="w-full rounded-lg border-[1.5px] border-primary bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white"
-                {...register("description")}
-             ></textarea>
-            </div>
-
-            {/* )} */}
-
-            {/* <div className="flex justify-end gap-4.5">
-            <button
-              className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-              type="submit"
+          </div>
+          <div class="mb-5">
+            <label
+              for="taskTitle"
+              class="mb-2.5 block font-medium text-black dark:text-white"
             >
-              Cancel
-            </button>
-            <button
-              className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-95"
-              type="submit"
+              Title
+            </label>
+            <input
+              id="taskTitle"
+              placeholder="Enter title here..."
+              class="w-full rounded-sm border border-stroke bg-white px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-boxdark dark:text-white dark:focus:border-primary"
+              type="text"
+              name="taskTitle"
+              {...register("title")}
+            />
+          </div>
+          <div class="mb-5">
+            <label
+              for="taskDescription"
+              class="mb-2.5 block font-medium text-black dark:text-white"
             >
-              Save
-            </button>
-          </div> */}
-            <div className="flex justify-end gap-4.5">
-              <button
-                className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                type="submit"
-              >
-                Cancel
-              </button>
-              <button
-                className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-95"
-                type="submit"
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
+              Anouncement Detail
+            </label>
+            <textarea
+              name="taskDescription"
+              id="taskDescription"
+              cols="30"
+              rows="7"
+              placeholder="Write announcement detail here..."
+              {...register("description")}
+              class="w-full rounded-sm border border-stroke bg-white px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-boxdark dark:text-white dark:focus:border-primary"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="flex w-full items-center justify-center gap-2 rounded bg-primary px-4.5 py-2.5 font-medium text-white hover:bg-opacity-90"
+          >
+            <svg
+              class="fill-current"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_60_9740)">
+                <path
+                  d="M18.75 9.3125H10.7187V1.25C10.7187 0.875 10.4062 0.53125 10 0.53125C9.625 0.53125 9.28125 0.84375 9.28125 1.25V9.3125H1.25C0.875 9.3125 0.53125 9.625 0.53125 10.0312C0.53125 10.4062 0.84375 10.75 1.25 10.75H9.3125V18.75C9.3125 19.125 9.625 19.4687 10.0312 19.4687C10.4062 19.4687 10.75 19.1562 10.75 18.75V10.7187H18.75C19.125 10.7187 19.4687 10.4062 19.4687 10C19.4687 9.625 19.125 9.3125 18.75 9.3125Z"
+                  fill=""
+                ></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_60_9740">
+                  <rect width="20" height="20" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            Post
+          </button>
+        </form>
       </div>
     </div>
   );

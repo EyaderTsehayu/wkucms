@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-const RegisterOffice = () => {
+const RegisterOffice = ({ onCancel }) => {
   const [stepData, setStepData] = useState([]);
   const {
     handleSubmit,
@@ -14,28 +14,23 @@ const RegisterOffice = () => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
-
   const programs = ["STUDENT", "STAFF"];
 
   const onSubmit = async (data) => {
-
     const fromFirstName = data.officeName.toLowerCase();
-
 
     // Generate a random number between 100 and 999
 
     const password = `${fromFirstName}@office`;
 
-    console.log(data);
     try {
-
       // first fetch the steps from step model start
 
-      const stepType =data.program; // Define your stepType here
+      const stepType = data.program; // Define your stepType here
 
       const url = new URL("http://localhost:3000/api/step");
       url.searchParams.append("stepType", stepType);
-  
+
       const responsed = await fetch(url);
       if (!responsed.ok) {
         throw new Error("Network responsed was not ok");
@@ -58,23 +53,12 @@ const RegisterOffice = () => {
           password: password,
           location: data.location,
           items: data.items,
-          type:stepType,
-          status:"active"
+          type: stepType,
+          status: "active",
         }),
       });
 
-
-      
-      
-      
-      console.log("ddddddd");
       if (response.ok) {
-        console.log("ddddddd");
-        // push to step
-        // const UpdatedSteps = [...stepData, data.officeName];
-        
-        // console.log("erekoy eskieee",stepData)
-        // Calculate the index to insert data.officeName
         const insertIndex = UpdatedSteps.length - 1;
 
         // Insert data.officeName at the specified index
@@ -91,25 +75,14 @@ const RegisterOffice = () => {
             // updatedSteps: UpdatedSteps,
           }),
 
-        // setStepData(...stepData,data.officeName)
-        // console.log("i think is working",UpdatedSteps)
-        // const stepResponse = await fetch("/api/step", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //       // id: "65c4891df9228bec3acfe3a0",
-        //       steps:UpdatedSteps,
-        //       stepType:stepType
-        //   }),
-      });
-     
+        });
 
-      // Check if step insertion was successful
-      if (response.ok) {
+        // Check if step insertion was successful
+        if (response.ok) {
           toast.success("Office and Steps registered Successfully!");
-      } else {
+        } else {
           toast.error("Steps Not registered Successfully!");
-      }
-
+        }
 
         // toast.success("Office registered Successfully!");
       }
@@ -118,11 +91,12 @@ const RegisterOffice = () => {
       console.log(error);
     }
 
-
     reset();
   };
 
-  
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
     <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
@@ -245,7 +219,10 @@ const RegisterOffice = () => {
           </div>
 
           <div className="w-full px-3 2xsm:w-1/2">
-            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+            <button
+              onClick={handleCancel}
+              className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+            >
               Cancel
             </button>
           </div>

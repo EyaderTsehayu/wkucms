@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerOfficerSchema } from "@/validations/registrationValidation";
@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { privilegeData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const RegisterOfficer = () => {
+const RegisterOfficer = ({ onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -15,8 +15,6 @@ const RegisterOfficer = () => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
-
- 
 
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +36,6 @@ const RegisterOfficer = () => {
 
   useEffect(() => {
     if (searchCollege) {
-        
       const filteredResults = privilegeData.filter((college) =>
         college.name.toLowerCase().includes(searchCollege.toLowerCase())
       );
@@ -50,7 +47,10 @@ const RegisterOfficer = () => {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (collegeDropdownRef.current && !collegeDropdownRef.current.contains(event.target)) {
+      if (
+        collegeDropdownRef.current &&
+        !collegeDropdownRef.current.contains(event.target)
+      ) {
         setShowCollegeDropdown(false);
       }
     }
@@ -68,7 +68,7 @@ const RegisterOfficer = () => {
 
   const handleDropdownCollegeClick = (college) => {
     setValue("collegeName", college.name);
-    toast.success("rerrrrr!",college.name," ",college.id);
+    toast.success("rerrrrr!", college.name, " ", college.id);
     setValue("collegeId", college.id);
     setSelectedCollege(college);
     setSearchCollege(college.name);
@@ -79,7 +79,7 @@ const RegisterOfficer = () => {
     const fromFirstName = data.firstName.toLowerCase();
     const fromMiddleName = data.middleName.charAt(0).toLowerCase();
     const password = `${fromFirstName}@${fromMiddleName}1234`;
-   
+
     try {
       const response = await fetch("/api/user/new", {
         method: "POST",
@@ -98,14 +98,14 @@ const RegisterOfficer = () => {
         toast.success("Officer registered Successfully!");
       }
     } catch (error) {
-     
       console.log(error);
     }
     setSearchCollege("");
     reset();
   };
-
-
+  const handleCancel = () => {
+    onCancel();
+  };
   return (
     <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <div classNameName="flex flex-row place-content-between">
@@ -115,8 +115,6 @@ const RegisterOfficer = () => {
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
-
-       
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -238,10 +236,7 @@ const RegisterOfficer = () => {
               </div>
             )}
           </div>
-
-      
         </div>
-      
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
           <div className="w-full px-3 2xsm:w-1/2">
@@ -254,7 +249,10 @@ const RegisterOfficer = () => {
           </div>
 
           <div className="w-full px-3 2xsm:w-1/2">
-            <button className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1">
+            <button
+              onClick={handleCancel}
+              className="block w-full rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+            >
               Cancel
             </button>
           </div>
@@ -264,6 +262,3 @@ const RegisterOfficer = () => {
   );
 };
 export default RegisterOfficer;
-
-
-
