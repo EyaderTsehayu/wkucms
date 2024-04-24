@@ -43,35 +43,35 @@ const SignIn = () => {
       });
 
       if (res.error || status == "inactive") {
-        if(res.error){  toast.error("invalid credentials");}
-        else if(status == "inactive"){ toast.error("You have been banned.");}
+        if (res.error) {
+          toast.error("invalid credentials");
+        } else if (status == "inactive") {
+          toast.error("You have been banned.");
+        }
         return;
       } else {
+        console.log("status", status);
+        if (role === "ADMIN") {
+          toast.success("Login Successful!");
+          router.replace("/admin");
+        } else if (role === "STUDENT") {
+          toast.success("Login Successful!");
+          router.replace("/user");
+        } else if (role === "STAFF") {
+          toast.success("Login Successful!");
+          router.replace("/user/");
+        }
 
-          console.log("status", status);
-          if (role === "ADMIN") {
-            toast.success("Login Successful!");
-            router.replace("/admin");
-          } else if (role === "STUDENT") {
-            toast.success("Login Successful!");
-            router.replace("/user");
-          } else if (role === "STAFF") {
-            toast.success("Login Successful!");
-            router.replace("/user/");
-          }
-         
-          //  router.push("/user");
-       
+        //  router.push("/user");
 
-
-      // console.log("status", status);
-      // if (role == "ADMIN" && status == "active") {
-      //   router.replace("/admin");
-      // } else if (role == "STUDENT" && status == "active") {
-      //   router.replace("/user");
-      // } else if (role == "STAFF" && status == "active") {
-      //   router.replace("/user/");
-      // }
+        // console.log("status", status);
+        // if (role == "ADMIN" && status == "active") {
+        //   router.replace("/admin");
+        // } else if (role == "STUDENT" && status == "active") {
+        //   router.replace("/user");
+        // } else if (role == "STAFF" && status == "active") {
+        //   router.replace("/user/");
+      }
     } catch (error) {
       console.log(error);
     }
