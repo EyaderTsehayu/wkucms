@@ -17,6 +17,21 @@ import AddIcon from '@mui/icons-material/Add';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// const PersonItem = ({person,index }) => (
+//   <>
+//    {person!="APPROVED"&&(
+//   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+//      {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
+//     <SwapVertIcon/>
+//     <p>{index}</p>
+//     <p>{person}</p>
+//     </div>
+//     )}
+//   </>
+// );
+
 const ManageStudentOffices = () => {
   const [keyValuePairs, setKeyValuePairs] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
