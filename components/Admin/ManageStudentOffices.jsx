@@ -4,35 +4,16 @@ import AdminContainer from "@/components/Admin/AdminContainer";
 import React, { useState, useEffect, useRef } from "react";
 
 import RegisterOffice from "@/components/Modals/RegisterOffice";
-import useSWR from 'swr';
+import useSWR from "swr";
 import { usePathname } from "next/navigation";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
-import SwapVertIcon from '@mui/icons-material/SwapVert';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
-
-
-// import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-// const PersonItem = ({person,index }) => (
-//   <>
-//    {person!="APPROVED"&&(
-//   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
-//      {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
-//     <SwapVertIcon/>
-//     <p>{index}</p>
-//     <p>{person}</p>
-//     </div>
-//     )}
-//   </>
-// );
-
-
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 
 const ManageStudentOffices = () => {
-
   const dragPerson = useRef(0);
   const draggedOverPerson = useRef(0);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -42,17 +23,11 @@ const ManageStudentOffices = () => {
   const [stepData, setStepData] = useState(null);
   const [stepError, setStepError] = useState(null);
   const [updateSteps, setUpdateSteps] = useState();
-  const [draggedData,setDraggedData]=useState();
-  
-
-
+  const [draggedData, setDraggedData] = useState();
 
   const PersonItem = ({ person, index, draggedData, setDraggedData }) => {
     const SwapDecreamentally = () => {
-     
-  
-      if ((index < draggedData.length - 1) && (index != 0)) {
-  
+      if (index < draggedData.length - 1 && index != 0) {
         const updatedData = [...draggedData];
         // Swap the items
         const temp = updatedData[index];
@@ -60,7 +35,7 @@ const ManageStudentOffices = () => {
         updatedData[index - 1] = temp;
         // Update the state
         setDraggedData(updatedData);
-        console.log("wwww", updatedData)
+        console.log("wwww", updatedData);
         setUpdateSteps(updatedData);
       } else if (index == 0) {
         const updatedData = [...draggedData];
@@ -70,16 +45,13 @@ const ManageStudentOffices = () => {
         updatedData[draggedData.length - 2] = temp;
         // Update the state
         setDraggedData(updatedData);
-  
+
         setUpdateSteps(updatedData);
       }
     };
-  
+
     const SwapIncreamentally = () => {
-     
-  
       if (index < draggedData.length - 2) {
-  
         const updatedData = [...draggedData];
         // Swap the items
         const temp = updatedData[index];
@@ -87,7 +59,7 @@ const ManageStudentOffices = () => {
         updatedData[index + 1] = temp;
         // Update the state
         setDraggedData(updatedData);
-        console.log("wwww", updatedData)
+        console.log("wwww", updatedData);
         setUpdateSteps(updatedData);
       } else if (index == draggedData.length - 2) {
         const updatedData = [...draggedData];
@@ -97,18 +69,17 @@ const ManageStudentOffices = () => {
         updatedData[0] = temp;
         // Update the state
         setDraggedData(updatedData);
-  
+
         setUpdateSteps(updatedData);
       }
     };
-  
-  
+
     return (
       <>
         {person !== "APPROVED" && (
           <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
             <KeyboardDoubleArrowUpIcon onClick={SwapDecreamentally} />
-  
+
             <p onClick={() => console.log(`${index + 1}`)}>{index + 1}</p>
             <p>{person}</p>
             <div class="flex flex-1 justify-end">
@@ -119,18 +90,14 @@ const ManageStudentOffices = () => {
       </>
     );
   };
-  
-  
 
   useEffect(() => {
-    
-
     const fetchData = async () => {
       try {
         const stepType = "STUDENT"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/step");
         url.searchParams.append("stepType", stepType);
-    
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -153,8 +120,7 @@ const ManageStudentOffices = () => {
   }, []);
 
   if (stepData) {
-
-    console.log("stepData ", stepData)
+    console.log("stepData ", stepData);
   }
 
   // Render loading state
@@ -168,22 +134,16 @@ const ManageStudentOffices = () => {
     return <p>Failed to fetch data</p>;
   }
 
-
-
-
-
   function handleSort() {
     const peopleClone = [...stepData[0].steps];
     const temp = peopleClone[dragPerson.current];
     peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
     peopleClone[draggedOverPerson.current] = temp;
-    console.log("peopleClone",peopleClone)
+    console.log("peopleClone", peopleClone);
     setDraggedData(peopleClone);
-    console.log("setDraggedData",draggedData);
+    console.log("setDraggedData", draggedData);
     setUpdateSteps(peopleClone);
   }
-
-
 
   // modify the steps
   const modifySteps = async () => {
@@ -196,10 +156,12 @@ const ManageStudentOffices = () => {
           updatedSteps: updateSteps,
         }),
       });
-  
+
       if (!response.ok) {
         // Check if response status is not in the range 200-299 (successful)
-        throw new Error('Failed to fetch data. Server returned ' + response.status);
+        throw new Error(
+          "Failed to fetch data. Server returned " + response.status
+        );
       }
       toast.success("update Successful!");
       // Optionally, you can handle the response here if needed
@@ -208,7 +170,6 @@ const ManageStudentOffices = () => {
       // Handle error appropriately, perhaps by displaying an error message to the user
     }
   };
-  
 
   const pathname = usePathname();
   // const [selectedRows, setSelectedRows] = useState([]);
@@ -221,17 +182,15 @@ const ManageStudentOffices = () => {
     }
   };
 
-
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${pathname.includes("student") && "col-span-9"
-        } col-span-12 xs:col-span-9 `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
+        pathname.includes("student") && "col-span-9"
+      } col-span-12 xs:col-span-9 `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -259,23 +218,24 @@ const ManageStudentOffices = () => {
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-
-
           <main className="flex min-h-screen flex-col items-center space-y-4">
             {/* <h1 className="text-xl font-bold mt-4">List</h1> */}
             {/* {stepData[0]?.steps?.map((person, index) => ( */}
-               {draggedData.map((person, index) => (
-              <div key={index}
+            {draggedData.map((person, index) => (
+              <div
+                key={index}
                 draggable
                 onDragStart={() => (dragPerson.current = index)}
                 onDragEnter={() => (draggedOverPerson.current = index)}
                 onDragEnd={handleSort}
                 onDragOver={(e) => e.preventDefault()}
               >
-                 <PersonItem index={index}
+                <PersonItem
+                  index={index}
                   person={person}
                   draggedData={draggedData}
-                  setDraggedData={setDraggedData} />
+                  setDraggedData={setDraggedData}
+                />
               </div>
             ))}
             <div className=" w-full px-1 ">
@@ -287,11 +247,7 @@ const ManageStudentOffices = () => {
               </button>
             </div>
           </main>
-
-
-
         </div>
-
       </div>
 
       <Modal
@@ -307,11 +263,8 @@ const ManageStudentOffices = () => {
           <RegisterOffice />
         </div>
       </Modal>
-
     </div>
   );
 };
 
 export default ManageStudentOffices;
-
-
