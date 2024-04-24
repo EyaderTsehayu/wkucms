@@ -43,7 +43,7 @@ export default function adminLayout({ children }) {
 
                 {/* <!-- ===== Main Content Start ===== --> */}
                 <main>
-                  <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                  <div className="mx-auto bg-white dark:bg-boxdark-2 max-w-screen-2xl p-4 md:p-6 2xl:p-10">
                     {children}
                   </div>
                 </main>
