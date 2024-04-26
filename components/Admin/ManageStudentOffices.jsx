@@ -322,6 +322,7 @@ const ManageStudentOffices = () => {
                 </p>)}
 
               <div className="mt-5 " >
+              <p></p>
                 <ul className="pl-5 py-3">
                   {keyValuePairs[selectedKey]?.map((value) => (
                     <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3" key={value}>
