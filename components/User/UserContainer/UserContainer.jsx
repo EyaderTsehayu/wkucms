@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Table from "../../Admin/Table";
 
@@ -29,6 +29,11 @@ const UserContainer = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  useEffect(() => {
+    setIsFiltering(false);
+  }, [rows]);
 
   // start searching
   const handleSearch = (event) => {
@@ -43,7 +48,7 @@ const UserContainer = ({
       // Return true if any of the criteria match
       return userId || firstname || reason || dateApproved;
     });
-
+    setIsFiltering(true);
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
   };
@@ -155,7 +160,7 @@ const UserContainer = ({
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <Table
             columns={columns}
-            rows={filteredRows}
+            rows={isFiltering ? filteredRows : rows}
             setSelectedRows={setSelectedRows}
             handleApproveAll={handleApproveAll}
             clickableColumns={clickableColumns}
