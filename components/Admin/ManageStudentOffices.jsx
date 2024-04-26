@@ -17,7 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 
-const ManageStudentOffices  = () => {
+const ManageStudentOffices = () => {
   const [keyValuePairs, setKeyValuePairs] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
@@ -50,50 +50,50 @@ const ManageStudentOffices  = () => {
   //  setSteps({"yes":["College Dean"]})
   const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
- // console.log("ooooo", steps);
- useEffect(() => {
-  console.log("oooooooowaaw");
+  // console.log("ooooo", steps);
+  useEffect(() => {
+    console.log("oooooooowaaw");
 
-  const fetchData = async () => {
-    try {
-      const stepType = "STUDENT"; // Define your stepType here
-      const url = "/api/steps"; // Define the URL
+    const fetchData = async () => {
+      try {
+        const stepType = "STUDENT"; // Define your stepType here
+        const url = "/api/steps"; // Define the URL
 
-      // Construct URL with query parameter
-      const fullUrl = `${url}?stepType=${stepType}`;
+        // Construct URL with query parameter
+        const fullUrl = `${url}?stepType=${stepType}`;
 
-      // Make the GET request using fetch
-      const response = await fetch(fullUrl);
+        // Make the GET request using fetch
+        const response = await fetch(fullUrl);
 
-      // Check if response is successful
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // Check if response is successful
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        // Extract JSON data from response
+        const data = await response.json();
+
+        // Update data format if needed
+        const updatedData = data.map((user) => ({
+          ...user,
+          id: user._id,
+        }));
+
+        // Set data into state
+        setStepData(data);
+
+        console.log("setDraggedData", data);
+      } catch (error) {
+        // Handle errors
+        setStepError(error);
       }
+    };
 
-      // Extract JSON data from response
-      const data = await response.json();
+    // Call fetchData when component mounts
+    fetchData();
 
-      // Update data format if needed
-      const updatedData = data.map((user) => ({
-        ...user,
-        id: user._id,
-      }));
-
-      // Set data into state
-      setStepData(data);
-
-      console.log("setDraggedData", data);
-    } catch (error) {
-      // Handle errors
-      setStepError(error);
-    }
-  };
-
-  // Call fetchData when component mounts
-  fetchData();
-
-  // No cleanup or dependency array needed as we only want to fetch data once
-}, []);
+    // No cleanup or dependency array needed as we only want to fetch data once
+  }, []);
 
 
   if (stepData) {
@@ -106,7 +106,7 @@ const ManageStudentOffices  = () => {
     return <p>Loading...</p>;
   }
 
- 
+
 
 
 
@@ -228,23 +228,35 @@ const ManageStudentOffices  = () => {
 
         </div>
 
-        <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
+    { !selectedKey && selectedKey !== "Select a Step"  && ( 
+       <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
           >
             Register
           </button>
-        </div>
+        </div>)}
+         {selectedKey  && (
+              <div className="flex  justify-end w-full px-1 ">
+                <button
+
+                  onClick={() => modifySteps(selectedKey, keyValuePairs[selectedKey])}
+                  className=" rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
+                >
+                  Save
+                </button>
+              </div>)}
       </div>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
 
 
-          <main className="flex min-h-screen flex-col items-center space-y-4">
+          <main className="flex min-h-screen flex-col items-center space-y-4 ">
 
+<div  >
 
-            <select class="ml-1 mr-15  bg-primary text-white  inline-flex items-center gap-2.5 rounded-md dark:bg-boxdark px-5.5 py-3 font-medium  dark:border-strokedark dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
+            <select className="ml-1 mr-30  bg-primary text-white rounded-md dark:bg-boxdark px-5.5 py-3 font-medium   dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
 
               <option value={null}>Select a Step</option>
               {stepData.map((data, key) => (
@@ -254,6 +266,7 @@ const ManageStudentOffices  = () => {
                 </option>
               ))}
             </select>
+           </div>
             <div className="flex flex-col gap-15 md:flex-row">
 
               {/* && !stepData[selectedKey]?.includes(value.name )  */}
@@ -266,7 +279,10 @@ const ManageStudentOffices  = () => {
                       <div key={key}>
 
                         <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
-                          <div className="justify-center">{key}</div>
+                          <div className="justify-center">
+
+                            <p className="font-satoshi capitalize">   {key}</p>
+                          </div>
                           <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, key)}>
                             {/* <ArrowCircleRightIcon /> */}
                             <AddIcon />
@@ -282,7 +298,9 @@ const ManageStudentOffices  = () => {
                     <div key={Approved.name}>
 
                       <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
-                        <div className="justify-center">{Approved.name}</div>
+                        <div className="justify-center ">
+                          <p font-satoshi capitalize>  {Approved.name}</p>
+                        </div>
                         <button className="flex flex-1 justify-end" onClick={() => addItem(selectedKey, Approved.name)}>
                           {/* <ArrowCircleRightIcon /> */}
                           <AddIcon />
@@ -297,8 +315,13 @@ const ManageStudentOffices  = () => {
               </div>
               {/* rounded-md border border-stroke bg-white shadow-default dark:border-black dark:bg-black */}
               {/* remover */}
+              {selectedKey && selectedKey !== "Select a Step" && (
+                <p
+                  className="text-base font-medium leading-10 font-satoshi capitalize text-wrap   line-clamp-3 w-1/4 flex  justify-center  border rounded-lg p-10 bg-gray-100 mb-5 mt-5 ml-10">
+                  Upon clicking the 'Add' button on the left side, the newly added item becomes the subsequent step following the current status   {selectedKey}.
+                </p>)}
+
               <div className="mt-5 " >
-              <p></p>
                 <ul className="pl-5 py-3">
                   {keyValuePairs[selectedKey]?.map((value) => (
                     <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3" key={value}>
@@ -315,15 +338,27 @@ const ManageStudentOffices  = () => {
               </div>
             </div>
 
-            <div className=" w-full px-1 ">
+            {/* {selectedKey  && (
+              <div className="flex  justify-end w-full px-1 ">
+                <button
+
+                  onClick={() => modifySteps(selectedKey, keyValuePairs[selectedKey])}
+                  className=" rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
+                >
+                  Save
+                </button>
+              </div>)} */}
+
+            {((selectedKey && selectedKey == "Select a Step")||(!selectedKey) )  && (<div className=" w-full px-1 ">
               <button
 
                 onClick={() => modifySteps(selectedKey, keyValuePairs[selectedKey])}
-                className="ml-5 block w-60 rounded border border-primary bg-primary p-3 text-center font-medium text-white transition hover:bg-opacity-90"
+                className="ml-5 block w-60 rounded border border-primary bg-primary p-3 text-center
+                 font-medium text-white transition hover:bg-opacity-90"
               >
                 Save
               </button>
-            </div>
+            </div>)}
           </main>
 
         </div>
@@ -348,5 +383,5 @@ const ManageStudentOffices  = () => {
   );
 };
 
-export default ManageStudentOffices ;
+export default ManageStudentOffices;
 
