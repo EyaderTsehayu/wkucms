@@ -56,6 +56,7 @@ const RegisterStaff = ({ onCancel }) => {
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
 
+
   const [Previlege, setPrevilege] = useState([])
   const [staffType, setStaffType] = useState([])
   const [director, setDirector] = useState([])
@@ -64,6 +65,7 @@ const RegisterStaff = ({ onCancel }) => {
 
 
 
+  const [Previlege, setPrevilege] = useState([])
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -93,6 +95,7 @@ const RegisterStaff = ({ onCancel }) => {
   };
 
 
+
   const handleSearchStaffTypeChange = (event) => {
     setSearchStaffType(event.target.value);
     setShowStaffType(true);
@@ -106,6 +109,7 @@ const RegisterStaff = ({ onCancel }) => {
       setShowDirectorDropdown(true);  
     }
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -122,7 +126,7 @@ const RegisterStaff = ({ onCancel }) => {
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
 
-        // fetch steps data for the dropdown of privilege
+
 
         try {
           const fetchedData = await fetch(`/api/steps`);
@@ -173,7 +177,7 @@ const RegisterStaff = ({ onCancel }) => {
 
         setDirector(previlege);
         setPrevilege(previlege);
-        
+
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
@@ -229,7 +233,9 @@ const RegisterStaff = ({ onCancel }) => {
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
+
   }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector]);
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -326,7 +332,6 @@ const RegisterStaff = ({ onCancel }) => {
     setFilteredStaffType(filteredResults);
   }, [searchStaffType]);
 
-
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
     setShowDropdown(true);
@@ -412,9 +417,11 @@ const RegisterStaff = ({ onCancel }) => {
           collegeName: data.collegeName,
           departmentName: data.departmentName,
           role: ROLES.STAFF,
+
           staffType: data.staffType,
           director:data.directorName,
           blockNo: data.blockNo,
+
 
         }),
       });
@@ -549,12 +556,14 @@ const RegisterStaff = ({ onCancel }) => {
             <input
               className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               type="text"
+
               name="staffType"
               id="staffType"
               placeholder="Search for a staff type..."
               value={searchStaffType}
               onFocus={handleSearchStaffType}
               onChange={handleSearchStaffTypeChange}
+
             />
 
             {showStaffType && (
@@ -574,7 +583,6 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
-
 
 
           <div className="w-full sm:w-1/2">
@@ -763,9 +771,11 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
+
           )}
 
           {/*for dormitory */}
+
           {searchPrevilege && searchPrevilege == "Dormitory" && (
             <div className="w-full sm:w-1/2">
               <label
@@ -811,4 +821,6 @@ const RegisterStaff = ({ onCancel }) => {
     </div>
   );
 };
+
 export default RegisterStaff;
+

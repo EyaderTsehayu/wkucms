@@ -261,4 +261,6 @@ const RegisterOfficer = ({ onCancel }) => {
     </div>
   );
 };
+
 export default RegisterOfficer;
+

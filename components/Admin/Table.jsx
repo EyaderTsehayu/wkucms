@@ -41,6 +41,25 @@ const Table = ({
     },
   });
 
+  const theme = createTheme({
+    typography: {
+      fontFamily: "Satoshi",
+    },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+       @font-face {
+  font-family: "Satoshi";
+  src: url("../../app/fonts/Satoshi-Regular.woff2") format("woff2")
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+      `,
+      },
+    },
+  });
+
   if (!clickableColumns) {
     clickableColumns = [-1];
   }

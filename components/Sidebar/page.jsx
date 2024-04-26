@@ -438,7 +438,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </Link>
                   </li>
 
+
                   <li>
+
                     <Link
                       href="/admin/offices"
                       className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium text-primary font-satoshi dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
@@ -448,6 +450,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       <HomeWorkIcon fontSize="small" />
                       Offices
                     </Link>
+
                   </li>
 
                   <li>
@@ -462,34 +465,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </Link>
                   </li>
 
-                  {/* steppppp */}
-                  {/* <li>
-                    <Link
-                      href="/admin/step"
-                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("step") && "bg-gray dark:bg-meta-4"
-                        }`}
-                    >
-                      <HomeWorkOutlinedIcon />
-                      Step
-                    </Link>
-                  </li> */}
-                  {/* stepp */}
-                  {/* <!-- Menu offices  --> */}
+                  <hr className="text-bodydark opacity-90 mt-1 mx-4 dark:text-bodydark" />
 
-                  {/* <!-- Menu officers  --> */}
-                  {/* <li>
-                    <Link
-                      href="/admin/officer"
-                      className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium  text-graydark dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${pathname.includes("officer") && "bg-gray dark:bg-meta-4"
-                        }`}
-                    >
-                      <ManageAccountsOutlinedIcon />
-                      Officers
-                    </Link>
-                  </li> */}
-                  {/* <!-- Menu Officers --> */}
+                  <h3 className="mt-4 mb-1 ml-4 text-sm font-semibold font-satoshi text-primary dark:text-bodydark ">
+                    OTHERS
+                  </h3>
 
-                  {/* <!-- Menu Admin  --> */}
                   <li>
                     <Link
                       href="/admin/manageOffices"

@@ -14,7 +14,9 @@ const RegisterOffice = ({ onCancel }) => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
+
   const programs = ["STUDENT", "ACADEMIC","ADMIN"];
+
 
   const onSubmit = async (data) => {
     const fromFirstName = data.officeName.toLowerCase();
@@ -23,7 +25,7 @@ const RegisterOffice = ({ onCancel }) => {
 
     const password = `${fromFirstName}@office`;
 
-    // console.log(data);
+
     try {
       // first fetch the steps from step model start
 
@@ -60,11 +62,7 @@ const RegisterOffice = ({ onCancel }) => {
       });
 
       if (response.ok) {
-        // push to step
-        // const UpdatedSteps = [...stepData, data.officeName];
 
-        // console.log("erekoy eskieee",stepData)
-        // Calculate the index to insert data.officeName
         const insertIndex = UpdatedSteps.length - 1;
 
         // Insert data.officeName at the specified index
@@ -81,15 +79,7 @@ const RegisterOffice = ({ onCancel }) => {
             // updatedSteps: UpdatedSteps,
           }),
 
-          // setStepData(...stepData,data.officeName)
-          // console.log("i think is working",UpdatedSteps)
-          // const stepResponse = await fetch("/api/step", {
-          //   method: "POST",
-          //   body: JSON.stringify({
-          //       // id: "65c4891df9228bec3acfe3a0",
-          //       steps:UpdatedSteps,
-          //       stepType:stepType
-          //   }),
+
         });
 
         // Check if step insertion was successful

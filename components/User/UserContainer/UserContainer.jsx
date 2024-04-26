@@ -29,7 +29,9 @@ const UserContainer = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
+
 console.log("filteredRows before search",filteredRows );
+
   // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -49,7 +51,7 @@ console.log("filteredRows before search",filteredRows );
     setFilteredRows(filteredRows);
     
   };
-  console.log("filteredRows After search",filteredRows );
+
 
   const handleApproveAll = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {

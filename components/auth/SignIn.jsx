@@ -31,16 +31,12 @@ const SignIn = () => {
     // fetch the status of user
 
     try {
-      console.log("userId lemnayiseram gn", userId);
+
       //const response = await fetch(`/api/user/byUserId/${userId}`);
       const url = new URL("http://localhost:3000/api/user/byUserId");
       url.searchParams.append("userId", userId);
       const response = await fetch(url);
 
-
-
-
-      console.log("response", response);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
