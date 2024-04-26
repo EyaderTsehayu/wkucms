@@ -14,7 +14,9 @@ const RegisterOffice = ({ onCancel }) => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
-  const programs = ["STUDENT", "STAFF"];
+
+  const programs = ["STUDENT", "ACADEMIC","ADMIN"];
+
 
   const onSubmit = async (data) => {
     const fromFirstName = data.officeName.toLowerCase();
@@ -22,6 +24,7 @@ const RegisterOffice = ({ onCancel }) => {
     // Generate a random number between 100 and 999
 
     const password = `${fromFirstName}@office`;
+
 
     try {
       // first fetch the steps from step model start
@@ -59,6 +62,7 @@ const RegisterOffice = ({ onCancel }) => {
       });
 
       if (response.ok) {
+
         const insertIndex = UpdatedSteps.length - 1;
 
         // Insert data.officeName at the specified index
@@ -74,6 +78,7 @@ const RegisterOffice = ({ onCancel }) => {
             stepType: stepType,
             // updatedSteps: UpdatedSteps,
           }),
+
 
         });
 

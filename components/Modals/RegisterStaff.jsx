@@ -17,32 +17,53 @@ const RegisterStaff = ({ onCancel }) => {
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
 
   let keys = [];
+  // Mock data for staff types
+  const staffTypes = ["Academic", "Admin"];
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedPrevilege, setSelectedPrevilege] = useState(null);
+   const [selectedDirector, setSelectedDirector] = useState(null);
+
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCollege, setSearchCollege] = useState("");
   const [searchPrevilege, setSearchPrevilege] = useState("");
+  const [searchStaffType, setSearchStaffType] = useState("");
+  const [searchDirector, setSearchDirector] = useState("");
 
   const [filteredOffices, setFilteredOffices] = useState([]);
   const [filteredColleges, setFilteredColleges] = useState([]);
   const [filteredPrevilege, setFilteredPrevilege] = useState([]);
+  const [filteredStaffType, setFilteredStaffType] = useState([]);
+  const [filteredDirector, setFilteredDirector] = useState(null);
+
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [showPrevilegeDropdown, setShowPrevilegeDropdown] = useState(false);
+  const [showStaffType, setShowStaffType] = useState(false);
+  const [showDirectorDropdown, setShowDirectorDropdown] = useState(false);
+
 
   const collegeDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
   const previlegeDropdownRef = useRef(null);
+  const staffTypeDropdownRef = useRef(null);
+  const directorDropdownRef = useRef(null);
+
 
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
-  // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
-  // let previlege={};
+
+  const [Previlege, setPrevilege] = useState([])
+  const [staffType, setStaffType] = useState([])
+  const [director, setDirector] = useState([])
+
+  // const staffType = ["Acadamic", "Admin"];
+
+
 
   const [Previlege, setPrevilege] = useState([])
 
@@ -73,6 +94,23 @@ const RegisterStaff = ({ onCancel }) => {
     }
   };
 
+
+
+  const handleSearchStaffTypeChange = (event) => {
+    setSearchStaffType(event.target.value);
+    setShowStaffType(true);
+  };
+
+  const handleSearchDirectorFocus = () => {
+    if (searchDirector) {
+      setShowDirectorDropdown(true);
+    } else {
+      setFilteredDirector(director);
+      setShowDirectorDropdown(true);  
+    }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,7 +126,7 @@ const RegisterStaff = ({ onCancel }) => {
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
 
-      // fetch steps data for the dropdown of privilege
+
 
         try {
           const fetchedData = await fetch(`/api/steps`);
@@ -100,7 +138,7 @@ const RegisterStaff = ({ onCancel }) => {
           data.forEach((item) => {
             keyValuePairs[item.name] = item.nextSteps;
           });
-           keys = Object.keys(keyValuePairs);
+          keys = Object.keys(keyValuePairs);
           const values = Object.values(keyValuePairs);
           console.log("keys fetch", keys, ">> values", values);
         } catch (error) {
@@ -137,6 +175,7 @@ const RegisterStaff = ({ onCancel }) => {
           name: role,
         }));
 
+        setDirector(previlege);
         setPrevilege(previlege);
 
       } catch (error) {
@@ -169,15 +208,34 @@ const RegisterStaff = ({ onCancel }) => {
     if (searchPrevilege) {
       // console.log("concatPrevilegeenatedArray",Previlege);
       // console.log("privilegeData",privilegeData);
-      const filteredResults = Previlege.filter((college) =>
+      const filteredResults = Previlege?.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
       setFilteredPrevilege(filteredResults);
     }
+
+    if (searchDirector) {
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
+      const filteredResults = director?.filter((college) =>
+        college.name.toLowerCase().includes(searchDirector.toLowerCase())
+      );
+      setFilteredDirector(filteredResults);
+    }
+    if (searchStaffType) {
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
+      const filteredResults = staffType.filter((college) =>
+        college.toLowerCase().includes(searchStaffType.toLowerCase())
+      );
+      setFilteredStaffType(filteredResults);
+    }
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
+
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector]);
+
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -231,6 +289,48 @@ const RegisterStaff = ({ onCancel }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        (directorDropdownRef.current &&
+          !directorDropdownRef.current.contains(event.target)) ||
+        (directorDropdownRef.current &&
+          !directorDropdownRef.current.contains(event.target))
+      ) {
+        setShowDirectorDropdown(false);
+        setShowDirectorDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        staffTypeDropdownRef.current &&
+        !staffTypeDropdownRef.current.contains(event.target)
+      ) {
+        setShowStaffType(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  useEffect(() => {
+    // Filter staff types based on search term
+    const filteredResults = staffTypes.filter((type) =>
+      type.toLowerCase().includes(searchStaffType.toLowerCase())
+    );
+    setFilteredStaffType(filteredResults);
+  }, [searchStaffType]);
 
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -239,8 +339,16 @@ const RegisterStaff = ({ onCancel }) => {
 
   const handleSearchPrevilegeChange = (event) => {
     setSearchPrevilege(event.target.value);
-    setShowDropdown(true);
+    setShowPrevilegeDropdown(true);
   };
+  const handleSearchDirectorChange = (event) => {
+    setSearchDirector(event.target.value);
+    setShowDirectorDropdown(true);
+  };
+  const handleSearchStaffType = () => {
+    setShowStaffType(true);
+  };
+
 
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
@@ -260,6 +368,21 @@ const RegisterStaff = ({ onCancel }) => {
     setShowPrevilegeDropdown(false);
   };
 
+  const handleDropdownDirectorItemClick = (office) => {
+    setValue("directorName", office.name);
+    setValue("directorId", office.id);
+    setSelectedDirector(office);
+
+    setSearchDirector(office.name);
+    setShowDirectorDropdown(false);
+  };
+
+
+  const handleDropdownStaffTypeItemClick = (staffType) => {
+    setSearchStaffType(staffType);
+    setShowStaffType(false);
+  };
+
   const handleSearchCollegeChange = (event) => {
     setSearchCollege(event.target.value);
     setShowCollegeDropdown(true);
@@ -272,6 +395,9 @@ const RegisterStaff = ({ onCancel }) => {
     setSearchCollege(college.name);
     setShowCollegeDropdown(false);
   };
+  console.log(console.log("directorprevilege",Previlege));
+  console.log(console.log("director",director));
+
 
   const onSubmit = async (data) => {
     const fromFirstName = data.firstName.toLowerCase();
@@ -292,7 +418,10 @@ const RegisterStaff = ({ onCancel }) => {
           departmentName: data.departmentName,
           role: ROLES.STAFF,
 
-          blockNo: ""
+          staffType: data.staffType,
+          director:data.directorName,
+          blockNo: data.blockNo,
+
 
         }),
       });
@@ -416,92 +545,45 @@ const RegisterStaff = ({ onCancel }) => {
           </div>
         </div>
 
+        {/*  */}
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
           <div className="w-full sm:w-1/2">
-            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-              College
-            </label>
-            <input
-              type="text"
-              name="collegeName"
-              id="collegeName"
-              placeholder="Search for a college..."
-              value={searchCollege}
-              onFocus={handleSearchCollegeFocus}
-              onChange={handleSearchCollegeChange}
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
 
-            />
-
-            <p>{errors.collegeName?.message}</p>
-
-            {showCollegeDropdown && (
-              <div
-                ref={collegeDropdownRef} // Use the college dropdown ref
-                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              >
-                {filteredColleges.map((college) => (
-                  <div
-                    key={college.id}
-                    onClick={() => handleDropdownCollegeClick(college)}
-                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                  >
-                    {college.name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-
-          <div className="w-full sm:w-1/2">
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="phoneNumber"
-            >
-              Department
-            </label>
+              htmlFor="staffType">Staff Type</label>
             <input
+              className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               type="text"
-              name="departmentName"
-              id="departmentName"
-              placeholder="Search for an office..."
-              value={searchTerm}
-              onFocus={handleSearchInputFocus}
-              onChange={handleSearchInputChange}
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //  {...register("departmentName")}
-            />
-            <input
-              type="hidden"
-              name="departmentId"
-              id="departmentId"
-              value={selectedDepartment ? selectedDepartment.id : ""}
+
+              name="staffType"
+              id="staffType"
+              placeholder="Search for a staff type..."
+              value={searchStaffType}
+              onFocus={handleSearchStaffType}
+              onChange={handleSearchStaffTypeChange}
+
             />
 
-            <p>{errors.departmentName?.message}</p>
-
-            {showDropdown && (
+            {showStaffType && (
               <div
-                ref={dropdownRef}
                 className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              >
-                {filteredOffices.map((office) => (
+                ref={staffTypeDropdownRef}>
+                {filteredStaffType.map((type) => (
                   <div
-                    key={office.id}
-                    onClick={() => handleDropdownItemClick(office)}
                     className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+
+                    key={type}
+                    onClick={() => handleDropdownStaffTypeItemClick(type)}
                   >
-                    {office.name}
+                    {type}
                   </div>
                 ))}
               </div>
             )}
           </div>
-        </div>
 
-        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
@@ -527,7 +609,7 @@ const RegisterStaff = ({ onCancel }) => {
                 ref={previlegeDropdownRef} // Use the college dropdown ref
                 className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               >
-                {filteredPrevilege.map((previlege) => (
+                {filteredPrevilege?.map((previlege) => (
                   <div
                     key={previlege.id}
                     onClick={() => handleDropdownPrevilegeItemClick(previlege)}
@@ -539,6 +621,160 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
+
+        </div>
+
+
+
+        {/*  */}
+        {searchStaffType && searchStaffType == "Academic" && (
+          <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+            <div className="w-full sm:w-1/2">
+              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                College
+              </label>
+              <input
+                type="text"
+                name="collegeName"
+                id="collegeName"
+                placeholder="Search for a college..."
+                value={searchCollege}
+                onFocus={handleSearchCollegeFocus}
+                onChange={handleSearchCollegeChange}
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+
+              />
+
+              <p>{errors.collegeName?.message}</p>
+
+              {showCollegeDropdown && (
+                <div
+                  ref={collegeDropdownRef} // Use the college dropdown ref
+                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                >
+                  {filteredColleges.map((college) => (
+                    <div
+                      key={college.id}
+                      onClick={() => handleDropdownCollegeClick(college)}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                    >
+                      {college.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
+            <div className="w-full sm:w-1/2">
+              <label
+                className="mb-3 block text-sm font-medium text-black dark:text-white"
+                htmlFor="phoneNumber"
+              >
+                Department
+              </label>
+              <input
+                type="text"
+                name="departmentName"
+                id="departmentName"
+                placeholder="Search for an office..."
+                value={searchTerm}
+                onFocus={handleSearchInputFocus}
+                onChange={handleSearchInputChange}
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              //  {...register("departmentName")}
+              />
+              <input
+                type="hidden"
+                name="departmentId"
+                id="departmentId"
+                value={selectedDepartment ? selectedDepartment.id : ""}
+              />
+
+              <p>{errors.departmentName?.message}</p>
+
+              {showDropdown && (
+                <div
+                  ref={dropdownRef}
+                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                >
+                  {filteredOffices.map((office) => (
+                    <div
+                      key={office.id}
+                      onClick={() => handleDropdownItemClick(office)}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                    >
+                      {office.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+
+          {searchStaffType && searchStaffType == "Admin" && (
+            // <div className="w-full sm:w-1/2">
+            //   <label
+            //     className="mb-3 block text-sm font-medium text-black dark:text-white"
+            //     htmlFor="director"
+            //   >
+            //     Director
+            //   </label>
+            //   <input
+            //     className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+            //     type="text"
+            //     name="director"
+            //     id="director"
+            //     placeholder="director"
+            //     {...register("director")}
+            //   />
+            //   <p>{errors.director?.message}</p>
+            // </div>
+            <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+            Director
+            </label>
+            <input
+              type="text"
+              name="directorName"
+              id="directorName"
+              placeholder="Search for a Director..."
+              value={searchDirector}
+              onFocus={handleSearchDirectorFocus}
+              onChange={handleSearchDirectorChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+
+            />
+
+
+            <p>{errors.collegeName?.message}</p>
+
+            {showDirectorDropdown && (
+              <div
+                ref={directorDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredDirector?.map((director) => (
+                  <div
+                    key={director.id}
+                    onClick={() => handleDropdownDirectorItemClick(director)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {director.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          )}
+
+          {/*for dormitory */}
 
           {searchPrevilege && searchPrevilege == "Dormitory" && (
             <div className="w-full sm:w-1/2">
@@ -560,7 +796,10 @@ const RegisterStaff = ({ onCancel }) => {
             </div>
           )}
 
+
         </div>
+
+
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
           <div className="w-full px-3 2xsm:w-1/2">
@@ -582,4 +821,6 @@ const RegisterStaff = ({ onCancel }) => {
     </div>
   );
 };
+
 export default RegisterStaff;
+

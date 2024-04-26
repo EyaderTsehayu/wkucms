@@ -51,7 +51,8 @@ export const config = {
     "/user/settings",
     "/user/staffApproval",
     "/user/studentApproval",
-
+    "/user/message",
+    
     "/admin/student",
     "/admin/manageAdmins",
     "/admin/manageOffices",

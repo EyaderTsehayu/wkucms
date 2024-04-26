@@ -14,6 +14,8 @@ const RegisterAdmin = ({ onCancel }) => {
     reset,
   } = useForm({ resolver: yupResolver(registerAdminSchema) });
 
+ 
+
   const onSubmit = async (data) => {
     console.log(data);
 

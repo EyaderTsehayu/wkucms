@@ -37,6 +37,7 @@ const RegisterStudent = ({ onCancel }) => {
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
 
+
   const handleSearchInputFocus = () => {
     if (searchTerm) {
       setShowDropdown(true);

@@ -20,14 +20,15 @@ export const POST = async (request) => {
   const { email,userId } = await request.json();
 
   const user = await User.findOne({ userId });
-  if (user) {
+  const userEmail = user.email;
+  if (user && userEmail === email) {
     // Generate a unique token for password reset
     const passwordResetToken = uuidv4();
      console.log("passwordResetToken",passwordResetToken);
      console.log("email     oo",email);
     // Set the token to emailResetPassword field in the user document
     user.emailResetPassword = passwordResetToken;
-    user.email = email;
+    // user.email = email;
     user.passwordResetTokenExpires = new Date(Date.now() + 3600000); // 1 hour from now
 
 
@@ -45,19 +46,21 @@ export const POST = async (request) => {
 
     // Send the password reset email with the token
     //  await sendPasswordResetEmail(email, passwordResetToken);
-     await sendNewPasswordEmail(email, newPassword);
+     await sendNewPasswordEmail(userEmail, newPassword);
     
     return new Response(JSON.stringify({ message: 'A password reset link has been sent to your email.' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } else {
+  }else if(user && userEmail !== email){
+    return new Response("you should enter the correct email", { status: 404 });
+  }
+  
+  else {
     // Respond with a generic message whether or not the email was found
     // This is a security measure to prevent email enumeration
-    return new Response(JSON.stringify({ message: 'If the email is associated with an account, a password reset link will be sent.' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    
+    return new Response("you should enter the correct email", { status: 404 });
   }
 };
 

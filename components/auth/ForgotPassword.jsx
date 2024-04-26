@@ -23,6 +23,7 @@ import Verify from "@/components/auth/Verify";
 const page = () => {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   // const router = useRouter();
   const router = useRouter()
   const {
@@ -33,6 +34,25 @@ const page = () => {
   } = useForm({
     resolver: yupResolver(forgotPassword),
   });
+
+
+// useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(`/api/user/byUserId/${userId}`);
+//         if (!response.ok) {
+//           throw new Error('Failed to fetch user data');
+//         }
+//         const data = await response.json();
+//         // setUserData(data);
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     };
+//     fetchData();
+//   }, []);
+
+
 
   const onSubmitHandler = async (data) => {
 
@@ -178,7 +198,7 @@ const page = () => {
                       <div className="mb-5">
                         <button
                           type="submit"
-                          className="w-full cursor-pointer rounded-lg border border-danger bg-danger p-4 text-white transition hover:bg-opacity-90"
+                          className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                         >
                           Reset
                         </button>

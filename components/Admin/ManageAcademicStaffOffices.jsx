@@ -15,9 +15,24 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import AddIcon from '@mui/icons-material/Add';
 
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// const PersonItem = ({person,index }) => (
+//   <>
+//    {person!="APPROVED"&&(
+//   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+//      {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
+//     <SwapVertIcon/>
+//     <p>{index}</p>
+//     <p>{person}</p>
+//     </div>
+//     )}
+//   </>
+// );
 
 
-const ManageStudentOffices  = () => {
+
+const ManageAcademicStaffOffices = () => {
   const [keyValuePairs, setKeyValuePairs] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
@@ -55,7 +70,7 @@ const ManageStudentOffices  = () => {
     console.log("ooooo");
     const fetchData = async () => {
       try {
-        const stepType = "STUDENT"; // Define your stepType here
+        const stepType = "STAFF"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/steps");
         url.searchParams.append("stepType", stepType);
 
@@ -131,6 +146,28 @@ const ManageStudentOffices  = () => {
       newProperty: ["New Value"],
       // You can add more properties here if needed
     }));
+    // donot delete the commit
+    // try {
+    //     const response = await fetch("/api/steps", {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             steps,
+    //             stepType: "STUDENT"
+    //         }),
+    //     });
+    //     if (response.ok) {
+    //         console.log("Steps created successfully!");
+    //         // Optionally, you can redirect or show a success message here
+    //     } else {
+    //         console.error("Failed to create steps");
+    //         // Handle the error, maybe show an error message to the user
+    //     }
+    // } catch (error) {
+    //     console.error("Error creating steps:", error);
+    //     // Handle any unexpected errors
+    // }
+
+
 
 
     try {
@@ -139,7 +176,7 @@ const ManageStudentOffices  = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STUDENT"
+          stepType: "STAFF"
         }),
       });
       if (response.ok) {
@@ -311,6 +348,8 @@ const ManageStudentOffices  = () => {
             </div>
           </main>
 
+
+
         </div>
 
       </div>
@@ -333,5 +372,7 @@ const ManageStudentOffices  = () => {
   );
 };
 
-export default ManageStudentOffices ;
+export default ManageAcademicStaffOffices;
 
+
+  

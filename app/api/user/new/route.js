@@ -20,7 +20,9 @@ export const POST = async (req) => {
     email,
     blockNo,
     status,
-    verificationCode
+    verificationCode,
+    director,
+    staffType
   } = await req.json();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -42,7 +44,9 @@ export const POST = async (req) => {
       email,
       blockNo,
       status:"active",
-      verificationCode
+      verificationCode,
+      director,
+      staffType
     });
 
     console.log(
@@ -61,7 +65,9 @@ export const POST = async (req) => {
       email,
       blockNo,
       status,
-      verificationCode
+      verificationCode,
+      director,
+      staffType
     );
     await newUser.save();
     return new Response(JSON.stringify(newUser), { status: 201 });

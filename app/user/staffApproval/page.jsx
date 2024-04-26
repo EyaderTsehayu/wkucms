@@ -94,10 +94,9 @@ const ApproveStaff = () => {
   const [searchTerm, setSearchTerm] = useState("");
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/staffApproval",
+    `/api/staffApproval`,
     fetcher,
     {
-      initialData: rows,
       revalidateOnFocus: false,
       refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     }
