@@ -2,84 +2,164 @@
 
 import UserContainer from "@/components/User/UserContainer/UserContainer";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegisterStaff from "@/components/Modals/RegisterStaff";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
+import RejectionMessageBox from "@/components/Modals/RejectionMessageBox";
 
 const columns = [
-  { field: "userId", headerName: "ID", width: "100" },
-  { field: "firstname", headerName: "First name", width: "160" },
-  { field: "middlename", headerName: "Last name", width: "160" },
+  { field: "userId", headerName: "ID", width: "120" },
+  { field: "firstname", headerName: "First Name", width: "140" },
+  { field: "middlename", headerName: "Last Name", width: "140" },
   { field: "reason", headerName: "Reason", width: "160" },
-  { field: "status", headerName: "Status", width: "160" },
+  //{ field: "director", headerName: "Director", width: "140" },
+  { field: "departmentName", headerName: "Department Name", width: "240" },
+  { field: "collegeName", headerName: "College Name", width: "240" },
 ];
 
-const rows = [
-  {
-    id: 1,
-    lastName: "Snow",
-    firstName: "Jon",
-    department: "Seng",
-    officeName: "Library",
-  },
-  {
-    id: 2,
-    lastName: "Lannister",
-    firstName: "Cersei",
-    department: "Seng",
-    officeName: "Cafteria",
-  },
-  {
-    id: 3,
-    lastName: "Lannister",
-    firstName: "Jaime",
-    department: "Seng",
-    officeName: "dpt Head office",
-  },
-  {
-    id: 4,
-    lastName: "Stark",
-    firstName: "Arya",
-    department: "Seng",
-    officeName: "Collage dean",
-  },
-  {
-    id: 5,
-    lastName: "Targaryen",
-    firstName: "Daenerys",
-    department: "Seng",
-    officeName: "Dormitory",
-  },
-  {
-    id: 6,
-    lastName: "Melisandre",
-    firstName: "Drunk",
-    department: "Seng",
-    officeName: "Sport and Recreational",
-  },
-  {
-    id: 7,
-    lastName: "Clifford",
-    firstName: "Ferrara",
-    department: "Seng",
-    officeName: "CCI",
-  },
-  {
-    id: 8,
-    lastName: "Frances",
-    firstName: "Rossini",
-    department: "Seng",
-    officeName: "CCI",
-  },
-  {
-    id: 9,
-    lastName: "Roxie",
-    firstName: "Harvey",
-    department: "Seng",
-    officeName: "CCI",
-  },
-];
+const academicStep = {
+  Head: "College Dean",
+  "College Dean": [
+    "Library Chief1",
+    "Library Chief2",
+    "Library Chief3",
+    "Accountant",
+    "Store Keeper (Electronics)",
+    "Store Keeper (Furniture)",
+    "Store Keeper (Ender/SemiEnder)",
+    "Teachers and Staff Savings Association Accountant",
+    "Registrar",
+    "Housing Management Coordinator",
+    "University Industry Linkage Directorate",
+    "Community Service Directorate",
+    "Indigenous Knowledge Directorate",
+    "Research Directorate",
+  ],
 
+  "Library Chief1": ["Library Director"],
+  "Library Chief2": ["Library Director"],
+  "Library Chief3": ["Library Director"],
+  Accountant: ["Main Treasurer"],
+  "Library Director": ["Human Resource Management Directorate"],
+  "Main Treasurer": ["Finance Directorate"],
+  "Finance Directorate": ["Human Resource Management Directorate"],
+
+  "Store Keeper (Electronics)": [
+    "Procurement and Asset Management Directorate",
+  ],
+  "Store Keeper (Furniture)": ["Procurement and Asset Management Directorate"],
+  "Store Keeper (Ender/SemiEnder)": [
+    "Procurement and Asset Management Directorate",
+  ],
+  "Procurement and Asset Management Directorate": [
+    "Human Resource Management Directorate",
+  ],
+
+  "Teachers and Staff Savings Association Accountant": [
+    "Human Resource Management Directorate",
+  ],
+  Registrar: ["Human Resource Management Directorate"],
+
+  "Housing Management Coordinator": ["Human Resource Management Directorate"],
+
+  "University Industry Linkage Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Community Service Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Indigenous Knowledge Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Research Directorate": ["Research and Community Service Vice President"],
+
+  "Research and Community Service Vice President": [
+    "Academic Affairs Vice president",
+  ],
+
+  "ICT Directorate": ["Human Resource Management Directorate"],
+
+  "Academic Affairs Vice president": [
+    "Administration Corporate Management Vice President",
+  ],
+  "Administration Corporate Management Vice President": [
+    "Records and Archives Officer",
+  ],
+  "Records and Archives Officer": ["Human Resource Management Directorate"],
+  "Human Resource Management Directorate": ["APPROVED"],
+};
+
+const adminStep = {
+  Director: [
+    "Library Chief1",
+    "Library Chief2",
+    "Library Chief3",
+    "Accountant",
+    "Store Keeper (Electronics)",
+    "Store Keeper (Furniture)",
+    "Store Keeper (Ender/SemiEnder)",
+    "Teachers and Staff Savings Association Accountant",
+    "Dean Of Student",
+    "Housing Management Coordinator",
+    "University Industry Linkage Directorate",
+    "Community Service Directorate",
+    "Indigenous Knowledge Directorate",
+    "Research Directorate",
+    "ICT Directorate",
+  ],
+
+  "Library Chief1": ["Library Director"],
+  "Library Chief2": ["Library Director"],
+  "Library Chief3": ["Library Director"],
+  Accountant: ["Main Treasurer"],
+
+  "Store Keeper (Electronics)": [
+    "Procurement and Asset Management Directorate",
+  ],
+  "Store Keeper (Furniture)": ["Procurement and Asset Management Directorate"],
+  "Store Keeper (Ender/SemiEnder)": [
+    "Procurement and Asset Management Directorate",
+  ],
+
+  "Teachers and Staff Savings Association Accountant": [
+    "Human Resource Management Directorate",
+  ],
+  "Dean Of Student": ["Human Resource Management Directorate"],
+
+  "Housing Management Coordinator": ["Human Resource Management Directorate"],
+
+  "University Industry Linkage Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Community Service Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Indigenous Knowledge Directorate": [
+    "Research and Community Service Vice President",
+  ],
+  "Research Directorate": ["Research and Community Service Vice President"],
+  "ICT Directorate": ["Human Resource Management Directorate"],
+
+  "Library Director": ["Human Resource Management Directorate"],
+  "Main Treasurer": ["Finance Directorate"],
+  "Finance Directorate": ["Human Resource Management Directorate"],
+  "Procurement and Asset Management Directorate": [
+    "Human Resource Management Directorate",
+  ],
+  "Research and Community Service Vice President": [
+    "Academic Affairs Vice president",
+  ],
+
+  "Academic Affairs Vice president": [
+    "Administration Corporate Management Vice President",
+  ],
+  "Administration Corporate Management Vice President": [
+    "Records and Archives Officer",
+  ],
+  "Records and Archives Officer": ["Human Resource Management Directorate"],
+  "Human Resource Management Directorate": ["APPROVED"],
+};
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -90,8 +170,14 @@ const fetcher = async (url) => {
   }));
   return updatedData;
 };
+
 const ApproveStaff = () => {
+  const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: session } = useSession();
+
+  const previlage = session?.user?.privilege;
+  //console.log("previlage inside staff approval", previlage);
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
   const { data: userData, error } = useSWR(
     `/api/staffApproval`,
@@ -101,7 +187,43 @@ const ApproveStaff = () => {
       refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
     }
   );
-  console.log("session from approval ad ", userData);
+
+  // console.log("USER DATA inside approval", userData);
+
+  useEffect(() => {
+    if (userData && previlage && previlage !== "Head") {
+      const filtered = userData.filter((request) => {
+        const approvalRoles = request.approvals.map(
+          (approval) => approval.role
+        );
+        const staffType = request.staffType;
+        let step;
+
+        if (staffType == "Academic") {
+          step = academicStep;
+        } else if (staffType == "Admin") {
+          step = { ...adminStep };
+          delete step.Director;
+        }
+
+        const stageKeys = Object.keys(step).filter((key) =>
+          step[key].includes(previlage)
+        );
+
+        // Check if the request has approvals for all stageKeys
+        const hasAllApprovals = stageKeys.every((key) =>
+          approvalRoles.includes(key)
+        );
+
+        // Check if the previlage is not in the rejections array
+        const notRejected = !request.rejections.includes(previlage);
+
+        return hasAllApprovals && notRejected;
+      });
+      setFilteredData(filtered);
+    }
+  }, [userData, previlage]);
+
   // Handle loading and fetch errors
   if (!userData && !error) {
     return <p>Loading...</p>;
@@ -111,11 +233,6 @@ const ApproveStaff = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
-
-  const filteredInfo = userData.filter((info) =>
-    info.reason.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  //const filteredInfo = rows.filter(info => info.id.includes(searchTerm));
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -138,8 +255,8 @@ const ApproveStaff = () => {
         <div className=" grid grid-cols-12 ">
           <UserContainer
             columns={columns}
-            rows={filteredInfo}
-            modal={RegisterStaff}
+            rows={previlage !== "Head" ? filteredData : userData}
+            modal={RejectionMessageBox}
           />
         </div>
       </div>

@@ -11,8 +11,17 @@ const StaffRequestSchema = new Schema({
   },
   attachedFile: { type: String },
   status: {
-    type: String,
+    type: [String],
     required: [true, "Status is required!"],
+  },
+  approvals: [
+    {
+      role: String,
+      time: Date,
+    },
+  ],
+  rejections: {
+    type: Array,
   },
   firstname: {
     type: String,
@@ -26,23 +35,30 @@ const StaffRequestSchema = new Schema({
     type: String,
     // required: [true, "privilege is required!"],
   },
-  collegeName:{
+  staffType: {
+    type: String,
+    // required: [true, "privilege is required!"],
+  },
+  director: {
+    type: String,
+  },
+  collegeName: {
     type: String,
     // required: [true, "collegeId is required!"],
   },
-  departmentName:{
+  departmentName: {
     type: String,
     // required: [true, "departmentId is required!"],
   },
-  _userId:{
-    type:String,
+  _userId: {
+    type: String,
   },
   role: {
     type: String,
     required: [true, "role is required!"],
   },
-  dateRequested:{
-    type:String,
+  dateRequested: {
+    type: String,
     required: [true, "Requested date is required!"],
   },
 });

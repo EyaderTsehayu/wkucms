@@ -2,7 +2,8 @@ import { connectToDB } from "@/utils/database";
 import StaffRequestSchema from "@/models/staffClearanceRequest";
 
 export const POST = async (req) => {
-  const { userId,
+  const {
+    userId,
     reason,
     attachedFile,
     status,
@@ -12,11 +13,10 @@ export const POST = async (req) => {
     collegeName,
     departmentName,
     _userId,
-     
-
+    staffType,
   } = await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
-  console.log("pkyrsf", status);
+
   if (requests.length > 0 && requests != null) {
     return new Response(
       `Cannot request clearance. An active request is already in progress`,
@@ -24,15 +24,14 @@ export const POST = async (req) => {
     );
   }
 
-
   // Get the current date
   const today = new Date();
 
   // Format the date as "DD/MM/YY"
-  const formattedDate = today.toLocaleDateString('en-US', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
+  const formattedDate = today.toLocaleDateString("en-US", {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
   });
   console.log("formattedDate");
   try {
@@ -48,7 +47,8 @@ export const POST = async (req) => {
       departmentName,
       _userId,
       role,
-      dateRequested: formattedDate
+      staffType,
+      dateRequested: formattedDate,
     });
 
     await clearanceReq.save();

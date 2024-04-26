@@ -13,7 +13,7 @@ import History from "@/components/User/History";
 import HistoryIcon from "@mui/icons-material/History";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import RuleOutlinedIcon from "@mui/icons-material/RuleOutlined";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR from "swr";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
@@ -50,6 +50,12 @@ export default function LabTabs() {
     }
   );
 
+  useEffect(() => {
+    if (userData && userData[0]?.status[0]) {
+      setValue("3");
+    }
+  }, [userData]);
+
   // Handle loading and fetch errors
   if (!userData && !error) {
     return <p>Loading...</p>;
@@ -85,7 +91,7 @@ export default function LabTabs() {
               onChange={handleChange}
               aria-label="lab API tabs example"
             >
-              {!userData[0]?.status && (
+              {!userData[0]?.status[0] && (
                 <Tab
                   sx={{
                     textTransform: "none",
