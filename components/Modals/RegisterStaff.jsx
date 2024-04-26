@@ -65,7 +65,7 @@ const RegisterStaff = ({ onCancel }) => {
 
 
 
-  const [Previlege, setPrevilege] = useState([])
+ 
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
