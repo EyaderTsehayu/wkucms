@@ -48,39 +48,53 @@ const ManageStudentOffices  = () => {
   // const [steps, setSteps] = useState({});
   const [selectedKey, setSelectedKey] = useState(null); // State for selected key
   //  setSteps({"yes":["College Dean"]})
-  const [stepData, setStepData] = useState();
+  const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
-  console.log("ooooo", steps);
-  useEffect(() => {
-    console.log("ooooo");
-    const fetchData = async () => {
-      try {
-        const stepType = "STUDENT"; // Define your stepType here
-        const url = new URL("http://localhost:3000/api/steps");
-        url.searchParams.append("stepType", stepType);
+ // console.log("ooooo", steps);
+ useEffect(() => {
+  console.log("oooooooowaaw");
 
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        const updatedData = data.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
-        setStepData(data);
+  const fetchData = async () => {
+    try {
+      const stepType = "STUDENT"; // Define your stepType here
+      const url = "/api/steps"; // Define the URL
 
-        console.log("setDraggedData", data);
-      } catch (error) {
-        setStepError(error);
+      // Construct URL with query parameter
+      const fullUrl = `${url}?stepType=${stepType}`;
+
+      // Make the GET request using fetch
+      const response = await fetch(fullUrl);
+
+      // Check if response is successful
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
 
+      // Extract JSON data from response
+      const data = await response.json();
 
-    fetchData(); // Fetch data once when component mounts
+      // Update data format if needed
+      const updatedData = data.map((user) => ({
+        ...user,
+        id: user._id,
+      }));
 
-    // No cleanup or dependency array needed as we only want to fetch data once
-  }, []);
+      // Set data into state
+      setStepData(data);
+
+      console.log("setDraggedData", data);
+    } catch (error) {
+      // Handle errors
+      setStepError(error);
+    }
+  };
+
+  // Call fetchData when component mounts
+  fetchData();
+
+  // No cleanup or dependency array needed as we only want to fetch data once
+}, []);
+
 
   if (stepData) {
 
@@ -98,7 +112,7 @@ const ManageStudentOffices  = () => {
 
 
   const list = [];
-  console.log("stepData[0].name", stepData[0].name);
+  console.log("stepData[0].name", stepData[0]?.name);
   // for (let index = 0; index < stepData[0].length; index++) {
   //     const key =stepData[0].name;
   //     list.push(key);
@@ -118,7 +132,7 @@ const ManageStudentOffices  = () => {
       }
     });
   }
-  const values = stepData[0].nextSteps;
+  const values = stepData[0]?.nextSteps;
 
 
 
@@ -284,6 +298,7 @@ const ManageStudentOffices  = () => {
               {/* rounded-md border border-stroke bg-white shadow-default dark:border-black dark:bg-black */}
               {/* remover */}
               <div className="mt-5 " >
+              <p></p>
                 <ul className="pl-5 py-3">
                   {keyValuePairs[selectedKey]?.map((value) => (
                     <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3" key={value}>
