@@ -1,4 +1,3 @@
-
 import { connectToDB } from "@/utils/database";
 import StaffRequestSchema from "@/models/staffClearanceRequest";
 
@@ -11,20 +10,29 @@ export const GET = async () => {
   const id = session?.user?.userId;
   const collegeName = session?.user?.collegeName;
   const departmentName = session?.user?.departmentName;
+  // const director = session?.user?.director;
 
-  // console.log("privilageprivilage", privilage)
-  // console.log("session from studentApproval ", session?.user?.privilege)
   try {
-
     await connectToDB();
 
-    const requests = collegeName && departmentName
-      ? await StaffRequestSchema.find({ status: privilage, userId: { $ne: id }, collegeName: collegeName, departmentName: departmentName })
-      : collegeName
-        ? await StaffRequestSchema.find({ status: privilage, userId: { $ne: id }, collegeName: collegeName })
-        : await StaffRequestSchema.find({ status: privilage, userId: { $ne: id } })
-
-
+    const requests =
+      collegeName && departmentName
+        ? await StaffRequestSchema.find({
+            status: privilage,
+            userId: { $ne: id },
+            collegeName: collegeName,
+            departmentName: departmentName,
+          })
+        : collegeName
+        ? await StaffRequestSchema.find({
+            status: privilage,
+            userId: { $ne: id },
+            collegeName: collegeName,
+          })
+        : await StaffRequestSchema.find({
+            status: privilage,
+            userId: { $ne: id },
+          });
 
     // Return a success response with the users data
     return new Response(JSON.stringify(requests), { status: 200 });
