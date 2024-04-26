@@ -32,7 +32,7 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 
 
 
-const ManageStudentOffices  = () => {
+const ManageAcademicStaffOffices = () => {
   const [keyValuePairs, setKeyValuePairs] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
@@ -70,7 +70,7 @@ const ManageStudentOffices  = () => {
     console.log("ooooo");
     const fetchData = async () => {
       try {
-        const stepType = "STUDENT"; // Define your stepType here
+        const stepType = "STAFF"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/steps");
         url.searchParams.append("stepType", stepType);
 
@@ -176,7 +176,7 @@ const ManageStudentOffices  = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STUDENT"
+          stepType: "STAFF"
         }),
       });
       if (response.ok) {
@@ -372,5 +372,7 @@ const ManageStudentOffices  = () => {
   );
 };
 
-export default ManageStudentOffices ;
+export default ManageAcademicStaffOffices;
 
+
+  

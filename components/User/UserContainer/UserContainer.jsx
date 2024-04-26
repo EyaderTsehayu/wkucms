@@ -29,7 +29,7 @@ const UserContainer = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
-
+console.log("filteredRows before search",filteredRows );
   // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -41,12 +41,15 @@ const UserContainer = ({
       const reason = row.reason?.toLowerCase().includes(searchTerm);
       const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
+      console.log("userId", row.userId);
       return userId || firstname || reason || dateApproved;
     });
 
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
+    
   };
+  console.log("filteredRows After search",filteredRows );
 
   const handleApproveAll = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {

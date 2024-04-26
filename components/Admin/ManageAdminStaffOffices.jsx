@@ -15,9 +15,24 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import AddIcon from '@mui/icons-material/Add';
 
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// const PersonItem = ({person,index }) => (
+//   <>
+//    {person!="APPROVED"&&(
+//   <div className="relative w-60 flex space-x-3 border rounded p-2 bg-gray-100">
+//      {/* <MaterialCommunityIcons name="menu-swap-outline" size={24} color="black" />~ */}
+//     <SwapVertIcon/>
+//     <p>{index}</p>
+//     <p>{person}</p>
+//     </div>
+//     )}
+//   </>
+// );
 
 
-const ManageStudentOffices = () => {
+
+const ManageAdminStaffOffices = () => {
   const [keyValuePairs, setKeyValuePairs] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
@@ -55,7 +70,7 @@ const ManageStudentOffices = () => {
     console.log("ooooo");
     const fetchData = async () => {
       try {
-        const stepType = "STUDENT"; // Define your stepType here
+        const stepType = "STAFF"; // Define your stepType here
         const url = new URL("http://localhost:3000/api/steps");
         url.searchParams.append("stepType", stepType);
 
@@ -92,18 +107,13 @@ const ManageStudentOffices = () => {
     return <p>Loading...</p>;
   }
 
-  // Render error state
-  //   if (stepError) {
-  //     console.error("Error fetching data:", stepError);
-  //     return <p>Failed to fetch data</p>;
-  //   }
-
+ 
 
 
 
 
   const list = [];
-  // console.log("stepData[0].name", stepData[0].name);
+  console.log("stepData[0].name", stepData[0].name);
   // for (let index = 0; index < stepData[0].length; index++) {
   //     const key =stepData[0].name;
   //     list.push(key);
@@ -136,9 +146,29 @@ const ManageStudentOffices = () => {
       newProperty: ["New Value"],
       // You can add more properties here if needed
     }));
+    // donot delete the commit
+    // try {
+    //     const response = await fetch("/api/steps", {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             steps,
+    //             stepType: "STUDENT"
+    //         }),
+    //     });
+    //     if (response.ok) {
+    //         console.log("Steps created successfully!");
+    //         // Optionally, you can redirect or show a success message here
+    //     } else {
+    //         console.error("Failed to create steps");
+    //         // Handle the error, maybe show an error message to the user
+    //     }
+    // } catch (error) {
+    //     console.error("Error creating steps:", error);
+    //     // Handle any unexpected errors
+    // }
 
-console.log("keyValuePairs for approved", keyValuePairs);
-console.log("keyValuePairs for approved", key,">>",value);
+
+
 
     try {
       const response = await fetch("/api/steps", {
@@ -146,13 +176,13 @@ console.log("keyValuePairs for approved", key,">>",value);
         body: JSON.stringify({
           key,
           value,
-          stepType: "STUDENT"
+          stepType: "STAFF"
         }),
       });
       if (response.ok) {
         toast.success("Steps updated successfully!")
         console.log("Steps updated successfully!");
-        // console.log("keyValuePairs", keyValuePairs);
+        console.log("keyValuePairs", keyValuePairs);
         // Optionally, you can redirect or show a success message here
       } else {
         console.error("Failed to create steps");
@@ -170,7 +200,6 @@ console.log("keyValuePairs for approved", key,">>",value);
     keyValuePairs[data.name] = data.nextSteps;
   });
 
-
   const addItem = (key, value) => {
     keyValuePairs[key].push(value)
     // console.log("ttttttttttttttttttttt","yyy",value);
@@ -181,7 +210,7 @@ console.log("keyValuePairs for approved", key,">>",value);
         return updatedPairs;
       });
     }
-    
+    // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
   };
 
 
@@ -189,23 +218,23 @@ console.log("keyValuePairs for approved", key,">>",value);
     keyValuePairs[key].pop(value);
     setSteps((prevSteps) => ({
       ...prevSteps,
-      [key]: prevSteps[key].filter((item) => item !== value),
+      [key]: prevSteps[key]?.filter((item) => item !== value),
     }));
   };
 
 
-  // console.log("steps", steps);
+  console.log("steps", steps);
 
 
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    // console.log("Key:", key);
-    // console.log("Value:", value);
+    console.log("Key:", key);
+    console.log("Value:", value);
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
-  
+
   const Approved = {
     key: "APPROVED",
     name: "APPROVED",
@@ -219,19 +248,10 @@ console.log("keyValuePairs for approved", key,">>",value);
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
         <div className="flex w-1/3 ">
-          {/* <input
-            type="text"
-            placeholder="Search here ..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className=" w-full hidden sm:block px-4 py-2 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-          /> */}
+
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          {/* <button className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1">
-            Deactivate
-          </button> */}
           <button
             onClick={handleOpen}
             className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
@@ -245,7 +265,8 @@ console.log("keyValuePairs for approved", key,">>",value);
 
 
           <main className="flex min-h-screen flex-col items-center space-y-4">
-            
+
+
             <select class="ml-1 mr-15  bg-primary text-white  inline-flex items-center gap-2.5 rounded-md dark:bg-boxdark px-5.5 py-3 font-medium  dark:border-strokedark dark:text-white" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value)}>
 
               <option value={null}>Select a Step</option>
@@ -280,7 +301,7 @@ console.log("keyValuePairs for approved", key,">>",value);
                       </div>
                     )
                   ))}
-                  {selectedKey?.toUpperCase() === "REGISTRAR" && !keyValuePairs[selectedKey]?.includes(Approved.name) && (
+                  {selectedKey?.toUpperCase() === "HR" && !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                     <div key={Approved.name}>
 
                       <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">
@@ -327,6 +348,8 @@ console.log("keyValuePairs for approved", key,">>",value);
             </div>
           </main>
 
+
+
         </div>
 
       </div>
@@ -349,5 +372,5 @@ console.log("keyValuePairs for approved", key,">>",value);
   );
 };
 
-export default ManageStudentOffices;
+export default ManageAdminStaffOffices;
 

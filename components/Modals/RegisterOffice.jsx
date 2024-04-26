@@ -14,8 +14,7 @@ const RegisterOffice = ({ onCancel }) => {
     reset,
   } = useForm({ resolver: yupResolver(registerOfficeSchema) });
 
-  const programs = ["STUDENT", "STAFF"];
- 
+  const programs = ["STUDENT", "ACADEMIC","ADMIN"];
 
   const onSubmit = async (data) => {
     const fromFirstName = data.officeName.toLowerCase();

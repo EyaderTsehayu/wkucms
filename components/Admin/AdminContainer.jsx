@@ -20,6 +20,12 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   const [filteredRows, setFilteredRows] = useState(rows);
 
+  useEffect(() => {
+    setIsFilter(false);
+
+  }, [rows])
+
+  const [isFilter, setIsFilter] = useState(false);
   // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -44,23 +50,19 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
         location
       );
     });
-
+    setIsFilter(true);
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
   };
   // end searching
 
-  // const handleCloseModal = () => {
-  //   setOpen(false); // Close the modal
-  // };
-
 
   const handleOpen = () => setOpen(true);
 
   const handleEditOpen = () => {
-    // setUserId(selectedRowsData[0]._id)
+ 
     setEditOpen(true); // Assuming this state update is still needed
-    // const len = selectedRowsData.length;
+    
   };
 
   // change the status
@@ -155,9 +157,8 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
 
   return (
     <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
-        pathname.includes("student") && "col-span-12"
-      } col-span-12  `}
+      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${pathname.includes("student") && "col-span-12"
+        } col-span-12  `}
     >
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
@@ -220,7 +221,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <Table
             columns={columns}
-            rows={filteredRows}
+            rows={isFilter ? filteredRows : rows}
             setSelectedRows={setSelectedRows}
           />
         </div>

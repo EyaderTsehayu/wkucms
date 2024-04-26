@@ -20,7 +20,7 @@ const Table = ({
   clickableColumns,
 }) => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [filteredRows, setFilteredRows] = useState(rows);
+ // const [filteredRows, setFilteredRows] = useState(rows);
 
   const theme = createTheme({
     typography: {

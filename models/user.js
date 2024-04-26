@@ -63,6 +63,12 @@ const UserSchema = new Schema({
  verificationCode: {
     type: String,
   },
+  director: {
+    type: String,
+  },
+  staffType: {
+    type: String,
+  },
  
   passwordResetTokenExpires: { type: Date, default: null },
 
