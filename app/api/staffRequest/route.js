@@ -14,6 +14,8 @@ export const POST = async (req) => {
     departmentName,
     _userId,
     staffType,
+    guarantorName,
+    guarantorId,
   } = await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
 
@@ -33,7 +35,7 @@ export const POST = async (req) => {
     month: "2-digit",
     day: "2-digit",
   });
-  console.log("formattedDate");
+
   try {
     await connectToDB();
     const clearanceReq = new StaffRequestSchema({
@@ -49,6 +51,8 @@ export const POST = async (req) => {
       role,
       staffType,
       dateRequested: formattedDate,
+      guarantorName,
+      guarantorId,
     });
 
     await clearanceReq.save();
