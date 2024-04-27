@@ -67,7 +67,7 @@ const ApproveStudent = () => {
   //console.log("previlage inside student approval", previlage);
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/studentApproval",
+    "/api/studentApproval",
     fetcher,
     {
       revalidateOnFocus: false,

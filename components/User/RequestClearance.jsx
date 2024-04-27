@@ -71,7 +71,7 @@ const TaskItem = () => {
     stepType = session?.data?.user.role;
     const fetchData = async () => {
       try {
-        const url = new URL("http://localhost:3000/api/step");
+        const url = new URL("/api/step");
         url.searchParams.append("stepType", stepType);
 
         const response = await fetch(url);

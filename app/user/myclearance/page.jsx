@@ -41,7 +41,7 @@ export default function LabTabs() {
   const a = [];
   // Step 3: Use useEffect to trigger the API request
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/userStatus",
+    "/api/userStatus",
     fetcher,
     {
       initialData: a,

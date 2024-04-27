@@ -185,7 +185,7 @@ const ManageAdminStaffOffices = () => {
 
 
     try {
-      const response = await fetch("http://localhost:3000/api/steps", {
+      const response = await fetch("/api/steps", {
         method: "PATCH",
         body: JSON.stringify({
           key,

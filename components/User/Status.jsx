@@ -183,7 +183,7 @@ const fetcher = async (url) => {
 
 const Status = () => {
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/userStatus",
+    "/api/userStatus",
     fetcher,
     {
       revalidateOnFocus: false,

@@ -33,7 +33,7 @@ const SignIn = () => {
     try {
 
       //const response = await fetch(`/api/user/byUserId/${userId}`);
-      const url = new URL("http://localhost:3000/api/user/byUserId");
+      const url = new URL("/api/user/byUserId");
       url.searchParams.append("userId", userId);
       const response = await fetch(url);
 
@@ -73,7 +73,7 @@ const SignIn = () => {
           router.replace("/user");
         } else if (role === "STAFF") {
           toast.success("Login Successful!");
-          router.replace("/user/");
+          router.replace("/user");
         }
 
       }

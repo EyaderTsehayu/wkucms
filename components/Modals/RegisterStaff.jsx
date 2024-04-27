@@ -118,11 +118,11 @@ const RegisterStaff = ({ onCancel }) => {
 
         const studentStepType = "STUDENT"
 
-        const staffUrl = new URL("http://localhost:3000/api/step");
+        const staffUrl = new URL("/api/step");
         staffUrl.searchParams.append("stepType", staffStepType);
         const responseStaff = await fetch(staffUrl);
         // fetch students step
-        const studentUrl = new URL("http://localhost:3000/api/step");
+        const studentUrl = new URL("/api/step");
         studentUrl.searchParams.append("stepType", studentStepType);
         const responseStudent = await fetch(studentUrl);
 

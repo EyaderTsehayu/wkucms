@@ -119,7 +119,7 @@ const StepsComponent = () => {
         const fetchData = async () => {
             try {
                 const stepType = "STUDENT"; // Define your stepType here
-                const url = new URL("http://localhost:3000/api/steps");
+                const url = new URL("/api/steps");
                 url.searchParams.append("stepType", stepType);
 
                 const response = await fetch(url);

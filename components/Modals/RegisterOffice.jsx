@@ -31,7 +31,7 @@ const RegisterOffice = ({ onCancel }) => {
 
       const stepType = data.program; // Define your stepType here
 
-      const url = new URL("http://localhost:3000/api/step");
+      const url = new URL("/api/step");
       url.searchParams.append("stepType", stepType);
 
       const responsed = await fetch(url);
