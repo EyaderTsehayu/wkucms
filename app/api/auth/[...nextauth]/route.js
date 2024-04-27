@@ -16,8 +16,6 @@ export const authOptions = {
           await connectToDB();
           const user = await User.findOne({ userId });
 
-          
-
           //console.log("user in route js", user);
 
           if (!user) {
@@ -53,11 +51,11 @@ export const authOptions = {
           middlename: user.middlename,
           lastname: user.lastname,
           role: user.role,
-          privilege:user.privilege,
-          collegeName:user.collegeName,
-          departmentName:user.departmentName,
-          fullName:user.firstname+ user.middlename,
-          status:user.status
+          privilege: user.privilege,
+          collegeName: user.collegeName,
+          departmentName: user.departmentName,
+          fullName: user.firstname + user.middlename,
+          status: user.status,
         };
       }
       return token;
@@ -74,11 +72,11 @@ export const authOptions = {
           middlename: token.middlename,
           lastname: token.lastname,
           role: token.role,
-          privilege:token.privilege,
-          collegeName:token.collegeName,
-          departmentName:token.departmentName,
-          fullName:token.firstname+ token.middlename,
-          status:token.status
+          privilege: token.privilege,
+          collegeName: token.collegeName,
+          departmentName: token.departmentName,
+          fullName: token.firstname + token.middlename,
+          status: token.status,
         },
       };
 

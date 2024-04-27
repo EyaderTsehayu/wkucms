@@ -17,9 +17,6 @@ import { useState, useEffect } from "react";
 import useSWR from "swr";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
-const iconStyle = {
-  marginRight: "8px", // Adjust the margin as needed
-};
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -37,7 +34,9 @@ export default function LabTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const handleRequest = () => {
+    setValue("1");
+  };
   const a = [];
   // Step 3: Use useEffect to trigger the API request
   const { data: userData, error } = useSWR(
@@ -144,7 +143,7 @@ export default function LabTabs() {
               <History />
             </TabPanel>
             <TabPanel value="3">
-              <Status />
+              <Status handleRequest={handleRequest} />
             </TabPanel>
           </>
         </TabContext>
