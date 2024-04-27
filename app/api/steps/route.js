@@ -69,6 +69,7 @@ async function populateSteps(data, stepType) {
 }
 
 export const GET = async (request) => {
+  console.log("yturytrtytuyuuu");
   // Parse the stepType from the URL query parameters
   const params = new URL(request.url).searchParams;
   const stepType = params.get("stepType");
@@ -76,7 +77,7 @@ export const GET = async (request) => {
   const session = await getServerSession(authOptions);
   const privilage = session?.user?.privilege;
   // console.log("sendtoapi", stepType);
-
+console.log("steptype",stepType);
   // console.log("session from studentApproval ", session?.user?.privilege)
   try {
     await connectToDB();

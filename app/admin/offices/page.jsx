@@ -40,7 +40,7 @@ const ManageOffices = () => {
 
   // Use useSWR to fetch data
   const { data: officeData, error } = useSWR(
-    "http://localhost:3000/api/office",
+    "/api/office",
     async (url) => {
       const response = await fetch(url);
       const data = await response.json();

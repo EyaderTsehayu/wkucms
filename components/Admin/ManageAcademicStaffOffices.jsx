@@ -63,40 +63,85 @@ const ManageAcademicStaffOffices = () => {
   // const [steps, setSteps] = useState({});
   const [selectedKey, setSelectedKey] = useState(null); // State for selected key
   //  setSteps({"yes":["College Dean"]})
-  const [stepData, setStepData] = useState();
+  const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
   console.log("ooooo", steps);
+
+  // useEffect(() => {
+  //   console.log("ooooott");
+  //   const fetchData = async () => {
+  //     try {
+  //       const stepType = "STAFF"; // Define your stepType here
+  //       const url = new URL("/api/steps");
+  //       url.searchParams.append("stepType", stepType);
+
+  //       const response = await fetch(url);
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       const data = await response.json();
+  //       const updatedData = data.map((user) => ({
+  //         ...user,
+  //         id: user._id,
+  //       }));
+  //       setStepData(data);
+
+  //       console.log("setDraggedData", data);
+  //     } catch (error) {
+  //       setStepError(error);
+  //     }
+  //   };
+
+
+  //   fetchData(); // Fetch data once when component mounts
+
+  //   // No cleanup or dependency array needed as we only want to fetch data once
+  // }, []);
+
   useEffect(() => {
-    console.log("ooooo");
+    console.log("oooooooowaaw");
+  
     const fetchData = async () => {
       try {
         const stepType = "STAFF"; // Define your stepType here
-        const url = new URL("http://localhost:3000/api/steps");
-        url.searchParams.append("stepType", stepType);
-
-        const response = await fetch(url);
+        const url = "/api/steps"; // Define the URL
+  
+        // Construct URL with query parameter
+        const fullUrl = `${url}?stepType=${stepType}`;
+  
+        // Make the GET request using fetch
+        const response = await fetch(fullUrl);
+  
+        // Check if response is successful
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+  
+        // Extract JSON data from response
         const data = await response.json();
+  
+        // Update data format if needed
         const updatedData = data.map((user) => ({
           ...user,
           id: user._id,
         }));
+  
+        // Set data into state
         setStepData(data);
-
+  
         console.log("setDraggedData", data);
       } catch (error) {
+        // Handle errors
         setStepError(error);
       }
     };
-
-
-    fetchData(); // Fetch data once when component mounts
-
+  
+    // Call fetchData when component mounts
+    fetchData();
+  
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
-
+  
   if (stepData) {
 
     console.log("stepData ", stepData[0])
@@ -113,7 +158,7 @@ const ManageAcademicStaffOffices = () => {
 
 
   const list = [];
-  console.log("stepData[0].name", stepData[0].name);
+  console.log("stepData[0].name", stepData[0]?.name);
   // for (let index = 0; index < stepData[0].length; index++) {
   //     const key =stepData[0].name;
   //     list.push(key);
@@ -133,7 +178,7 @@ const ManageAcademicStaffOffices = () => {
       }
     });
   }
-  const values = stepData[0].nextSteps;
+  const values = stepData[0]?.nextSteps;
 
 
 

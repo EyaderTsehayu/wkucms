@@ -34,7 +34,7 @@ const ManageStaff = () => {
 
   // Use SWR to fetch and cache data
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/user/new/staff",
+    "/api/user/new/staff",
     fetcher,
     {
       initialData: rows, // Provide initial data (can be an empty array)
