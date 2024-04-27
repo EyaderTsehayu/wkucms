@@ -15,6 +15,17 @@ export const PATCH = async (request) => {
 
     await connectToDB();
 
+
+    const studentType = "STUDENT";
+   
+    
+      const requests = await DynamicSteps.find({stepType: studentType});
+      //return new Response(JSON.stringify(requests), { status: 200 });
+   
+    
+    console.log("studentData from myclearance on", requests);
+  
+    
     // first fetch the steps
     // const steps = await StepSchema.findOne({ stepType: "STUDENT" });
     //studentApproval = steps.steps;

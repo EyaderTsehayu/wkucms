@@ -169,7 +169,7 @@ const adminStep = {
   "Human Resource Management Directorate": ["APPROVED"],
 };
 let steps;
-
+ 
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -181,7 +181,10 @@ const fetcher = async (url) => {
   return updatedData;
 };
 
-const Status = () => {
+const Status = ({studentStepData,adminStepData,academicStepData}) => {
+  console.log("studentStepData",studentStepData);
+  console.log("adminStepData",adminStepData);
+  console.log("academicStepData",academicStepData);
   const { data: userData, error } = useSWR(
     "/api/userStatus",
     fetcher,
@@ -190,12 +193,25 @@ const Status = () => {
       refreshInterval: 2000,
     }
   );
-  if (userData && userData[0]?.staffType == "Academic") {
+  if (userData && userData[0]?.staffType == "ACADEMIC") {
+    let academicStep = {};
+    academicStepData.forEach((data, index) => {
+    academicStep[data.name] = data.nextSteps;
+  });
     steps = academicStep;
-  } else if (userData && userData[0]?.staffType == "Admin") {
+  } else if (userData && userData[0]?.staffType == "ADMIN") {
+    let adminStep = {};
+    adminStepData.forEach((data, index) => {
+      adminStep[data.name] = data.nextSteps;
+    });
     steps = { ...adminStep };
     delete steps.Director;
   } else {
+    let studentStep = {};
+    studentStepData.forEach((data, index) => {
+      studentStep[data.name] = data.nextSteps;
+    });
+    console.log("studentStep", studentStep);
     steps = studentStep;
   }
   if (!userData && !error) {
