@@ -43,67 +43,24 @@ const ManageAcademicStaffOffices = () => {
       handleClose();
     }
   };
-
-  const [steps, setSteps] = useState({
-    Head: ["College Dean"],
-    "College Dean": [
-      "Dormitory",
-      "Cafteria",
-      "Sport And Recreation",
-      "College Book Store",
-    ],
-    Dormitory: ["Dean Of Student"],
-    Cafteria: ["Dean Of Student"],
-    "Sport And Recreation": ["Dean Of Student"],
-    "College Book Store": ["Library Chief"],
-    "Dean Of Student": ["Registrar"],
-    "Library Chief": ["Registrar"],
-    Registrar: ["APPROVED"],
-  });
+  
+  const [steps, setSteps] = useState({});
+ 
   // const [steps, setSteps] = useState({});
   const [selectedKey, setSelectedKey] = useState(null); // State for selected key
   //  setSteps({"yes":["College Dean"]})
   const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
-  console.log("ooooo", steps);
+ 
 
-  // useEffect(() => {
-  //   console.log("ooooott");
-  //   const fetchData = async () => {
-  //     try {
-  //       const stepType = "STAFF"; // Define your stepType here
-  //       const url = new URL("/api/steps");
-  //       url.searchParams.append("stepType", stepType);
-
-  //       const response = await fetch(url);
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const data = await response.json();
-  //       const updatedData = data.map((user) => ({
-  //         ...user,
-  //         id: user._id,
-  //       }));
-  //       setStepData(data);
-
-  //       console.log("setDraggedData", data);
-  //     } catch (error) {
-  //       setStepError(error);
-  //     }
-  //   };
-
-
-  //   fetchData(); // Fetch data once when component mounts
-
-  //   // No cleanup or dependency array needed as we only want to fetch data once
-  // }, []);
+  
 
   useEffect(() => {
-    console.log("oooooooowaaw");
+    
   
     const fetchData = async () => {
       try {
-        const stepType = "STAFF"; // Define your stepType here
+        const stepType = "ACADEMIC"; // Define your stepType here
         const url = "/api/steps"; // Define the URL
   
         // Construct URL with query parameter
@@ -152,27 +109,15 @@ const ManageAcademicStaffOffices = () => {
     return <p>Loading...</p>;
   }
 
- 
-
-
-
-
   const list = [];
   console.log("stepData[0].name", stepData[0]?.name);
-  // for (let index = 0; index < stepData[0].length; index++) {
-  //     const key =stepData[0].name;
-  //     list.push(key);
-  // }
-  //     stepData[0].name.forEach(element => {
-  //         list.push(element);
-
-  //    });
+  
   const data = stepData[0];
-  // console.log("data",data);
+
   for (let index = 0; index < stepData.length; index++) {
 
     Object.keys(data).forEach(key => {
-      // console.log("key",key);
+    
       if (key === 'name') {
         list.push(data[key]);
       }
@@ -180,41 +125,13 @@ const ManageAcademicStaffOffices = () => {
   }
   const values = stepData[0]?.nextSteps;
 
-
-
-  // const keys = Object.keys(steps);
-  // const values = Object.values(steps);
-  console.log("list", list);
   const modifySteps = async (key, value) => {
     setSteps(prevSteps => ({
       ...prevSteps,
       newProperty: ["New Value"],
       // You can add more properties here if needed
     }));
-    // donot delete the commit
-    // try {
-    //     const response = await fetch("/api/steps", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             steps,
-    //             stepType: "STUDENT"
-    //         }),
-    //     });
-    //     if (response.ok) {
-    //         console.log("Steps created successfully!");
-    //         // Optionally, you can redirect or show a success message here
-    //     } else {
-    //         console.error("Failed to create steps");
-    //         // Handle the error, maybe show an error message to the user
-    //     }
-    // } catch (error) {
-    //     console.error("Error creating steps:", error);
-    //     // Handle any unexpected errors
-    // }
-
-
-
-
+   
     try {
       const response = await fetch("/api/steps", {
         method: "PATCH",
@@ -268,7 +185,7 @@ const ManageAcademicStaffOffices = () => {
   };
 
 
-  console.log("steps", steps);
+  
 
 
 

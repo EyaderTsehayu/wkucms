@@ -44,34 +44,19 @@ const ManageAdminStaffOffices = () => {
     }
   };
 
-  const [steps, setSteps] = useState({
-    Head: ["College Dean"],
-    "College Dean": [
-      "Dormitory",
-      "Cafteria",
-      "Sport And Recreation",
-      "College Book Store",
-    ],
-    Dormitory: ["Dean Of Student"],
-    Cafteria: ["Dean Of Student"],
-    "Sport And Recreation": ["Dean Of Student"],
-    "College Book Store": ["Library Chief"],
-    "Dean Of Student": ["Registrar"],
-    "Library Chief": ["Registrar"],
-    Registrar: ["APPROVED"],
-  });
+  const [steps, setSteps] = useState({});
   // const [steps, setSteps] = useState({});
   const [selectedKey, setSelectedKey] = useState(null); // State for selected key
   //  setSteps({"yes":["College Dean"]})
   const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
-  console.log("ooooo", steps);
+
   useEffect(() => {
-    console.log("oooooooowaaw");
+  
   
     const fetchData = async () => {
       try {
-        const stepType = "STAFF"; // Define your stepType here
+        const stepType = "ADMIN"; // Define your stepType here
         const url = "/api/steps"; // Define the URL
   
         // Construct URL with query parameter
@@ -97,7 +82,7 @@ const ManageAdminStaffOffices = () => {
         // Set data into state
         setStepData(data);
   
-        console.log("setDraggedData", data);
+      
       } catch (error) {
         // Handle errors
         setStepError(error);
@@ -127,15 +112,8 @@ const ManageAdminStaffOffices = () => {
 
 
   const list = [];
-  console.log("stepData[0].name", stepData[0]?.name);
-  // for (let index = 0; index < stepData[0].length; index++) {
-  //     const key =stepData[0].name;
-  //     list.push(key);
-  // }
-  //     stepData[0].name.forEach(element => {
-  //         list.push(element);
-
-  //    });
+ 
+ 
   const data = stepData[0];
   // console.log("data",data);
   for (let index = 0; index < stepData.length; index++) {
@@ -153,36 +131,14 @@ const ManageAdminStaffOffices = () => {
 
   // const keys = Object.keys(steps);
   // const values = Object.values(steps);
-  console.log("list", list);
+
   const modifySteps = async (key, value) => {
     setSteps(prevSteps => ({
       ...prevSteps,
       newProperty: ["New Value"],
       // You can add more properties here if needed
     }));
-    // donot delete the commit
-    // try {
-    //     const response = await fetch("/api/steps", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             steps,
-    //             stepType: "STUDENT"
-    //         }),
-    //     });
-    //     if (response.ok) {
-    //         console.log("Steps created successfully!");
-    //         // Optionally, you can redirect or show a success message here
-    //     } else {
-    //         console.error("Failed to create steps");
-    //         // Handle the error, maybe show an error message to the user
-    //     }
-    // } catch (error) {
-    //     console.error("Error creating steps:", error);
-    //     // Handle any unexpected errors
-    // }
-
-
-
+   
 
     try {
       const response = await fetch("/api/steps", {
@@ -216,7 +172,7 @@ const ManageAdminStaffOffices = () => {
 
   const addItem = (key, value) => {
     keyValuePairs[key].push(value)
-    // console.log("ttttttttttttttttttttt","yyy",value);
+    
     if (key !== value && key !== "Select a Step") {
       setKeyValuePairs(prevKeyValuePairs => {
         const updatedPairs = { ...prevKeyValuePairs };
@@ -224,7 +180,7 @@ const ManageAdminStaffOffices = () => {
         return updatedPairs;
       });
     }
-    // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
+    
   };
 
 
@@ -237,7 +193,7 @@ const ManageAdminStaffOffices = () => {
   };
 
 
-  console.log("steps", steps);
+
 
 
 

@@ -31,11 +31,19 @@ const SignIn = () => {
     // fetch the status of user
 
     try {
+   //   const stepType = "ACADEMIC"; // Define your stepType here
+      const url = "/api/user/byUserId"; // Define the URL
+
+      // Construct URL with query parameter
+      const fullUrl = `${url}?userId=${userId}`;
+
+      // Make the GET request using fetch
+      const response = await fetch(fullUrl);
 
       //const response = await fetch(`/api/user/byUserId/${userId}`);
-      const url = new URL("/api/user/byUserId");
-      url.searchParams.append("userId", userId);
-      const response = await fetch(url);
+      // const url = new URL("/api/user/byUserId");
+      // url.searchParams.append("userId", userId);
+      // const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -50,6 +58,15 @@ const SignIn = () => {
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
+
+
+
+
+
+
+
+
+
     console.log("status:", status);
     try {
       const res = await signIn("credentials", {
