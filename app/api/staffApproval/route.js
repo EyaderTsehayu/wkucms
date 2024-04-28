@@ -3,6 +3,7 @@ import StaffRequestSchema from "@/models/staffClearanceRequest";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
+import User from "@/models/user";
 
 export const GET = async () => {
   const session = await getServerSession(authOptions);
