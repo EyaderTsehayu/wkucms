@@ -109,10 +109,7 @@ export default function LabTabs() {
 
 console.log("studentStepData from myclearance", studentStepData);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
+  
  
   useEffect(() => {
     if (userData && userData[0]?.status[0]) {
