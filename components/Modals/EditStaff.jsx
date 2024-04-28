@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { CollegeData, DepartmentData, ROLES } from "@/utils/constants";
 import * as XLSX from "xlsx";
 
-const EditStaff = ({ userData, onCancel }) => {
+const EditStaff = ({ userData,onCancel }) => {
   const {
     handleSubmit,
     register,
@@ -15,39 +15,57 @@ const EditStaff = ({ userData, onCancel }) => {
     reset,
     setValue,
   } = useForm({ resolver: yupResolver(registerOfficerSchema) });
-  console.log("www", userData);
-  // userData && userData.forEach((user) => {
-  //   console.log(user.privilege); // Output: Head (or the privilege for each user)
-  // })
 
-  console.log("sera mesel", userData[0]);
-  // userData && userData[0].map((data)=>console.log(data));
+  let keys = [];
+  // Mock data for staff types
+  const staffTypes = ["ACADEMIC", "ADMIN"];
+
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedPrevilege, setSelectedPrevilege] = useState(null);
+   const [selectedDirector, setSelectedDirector] = useState(null);
+
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCollege, setSearchCollege] = useState("");
   const [searchPrevilege, setSearchPrevilege] = useState("");
+  const [searchStaffType, setSearchStaffType] = useState("");
+  const [searchDirector, setSearchDirector] = useState("");
 
   const [filteredOffices, setFilteredOffices] = useState([]);
   const [filteredColleges, setFilteredColleges] = useState([]);
   const [filteredPrevilege, setFilteredPrevilege] = useState([]);
+  const [filteredStaffType, setFilteredStaffType] = useState([]);
+  const [filteredDirector, setFilteredDirector] = useState(null);
+
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [showPrevilegeDropdown, setShowPrevilegeDropdown] = useState(false);
+  const [showStaffType, setShowStaffType] = useState(false);
+  const [showDirectorDropdown, setShowDirectorDropdown] = useState(false);
+
 
   const collegeDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
   const previlegeDropdownRef = useRef(null);
+  const staffTypeDropdownRef = useRef(null);
+  const directorDropdownRef = useRef(null);
+
 
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
-  // const initialDropdownPrivilege = privilegeData.slice(0, 1);
 
-  // let previlege={};
-  const [Previlege, setPrevilege] = useState([]);
+
+  const [Previlege, setPrevilege] = useState([])
+  const [staffType, setStaffType] = useState([])
+  const [director, setDirector] = useState([])
+
+  // const staffType = ["Acadamic", "Admin"];
+
+
+
+ 
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -76,104 +94,76 @@ const EditStaff = ({ userData, onCancel }) => {
     }
   };
 
-  //  fetch from staff by id
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-         const stepType = "STAFF"; // Define your stepType here
-        // const url = new URL("/api/step");
-        // url.searchParams.append("stepType", stepType);
 
-        const url = "/api/step"; // Define the URL
 
-        // Construct URL with query parameter
-        const fullUrl = `${url}?stepType=${stepType}`;
-  
-        // Make the GET request using fetch
-        const response = await fetch(fullUrl);
-  
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        const updatedData = data.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
-        // setStepData(updatedData);
-        // setDraggedData(updatedData[0].steps);
-        console.log("setDraggedData", updatedData);
-      } catch (error) {
-        setStepError(error);
-      }
-    };
-    fetchData(); // Fetch data once when component mounts
+  const handleSearchStaffTypeChange = (event) => {
+    setSearchStaffType(event.target.value);
+    setShowStaffType(true);
+  };
 
-    // No cleanup or dependency array needed as we only want to fetch data once
-  }, []);
+  const handleSearchDirectorFocus = () => {
+    if (searchDirector) {
+      setShowDirectorDropdown(true);
+    } else {
+      setFilteredDirector(director);
+      setShowDirectorDropdown(true);  
+    }
+  };
 
-  //
 
   useEffect(() => {
+    console.log("fetching data from the server ...");
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
-        const studentStepType = "STUDENT";
 
-
-        const url = "/api/step"; // Define the URL
-
-
-        const fullUrl = `${url}?stepType=${staffStepType}`;
-        const responseStaff = await fetch(fullUrl);
-        // fetch students step
-        // const studentUrl = new URL("/api/step");
-        // studentUrl.searchParams.append("stepType", studentStepType);
-        // const responseStudent = await fetch(studentUrl);
+        const studentStepType = "STUDENT"
 
        
-        const fullStudentUrl = `${url}?stepType=${studentStepType}`;
-        const responseStudent = await fetch(fullStudentUrl);
+
+// searchStaffType
+    let fetchData;
+        try {
+          if(searchStaffType){
+            const url = "/api/steps"; // Define the URL
+  
+  
+            const fullUrl = `${url}?stepType=${searchStaffType}`;
+            fetchData = await fetch(fullUrl);
+
+          }else{
+
+            fetchData = await fetch(`/api/steps`);
+          }
+          console.log("userData",userData[0]);
+          console.log("userData",userData[0].staffType);
 
 
-
-
-        if (!responseStaff.ok && !responseStudent.ok) {
-          throw new Error("Network responseStaff was not ok");
+          if (!fetchData.ok) {
+            throw new Error(`Failed to fetch data. Status: ${fetchData.status}`);
+          }
+          const data = await fetchData.json();
+          const keyValuePairs = {};
+          data.forEach((item) => {
+            keyValuePairs[item.name] = item.nextSteps;
+          });
+          keys = Object.keys(keyValuePairs);
+          const values = Object.values(keyValuePairs);
+          console.log("keys fetch", keys, ">> values", values);
+        } catch (error) {
+          console.error('Error fetching or processing data:', error);
         }
-        const staffData = await responseStaff.json();
-        const updatedStaffData = staffData.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
 
-        const studentData = await responseStudent.json();
-        const updatedStudentData = studentData.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
 
-        // Assuming setStepData and setStepError are state updating functions
-        // setStepData(updatedStaffData);
-        // setDraggedData(updatedStaffData[0].steps);
-        const concatenatedArray = [
-          ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
+        const previlege = keys.map((role, index) => ({
 
-          ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
-        ];
-        let cnt = 0;
-        const previlege = concatenatedArray.map((role, index) => ({
           id: (index + 1).toString(),
           name: role,
         }));
-        cnt = previlege.length + 1;
-        previlege.push({ id: "" + `${cnt}` + "", name: "Null" });
+        //console.log("previlege",searchStaffType);
+        setDirector(previlege);
         setPrevilege(previlege);
 
-        console.log("qaqaqa", previlege);
-        console.log("cnt", cnt);
-        //   console.log("Data fetched successfully:", previlege);
-        //  console.log("initialDropdownPrivilege", initialDropdownPrivilege);
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
@@ -204,15 +194,34 @@ const EditStaff = ({ userData, onCancel }) => {
     if (searchPrevilege) {
       // console.log("concatPrevilegeenatedArray",Previlege);
       // console.log("privilegeData",privilegeData);
-      const filteredResults = Previlege.filter((college) =>
+      const filteredResults = Previlege?.filter((college) =>
         college.name.toLowerCase().includes(searchPrevilege.toLowerCase())
       );
       setFilteredPrevilege(filteredResults);
     }
+
+    if (searchDirector) {
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
+      const filteredResults = director?.filter((college) =>
+        college.name.toLowerCase().includes(searchDirector.toLowerCase())
+      );
+      setFilteredDirector(filteredResults);
+    }
+    if (searchStaffType) {
+      // console.log("concatPrevilegeenatedArray",Previlege);
+      // console.log("privilegeData",privilegeData);
+      const filteredResults = staffType.filter((college) =>
+        college.toLowerCase().includes(searchStaffType.toLowerCase())
+      );
+      setFilteredStaffType(filteredResults);
+    }
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege]);
+
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector,searchStaffType]);
+// searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -266,6 +275,48 @@ const EditStaff = ({ userData, onCancel }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        (directorDropdownRef.current &&
+          !directorDropdownRef.current.contains(event.target)) ||
+        (directorDropdownRef.current &&
+          !directorDropdownRef.current.contains(event.target))
+      ) {
+        setShowDirectorDropdown(false);
+        setShowDirectorDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        staffTypeDropdownRef.current &&
+        !staffTypeDropdownRef.current.contains(event.target)
+      ) {
+        setShowStaffType(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  useEffect(() => {
+    // Filter staff types based on search term
+    const filteredResults = staffTypes.filter((type) =>
+      type.toLowerCase().includes(searchStaffType.toLowerCase())
+    );
+    setFilteredStaffType(filteredResults);
+  }, [searchStaffType]);
 
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -274,8 +325,16 @@ const EditStaff = ({ userData, onCancel }) => {
 
   const handleSearchPrevilegeChange = (event) => {
     setSearchPrevilege(event.target.value);
-    setShowDropdown(true);
+    setShowPrevilegeDropdown(true);
   };
+  const handleSearchDirectorChange = (event) => {
+    setSearchDirector(event.target.value);
+    setShowDirectorDropdown(true);
+  };
+  const handleSearchStaffType = () => {
+    setShowStaffType(true);
+  };
+
 
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
@@ -295,6 +354,21 @@ const EditStaff = ({ userData, onCancel }) => {
     setShowPrevilegeDropdown(false);
   };
 
+  const handleDropdownDirectorItemClick = (office) => {
+    setValue("directorName", office.name);
+    setValue("directorId", office.id);
+    setSelectedDirector(office);
+
+    setSearchDirector(office.name);
+    setShowDirectorDropdown(false);
+  };
+
+
+  const handleDropdownStaffTypeItemClick = (staffType) => {
+    setSearchStaffType(staffType);
+    setShowStaffType(false);
+  };
+
   const handleSearchCollegeChange = (event) => {
     setSearchCollege(event.target.value);
     setShowCollegeDropdown(true);
@@ -302,44 +376,14 @@ const EditStaff = ({ userData, onCancel }) => {
 
   const handleDropdownCollegeClick = (college) => {
     setValue("collegeName", college.name);
-    // toast.success("rerrrrr!",college.name," ",college.id);
     setValue("collegeId", college.id);
     setSelectedCollege(college);
     setSearchCollege(college.name);
     setShowCollegeDropdown(false);
   };
+  // console.log(console.log("directorprevilege",Previlege));
+  // console.log(console.log("director",director));
 
-  // useEffect(()=>{
-  //   const fetchStaff=async()=>{
-  //       try {
-  //     //const url = `/api/staff?objectId=${selectedRowsData[0]._id}&arrLength=${len}`; // Build GET request URL with parameters
-  //     const ur=`/api/user/new/staff/${userId}`
-  //     const response = await fetch(ur);
-
-  //     if (response.ok) {
-  //       const responseData = await response.text();
-  //       let toastShown = false;
-  //       setUserData(responseData);
-  //       if (responseData) {
-  //         if (selectedRows.length > 1) {
-  //           toast.success(responseData);
-  //           toastShown = true;
-  //         } else {
-  //           toast.success("Approved Successfully");
-  //         }
-  //       }
-  //     } else {
-  //       console.error("Error fetching data:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-
-  //   }
-  //   if(userId){
-  //     fetchStaff();
-  //   }
-  // },[])
 
   const onSubmit = async (data) => {
     // const fromFirstName = data.firstName.toLowerCase();
@@ -347,8 +391,14 @@ const EditStaff = ({ userData, onCancel }) => {
     // const password = `${fromFirstName}@${fromMiddleName}1234`;
     console.log("check", data.previlegeName, "and", userData[0].privilege);
     if (
-      data.previlegeName !== userData[0].privilege &&
-      data.previlegeName != undefined
+      (data.previlegeName !== userData[0].privilege &&
+      data.previlegeName != undefined )||
+      (data.directorName !== userData[0].director &&
+      data.directorName != undefined)||
+      (data.blockNo !== userData[0].blockNo &&
+      data.blockNo != undefined)
+      
+
     ) {
       try {
         const response = await fetch(`/api/user/new/staff`, {
@@ -357,8 +407,13 @@ const EditStaff = ({ userData, onCancel }) => {
             objectId: userData[0]._id,
             userId: userData[0].userId,
             privilege: data.previlegeName,
+            college: selectedCollege?.id,
+            department: selectedDepartment?.id,
+            director:data.directorName,
+            blockNo: data.blockNo,
           }),
         });
+
 
         if (response.ok) {
           toast.success("Officer Updated Successfully!");
@@ -372,15 +427,34 @@ const EditStaff = ({ userData, onCancel }) => {
       toast.error("First update the previlege before updating!");
     }
   };
+
+
   const handleCancel = () => {
     onCancel();
   };
+
+  const handleDownload = () => {
+    // Constructing a temporary link element
+    const link = document.createElement("a");
+    link.href = "/files/studentsTrial.xlsx";
+    link.setAttribute("download", "studentsTrial.xlsx");
+    // Simulating a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
-    <div className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+    <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
+      <button
+        onClick={handleDownload}
+        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+      >
+        Get Importing Format
+      </button>
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-            Edit Staff Previlege
+            Register Staff
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>
@@ -421,8 +495,8 @@ const EditStaff = ({ userData, onCancel }) => {
                 type="text"
                 name="middleName"
                 id="middleName"
-                readOnly
                 value={userData[0].middlename}
+                readOnly  
                 placeholder="Father's name"
                 {...register("middleName")}
               />
@@ -443,8 +517,8 @@ const EditStaff = ({ userData, onCancel }) => {
               type="text"
               name="lastName"
               id="lastName"
-              readOnly
               value={userData[0].lastname}
+              readOnly
               placeholder="Grand father's Name"
               {...register("lastName")}
             />
@@ -463,8 +537,8 @@ const EditStaff = ({ userData, onCancel }) => {
               type="text"
               name="studentId"
               id="studentId"
-              readOnly
               value={userData[0].userId}
+              readOnly
               placeholder=".../..../.."
               {...register("studentId")}
             />
@@ -472,98 +546,101 @@ const EditStaff = ({ userData, onCancel }) => {
           </div>
         </div>
 
-        <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-          <div className="w-full sm:w-1/2">
-            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-              College
-            </label>
-            <input
-              type="text"
-              name="collegeName"
-              id="collegeName"
-              readOnly
-              placeholder="Search for a college..."
-              value={searchCollege ? searchCollege : userData[0].collegeName}
-              onFocus={handleSearchCollegeFocus}
-              onChange={handleSearchCollegeChange}
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
-            />
-            <input
-              type="hidden"
-              name="collegeId"
-              id="collegeId"
-              value={selectedCollege ? selectedCollege.id : ""}
-            />
+        {/*  */}
+        {userData[0].staffType && userData[0].staffType == "ACADEMIC" && (
+          <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
-            <p>{errors.collegeName?.message}</p>
+            <div className="w-full sm:w-1/2">
+              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                College
+              </label>
+              <input
+                type="text"
+                name="collegeName"
+                id="collegeName"
+                value={userData[0].collegeName}
+               
+                placeholder="Search for a college..."
+                readOnly
+                onFocus={handleSearchCollegeFocus}
+                onChange={handleSearchCollegeChange}
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
 
-            {showCollegeDropdown && (
-              <div
-                ref={collegeDropdownRef} // Use the college dropdown ref
-                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              />
+
+              <p>{errors.collegeName?.message}</p>
+
+              {showCollegeDropdown && (
+                <div
+                  ref={collegeDropdownRef} // Use the college dropdown ref
+                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                >
+                  {filteredColleges.map((college) => (
+                    <div
+                      key={college.id}
+                      onClick={() => handleDropdownCollegeClick(college)}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                    >
+                      {college.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+
+            <div className="w-full sm:w-1/2">
+              <label
+                className="mb-3 block text-sm font-medium text-black dark:text-white"
+                htmlFor="phoneNumber"
               >
-                {filteredColleges.map((college) => (
-                  <div
-                    key={college.id}
-                    onClick={() => handleDropdownCollegeClick(college)}
-                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                  >
-                    {college.name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="w-full sm:w-1/2">
-            <label
-              className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="phoneNumber"
-            >
-              Department
-            </label>
-            <input
-              type="text"
-              name="departmentName"
-              id="departmentName"
-              readOnly
-              placeholder="Search for an office..."
-              value={searchTerm ? searchTerm : userData[0].departmentName}
-              onFocus={handleSearchInputFocus}
-              onChange={handleSearchInputChange}
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                Department
+              </label>
+              <input
+                type="text"
+                name="departmentName"
+                id="departmentName"
+                placeholder="Search for an office..."
+                value={userData[0].departmentName}
+                readOnly
+                onFocus={handleSearchInputFocus}
+                onChange={handleSearchInputChange}
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               //  {...register("departmentName")}
-            />
-            <input
-              type="hidden"
-              name="departmentId"
-              id="departmentId"
-              value={selectedDepartment ? selectedDepartment.id : ""}
-            />
+              />
+              <input
+                type="hidden"
+                name="departmentId"
+                id="departmentId"
+                value={selectedDepartment ? selectedDepartment.id : ""}
+              />
 
-            <p>{errors.departmentName?.message}</p>
+              <p>{errors.departmentName?.message}</p>
 
-            {showDropdown && (
-              <div
-                ref={dropdownRef}
-                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              >
-                {filteredOffices.map((office) => (
-                  <div
-                    key={office.id}
-                    onClick={() => handleDropdownItemClick(office)}
-                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                  >
-                    {office.name}
-                  </div>
-                ))}
-              </div>
-            )}
+              {showDropdown && (
+                <div
+                  ref={dropdownRef}
+                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                >
+                  {filteredOffices.map((office) => (
+                    <div
+                      key={office.id}
+                      onClick={() => handleDropdownItemClick(office)}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                    >
+                      {office.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+
+    
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
               Previlege
@@ -574,17 +651,14 @@ const EditStaff = ({ userData, onCancel }) => {
               id="previlegeName"
               placeholder={userData[0].privilege}
               value={searchPrevilege}
+              
+              defaultValue={userData?.privilege}
               onFocus={handleSearchPrevilegeFocus}
               onChange={handleSearchPrevilegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //   {...register("collegeName")}
+
             />
-            {/* <input
-          type="hidden"
-          name="collegeId"
-          id="collegeId"
-          value={selectedCollege ? selectedCollege.id : ""}
-        /> */}
+
 
             <p>{errors.collegeName?.message}</p>
 
@@ -593,7 +667,7 @@ const EditStaff = ({ userData, onCancel }) => {
                 ref={previlegeDropdownRef} // Use the college dropdown ref
                 className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               >
-                {filteredPrevilege.map((previlege) => (
+                {filteredPrevilege?.map((previlege) => (
                   <div
                     key={previlege.id}
                     onClick={() => handleDropdownPrevilegeItemClick(previlege)}
@@ -605,7 +679,77 @@ const EditStaff = ({ userData, onCancel }) => {
               </div>
             )}
           </div>
+          {userData[0].staffType && userData[0].staffType == "ADMIN" && (
+            
+            <div className="w-full sm:w-1/2">
+            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+            Director
+            </label>
+            <input
+              type="text"
+              name="directorName"
+              id="directorName"
+              placeholder={userData[0].director}
+              value={searchDirector}
+              onFocus={handleSearchDirectorFocus}
+              onChange={handleSearchDirectorChange}
+              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+
+            />
+
+
+            <p>{errors.collegeName?.message}</p>
+
+            {showDirectorDropdown && (
+              <div
+                ref={directorDropdownRef} // Use the college dropdown ref
+                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              >
+                {filteredDirector?.map((director) => (
+                  <div
+                    key={director.id}
+                    onClick={() => handleDropdownDirectorItemClick(director)}
+                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                  >
+                    {director.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          )}
+  {userData[0].blockNo &&( userData[0].privilege=="Dormitory" ||searchPrevilege=="Dormitory" )&&  (
+            <div className="w-full sm:w-1/2">
+              <label
+                className="mb-3 block text-sm font-medium text-black dark:text-white"
+                htmlFor="blockNo"
+              >
+                Dorm Block
+              </label>
+              <input
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                type="text"
+                name="blockNo"
+                id="blockNo"
+                placeholder={userData[0].blockNo}
+                
+                {...register("blockNo")}
+              />
+              <p>{errors.blockNo?.message}</p>
+            </div>
+          )}
+
         </div>
+
+
+
+        {/*  */}
+        
+
+       
+
+
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
           <div className="w-full px-3 2xsm:w-1/2">
@@ -627,4 +771,6 @@ const EditStaff = ({ userData, onCancel }) => {
     </div>
   );
 };
+
 export default EditStaff;
+

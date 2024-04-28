@@ -24,7 +24,7 @@ export async function GET() {
 
 export const PATCH = async (request) => {
   try {
-    const { objectId, privilege,userId } = await request.json();
+    const { objectId, privilege,userId,director,blockNo } = await request.json();
   
     await connectToDB();
     // first fetch the steps
@@ -32,7 +32,12 @@ export const PATCH = async (request) => {
     console.log("objectId",objectId,"userId",userId,"previlege",privilege)
     // const editUser = await StepSchema.findOne({ userId:userId});
     //   // Fetch the user by userId
-      const  updatedUser = await User.findOneAndUpdate({ userId: userId }, { privilege:privilege });
+    
+      const  updatedUser =(director && privilege) ?await User.findOneAndUpdate({ userId: userId }, { privilege:privilege,director:director })
+                          :privilege ? await User.findOneAndUpdate({ userId: userId }, { privilege:privilege })
+                          :director? await User.findOneAndUpdate({ userId: userId }, { director:director })
+                          :await User.findOneAndUpdate({ userId: userId }, { blockNo:blockNo });
+      
 
       if (!updatedUser) {
         return new Response("User not found", { status: 404 });
