@@ -272,7 +272,7 @@ const TaskItem = () => {
   };
 
   return (
-    <div class="rounded-sm border border-stroke bg-white px-5 sm:pt-4 shadow-default dark:border-strokedark dark:bg-boxdark ">
+    <div class="rounded-md border border-stroke bg-white px-5 sm:pt-4 shadow-default dark:border-strokedark dark:bg-boxdark ">
       <div class="lg:px-12 md:px-6">
         <div class="mt-7.5 mb-3  text-left">
           {role == "STAFF" && (

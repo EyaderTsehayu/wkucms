@@ -65,7 +65,7 @@ export default function LabTabs() {
   }
 
   return (
-    <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
+    <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
       <Breadcrumb
         title="My Clearance"
         mainRoute="Dashboard"

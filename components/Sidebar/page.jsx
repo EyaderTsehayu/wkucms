@@ -15,6 +15,13 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import CampaignIcon from "@mui/icons-material/Campaign";
 
+//user sidebar
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import HelpCenterIcon from "@mui/icons-material/HelpCenter";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import HomeIcon from "@mui/icons-material/Home";
+
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import HomeWorkOutlinedIcon from "@mui/icons-material/HomeWorkOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
@@ -126,24 +133,26 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <aside
       ref={sidebar}
-      className={` absolute  left-0 top-0 z-9999 flex h-screen w-64 flex-col overflow-y-hidden  bg-white drop-shadow-2 duration-300 ease-linear dark:bg-boxdark dark:drop-shadow-none lg:static lg:translate-x-0 ${
+      className={` absolute  left-0 top-0 z-10 flex h-screen w-64 flex-col overflow-y-hidden  bg-white drop-shadow-2 duration-300 ease-linear dark:bg-boxdark dark:drop-shadow-none lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } ${
-        pathname == "/user" || pathname.includes("/user") ? "lg:hidden " : ""
+        pathname.includes("/user") && !session?.user?.privilege
+          ? "lg:hidden "
+          : ""
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 lg:pt-4 ">
-        <Link href="/admin" className="flex flex-row items-center gap-3 ">
+        <Link href="" className="flex flex-row items-center gap-3 ">
           <Image
             width={52}
             height={52}
             src={"/images/logo/logo.png"}
             alt="Logo"
           />
-          <h4 className="text-primary font-satoshi text-lg font-extrabold">
+          <h5 className="text-primary  text-title-md font-extrabold font-satoshi">
             WKU-CMS
-          </h4>
+          </h5>
         </Link>
 
         <button
@@ -169,221 +178,111 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         </button>
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
-
-      {(pathname == "/user" || pathname.includes("/user")) && (
+      {pathname.includes("/user") && (
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-          {/* <!-- Sidebar Menu --> */}
-          <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
-            {/* <!-- Menu Group --> */}
+          <nav className="mt-8  px-4 lg:mt-5 ">
             <div>
-              <ul className="mb-6 flex flex-col gap-1.5">
-                {/* <!-- Menu Item Dashboard --> */}
+              <h3 className="mb-1 mt-2 ml-4 text-sm font-semibold font-satoshi text-primary dark:text-bodydark ">
+                MENU
+              </h3>
+
+              <ul className="mb-4 flex flex-col gap-0.5">
                 <li>
                   <Link
                     href="/user"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
-                      pathname == "/user" &&
-                      "bg-gray dark:bg-graydark  dark:text-bodydark2"
+                    className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium font-satoshi text-primary dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4  ${
+                      pathname == "/user" && "bg-gray dark:bg-meta-4"
                     }`}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M13 12C13 11.4477 13.4477 11 14 11H19C19.5523 11 20 11.4477 20 12V19C20 19.5523 19.5523 20 19 20H14C13.4477 20 13 19.5523 13 19V12Z"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M4 5C4 4.44772 4.44772 4 5 4H9C9.55228 4 10 4.44772 10 5V12C10 12.5523 9.55228 13 9 13H5C4.44772 13 4 12.5523 4 12V5Z"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M4 17C4 16.4477 4.44772 16 5 16H9C9.55228 16 10 16.4477 10 17V19C10 19.5523 9.55228 20 9 20H5C4.44772 20 4 19.5523 4 19V17Z"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                      />
-                      <path
-                        d="M13 5C13 4.44772 13.4477 4 14 4H19C19.5523 4 20 4.44772 20 5V7C20 7.55228 19.5523 8 19 8H14C13.4477 8 13 7.55228 13 7V5Z"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                      />
-                    </svg>
+                    <HomeIcon fontSize="small" />
                     Home
                   </Link>
                 </li>
-                {/* <!-- Menu Item My clearance --> */}
                 <li>
                   <Link
                     href="/user/myclearance"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
+                    className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium font-satoshi text-primary dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4  ${
                       pathname == "/user/myclearance" &&
-                      "bg-gray dark:bg-graydark  dark:text-bodydark2"
+                      "bg-gray dark:bg-meta-4"
                     }`}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M7.48334 5.25942C6.33891 5.38732 5.42286 6.29057 5.29045 7.42268C4.93476 10.4638 4.93476 13.5361 5.29045 16.5772C5.42286 17.7093 6.33891 18.6126 7.48334 18.7405C10.4602 19.0732 13.5398 19.0732 16.5166 18.7405C17.6611 18.6126 18.5771 17.7093 18.7095 16.5772C18.9651 14.3921 19.037 12.1909 18.9253 9.99668C18.9224 9.94002 18.9436 9.88475 18.9837 9.84463L20.0225 8.80585C20.1427 8.68562 20.3482 8.7608 20.3609 8.93036C20.557 11.5353 20.5031 14.1543 20.1994 16.7515C19.9845 18.5884 18.5096 20.0271 16.6832 20.2312C13.5957 20.5763 10.4043 20.5763 7.31673 20.2312C5.49035 20.0271 4.01545 18.5884 3.8006 16.7515C3.43137 13.5945 3.43137 10.4053 3.8006 7.24843C4.01545 5.41146 5.49035 3.97282 7.31673 3.7687C10.4043 3.42362 13.5957 3.42362 16.6832 3.7687C17.3265 3.84059 17.9261 4.06562 18.4425 4.40725C18.5441 4.47448 18.5542 4.61732 18.468 4.70346L17.6652 5.50635C17.5995 5.57202 17.4976 5.58307 17.4158 5.5392C17.1423 5.39271 16.8385 5.29539 16.5166 5.25942C13.5398 4.92671 10.4602 4.92671 7.48334 5.25942Z"
-                        fill="#000000"
-                      />
-                      <path
-                        d="M21.0303 6.03028C21.3232 5.73738 21.3232 5.26251 21.0303 4.96962C20.7374 4.67672 20.2625 4.67672 19.9696 4.96962L11.5 13.4393L9.0303 10.9696C8.73741 10.6767 8.26253 10.6767 7.96964 10.9696C7.67675 11.2625 7.67675 11.7374 7.96964 12.0303L10.9696 15.0303C11.2625 15.3232 11.7374 15.3232 12.0303 15.0303L21.0303 6.03028Z"
-                        fill="#000000"
-                      />
-                    </svg>
+                    <CreditScoreIcon fontSize="small" />
                     My Clearance
                   </Link>
                 </li>
-                {/* <!-- Menu Item Myclearance --> */}
+                <hr className="text-bodydark opacity-90 mt-3 mx-4 dark:text-bodydark" />
+                {session?.user?.privilege && (
+                  <div className="flex flex-col gap-0.5 ">
+                    <h3 className="mt-4 mb-1 ml-4 text-sm font-semibold font-satoshi text-primary dark:text-bodydark ">
+                      APPROVALS
+                    </h3>
 
-                {/* <!-- Menu Item Help --> */}
+                    <li>
+                      <Link
+                        href="/user/studentApproval"
+                        className={`group relative flex items-center gap-2.5 rounded-md py-2  px-4 font-medium font-satoshi text-primary dark:text-bodydark1 duration-300 ease-in-out   hover:bg-gray dark:hover:bg-meta-4 ${
+                          pathname.includes("student") &&
+                          "bg-gray dark:bg-graydark dark:text-white"
+                        } `}
+                      >
+                        <HowToRegIcon />
+                        Student Approval
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/user/staffApproval"
+                        className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium  font-satoshi text-primary dark:text-bodydark1 duration-300 ease-in-out   hover:bg-gray dark:hover:bg-meta-4  ${
+                          pathname.includes("staffApproval") &&
+                          "bg-gray dark:bg-graydark dark:text-white"
+                        } `}
+                      >
+                        <Groups2Icon /> Staff Approval
+                      </Link>
+                    </li>
+                    {(session?.user?.privilege == "Registrar" ||
+                      session?.user?.privilege == "Head" ||
+                      session?.user?.privilege ==
+                        "Human Resource Management Directorate") && (
+                      <li>
+                        <Link
+                          href="/user/approvedUsers"
+                          className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium text-primary font-satoshi dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
+                            pathname.includes("approvedUsers") &&
+                            "bg-gray dark:bg-meta-4"
+                          }`}
+                        >
+                          <FactCheckIcon fontSize="small" />
+                          Approved Requests
+                        </Link>
+                      </li>
+                    )}
+                  </div>
+                )}
+                <hr className="text-bodydark opacity-90 mt-3 mx-4 dark:text-bodydark" />
+
+                <h3 className="mt-4 mb-1 ml-4 text-sm font-bold font-satoshi text-primary dark:text-bodydark ">
+                  OTHERS
+                </h3>
+
                 <li>
                   <Link
                     href="/user/help"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4  font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
-                      pathname == "/user/help" &&
-                      "bg-gray dark:bg-graydark dark:text-bodydark2"
+                    className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium font-satoshi text-primary dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
+                      pathname.includes("help") && "bg-gray dark:bg-meta-4"
                     }`}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                    <HelpCenterIcon fontSize="small" />
                     Help
                   </Link>
                 </li>
 
-                {session?.user?.privilege && (
-                  <li>
-                    <div className="relative h-40 ">
-                      <Link
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-graydark dark:text-bodydark2 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
-                          pathname == "/user/myclearance" &&
-                          "bg-gray dark:bg-graydark  dark:text-bodydark2"
-                        }`}
-                        href="/user/studentApproval"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                            stroke="#000000"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                        Approve
-                      </Link>
-                      {showDropdown && (
-                        <div
-                          ref={dropdownRef} // Assign the ref to the dropdown element
-                          className="absolute top-10 right-10 z-10 bg-white p-2 dark:bg-boxdark"
-                          onMouseEnter={handleMouseEnter}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <ul className="text-sm  dark:text-white text-graydark pr-9 ">
-                            <li className="pb-2 flex">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7.48334 5.25942C6.33891 5.38732 5.42286 6.29057 5.29045 7.42268C4.93476 10.4638 4.93476 13.5361 5.29045 16.5772C5.42286 17.7093 6.33891 18.6126 7.48334 18.7405C10.4602 19.0732 13.5398 19.0732 16.5166 18.7405C17.6611 18.6126 18.5771 17.7093 18.7095 16.5772C18.9651 14.3921 19.037 12.1909 18.9253 9.99668C18.9224 9.94002 18.9436 9.88475 18.9837 9.84463L20.0225 8.80585C20.1427 8.68562 20.3482 8.7608 20.3609 8.93036C20.557 11.5353 20.5031 14.1543 20.1994 16.7515C19.9845 18.5884 18.5096 20.0271 16.6832 20.2312C13.5957 20.5763 10.4043 20.5763 7.31673 20.2312C5.49035 20.0271 4.01545 18.5884 3.8006 16.7515C3.43137 13.5945 3.43137 10.4053 3.8006 7.24843C4.01545 5.41146 5.49035 3.97282 7.31673 3.7687C10.4043 3.42362 13.5957 3.42362 16.6832 3.7687C17.3265 3.84059 17.9261 4.06562 18.4425 4.40725C18.5441 4.47448 18.5542 4.61732 18.468 4.70346L17.6652 5.50635C17.5995 5.57202 17.4976 5.58307 17.4158 5.5392C17.1423 5.39271 16.8385 5.29539 16.5166 5.25942C13.5398 4.92671 10.4602 4.92671 7.48334 5.25942Z"
-                                  fill="#000000"
-                                />
-                                <path
-                                  d="M21.0303 6.03028C21.3232 5.73738 21.3232 5.26251 21.0303 4.96962C20.7374 4.67672 20.2625 4.67672 19.9696 4.96962L11.5 13.4393L9.0303 10.9696C8.73741 10.6767 8.26253 10.6767 7.96964 10.9696C7.67675 11.2625 7.67675 11.7374 7.96964 12.0303L10.9696 15.0303C11.2625 15.3232 11.7374 15.3232 12.0303 15.0303L21.0303 6.03028Z"
-                                  fill="#000000"
-                                />
-                              </svg>
-                              <Link
-                                href="/user/studentApproval"
-                                onClick={() =>
-                                  handleDropdownItemClick("/student")
-                                }
-                                className="pl-1 dark:text-bodydark2"
-                              >
-                                Student
-                              </Link>
-                            </li>
-                            <li className="flex">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7.48334 5.25942C6.33891 5.38732 5.42286 6.29057 5.29045 7.42268C4.93476 10.4638 4.93476 13.5361 5.29045 16.5772C5.42286 17.7093 6.33891 18.6126 7.48334 18.7405C10.4602 19.0732 13.5398 19.0732 16.5166 18.7405C17.6611 18.6126 18.5771 17.7093 18.7095 16.5772C18.9651 14.3921 19.037 12.1909 18.9253 9.99668C18.9224 9.94002 18.9436 9.88475 18.9837 9.84463L20.0225 8.80585C20.1427 8.68562 20.3482 8.7608 20.3609 8.93036C20.557 11.5353 20.5031 14.1543 20.1994 16.7515C19.9845 18.5884 18.5096 20.0271 16.6832 20.2312C13.5957 20.5763 10.4043 20.5763 7.31673 20.2312C5.49035 20.0271 4.01545 18.5884 3.8006 16.7515C3.43137 13.5945 3.43137 10.4053 3.8006 7.24843C4.01545 5.41146 5.49035 3.97282 7.31673 3.7687C10.4043 3.42362 13.5957 3.42362 16.6832 3.7687C17.3265 3.84059 17.9261 4.06562 18.4425 4.40725C18.5441 4.47448 18.5542 4.61732 18.468 4.70346L17.6652 5.50635C17.5995 5.57202 17.4976 5.58307 17.4158 5.5392C17.1423 5.39271 16.8385 5.29539 16.5166 5.25942C13.5398 4.92671 10.4602 4.92671 7.48334 5.25942Z"
-                                  fill="#000000"
-                                />
-                                <path
-                                  d="M21.0303 6.03028C21.3232 5.73738 21.3232 5.26251 21.0303 4.96962C20.7374 4.67672 20.2625 4.67672 19.9696 4.96962L11.5 13.4393L9.0303 10.9696C8.73741 10.6767 8.26253 10.6767 7.96964 10.9696C7.67675 11.2625 7.67675 11.7374 7.96964 12.0303L10.9696 15.0303C11.2625 15.3232 11.7374 15.3232 12.0303 15.0303L21.0303 6.03028Z"
-                                  fill="#000000"
-                                />
-                              </svg>
-                              <Link
-                                className="pl-1 dark:text-bodydark2"
-                                href="/user/staffApproval"
-                                onClick={() =>
-                                  handleDropdownItemClick("/staff")
-                                }
-                              >
-                                Staff
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                )}
-                {/* <!-- Menu Item Help --> */}
+                <hr className="text-bodydark opacity-90 mt-3 mx-4 dark:text-bodydark" />
               </ul>
             </div>
           </nav>
-          {/* <!-- Sidebar Menu --> */}
         </div>
       )}
-
       {/* <!-- ADMIN SIDEBAR --> */}
 
       {pathname == "admin" ||
@@ -438,9 +337,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </Link>
                   </li>
 
-
                   <li>
-
                     <Link
                       href="/admin/offices"
                       className={`group relative flex items-center gap-2.5 rounded-md py-2 px-4 font-medium text-primary font-satoshi dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray dark:hover:bg-meta-4 ${
@@ -450,7 +347,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       <HomeWorkIcon fontSize="small" />
                       Offices
                     </Link>
-
                   </li>
 
                   <li>
