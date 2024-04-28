@@ -4,16 +4,53 @@ import { STAFFSTEPS } from "@/utils/constants";
 import StepSchema from "@/models/step";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import DynamicSteps from "@/models/DynamicSteps";
 
 // const staffApproval = STAFFSTEPS;
 let staffApproval;
+
 export const PATCH = async (request) => {
+  let stepType="";
+  let step ={};
   const session = await getServerSession(authOptions);
   const privilege = session?.user?.privilege;
   try {
     const { objectId, arrLength } = await request.json();
 
     await connectToDB();
+    const existingRequest = await StaffClearnceReq.findById(objectId);
+
+    if (existingRequest && existingRequest.staffType == "ACADEMIC") {
+      stepType = "ACADEMIC";
+      const requests = await DynamicSteps.find({stepType: stepType});
+         //return new Response(JSON.stringify(requests), { status: 200 })
+      // console.log("studentData from myclearance on", requests);
+       
+         requests.forEach((data, index) => {
+          step[data.name] = data.nextSteps;
+         }
+       );
+      }else if (existingRequest && existingRequest.staffType == "ADMIN") {
+        stepType = "ADMIN";
+        const requests = await DynamicSteps.find({stepType: stepType});
+          //return new Response(JSON.stringify(requests), { status: 200 })
+        // console.log("studentData from myclearance on", requests);
+         
+          requests.forEach((data, index) => {
+            step[data.name] = data.nextSteps;
+          }
+        );
+      }
+
+
+
+// FETCH ACEDEMIC STEPS
+
+   
+
+
+   
+
 
     // first fetch the steps
     // const steps = await StepSchema.findOne({ stepType: "STUDENT" });
@@ -170,11 +207,11 @@ export const PATCH = async (request) => {
       "Human Resource Management Directorate": ["APPROVED"],
     };
 
-    const existingRequest = await StaffClearnceReq.findById(objectId);
+    
 
-    if (existingRequest && existingRequest.staffType == "Academic") {
+    if (existingRequest && existingRequest.staffType == "ACADEMIC") {
       const currentStatus = existingRequest.status;
-      const nextApprovers = academicStep[privilege];
+      const nextApprovers = academicSteps[privilege];
 
       const approvalTime = new Date(); // Get the current time for approval
 
@@ -225,7 +262,7 @@ export const PATCH = async (request) => {
       return new Response(`Approved successfully ${arrLength} requests`, {
         status: 201,
       });
-    } else if (existingRequest && existingRequest.staffType == "Admin") {
+    } else if (existingRequest && existingRequest.staffType == "ADMIN") {
       const currentStatus = existingRequest.status;
       const approvalRoles = existingRequest.approvals.map(
         (approval) => approval.role
@@ -243,20 +280,20 @@ export const PATCH = async (request) => {
       }
       const isDirectorApproved = isDirectorInApprovals();
       if (!isDirectorApproved) {
-        if (adminStep["Director"].includes(existingRequest.director)) {
-          nextApprovers = adminStep["Director"].filter(
+        if (adminSteps["Director"].includes(existingRequest.director)) {
+          nextApprovers = adminSteps["Director"].filter(
             (role) => role !== existingRequest.director
           );
 
           nextApprovers = nextApprovers.concat(
-            adminStep[existingRequest.director]
+            adminSteps[existingRequest.director]
           );
         } else {
-          nextApprovers = adminStep[privilege].concat(adminStep["Director"]);
+          nextApprovers = adminSteps[privilege].concat(adminSteps["Director"]);
         }
       } else {
         // console.log("Director is approved");
-        nextApprovers = adminStep[privilege];
+        nextApprovers = adminSteps[privilege];
       }
 
       const approvalTime = new Date(); // Get the current time for approval

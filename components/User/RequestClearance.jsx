@@ -71,10 +71,21 @@ const TaskItem = () => {
     stepType = session?.data?.user.role;
     const fetchData = async () => {
       try {
-        const url = new URL("/api/step");
-        url.searchParams.append("stepType", stepType);
+        const url = "/api/step"; // Define the URL
 
-        const response = await fetch(url);
+        // Construct URL with query parameter
+        const fullUrl = `${url}?stepType=${stepType}`;
+  
+        // Make the GET request using fetch
+        const response = await fetch(fullUrl);
+
+
+
+
+        // const url = new URL("/api/step");
+        // url.searchParams.append("stepType", stepType);
+        
+        // const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

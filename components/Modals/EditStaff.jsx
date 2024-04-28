@@ -80,11 +80,18 @@ const EditStaff = ({ userData, onCancel }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const stepType = "STUDENT"; // Define your stepType here
-        const url = new URL("/api/step");
-        url.searchParams.append("stepType", stepType);
+         const stepType = "STAFF"; // Define your stepType here
+        // const url = new URL("/api/step");
+        // url.searchParams.append("stepType", stepType);
 
-        const response = await fetch(url);
+        const url = "/api/step"; // Define the URL
+
+        // Construct URL with query parameter
+        const fullUrl = `${url}?stepType=${stepType}`;
+  
+        // Make the GET request using fetch
+        const response = await fetch(fullUrl);
+  
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -113,13 +120,23 @@ const EditStaff = ({ userData, onCancel }) => {
         const staffStepType = "STAFF"; // Define your stepType here
         const studentStepType = "STUDENT";
 
-        const staffUrl = new URL("/api/step");
-        staffUrl.searchParams.append("stepType", staffStepType);
-        const responseStaff = await fetch(staffUrl);
+
+        const url = "/api/step"; // Define the URL
+
+
+        const fullUrl = `${url}?stepType=${staffStepType}`;
+        const responseStaff = await fetch(fullUrl);
         // fetch students step
-        const studentUrl = new URL("/api/step");
-        studentUrl.searchParams.append("stepType", studentStepType);
-        const responseStudent = await fetch(studentUrl);
+        // const studentUrl = new URL("/api/step");
+        // studentUrl.searchParams.append("stepType", studentStepType);
+        // const responseStudent = await fetch(studentUrl);
+
+       
+        const fullStudentUrl = `${url}?stepType=${studentStepType}`;
+        const responseStudent = await fetch(fullStudentUrl);
+
+
+
 
         if (!responseStaff.ok && !responseStudent.ok) {
           throw new Error("Network responseStaff was not ok");

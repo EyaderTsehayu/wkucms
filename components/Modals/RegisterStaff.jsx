@@ -146,9 +146,9 @@ const RegisterStaff = ({ onCancel }) => {
         }
 
 
-        if (!responseStaff.ok && !responseStudent.ok) {
-          throw new Error("Network responseStaff was not ok");
-        }
+        // if (!responseStaff.ok && !responseStudent.ok) {
+        //   throw new Error("Network responseStaff was not ok");
+        // }
         const staffData = await responseStaff.json();
         const updatedStaffData = staffData.map((user) => ({
           ...user,

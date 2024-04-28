@@ -35,6 +35,11 @@ const RegisterOffice = ({ onCancel }) => {
       url.searchParams.append("stepType", stepType);
 
       const responsed = await fetch(url);
+
+      // const url = "/api/steps"; // Define the URL
+      // const fullUrl = `${url}?stepType=${stepType}`;
+      // const response = await fetch(fullUrl);
+
       if (!responsed.ok) {
         throw new Error("Network responsed was not ok");
       }

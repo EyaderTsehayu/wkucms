@@ -123,6 +123,12 @@ const StepsComponent = () => {
                 url.searchParams.append("stepType", stepType);
 
                 const response = await fetch(url);
+
+
+                // const url = "/api/steps"; // Define the URL
+                // const fullUrl = `${url}?stepType=${stepType}`;
+                // const response = await fetch(fullUrl);
+
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }

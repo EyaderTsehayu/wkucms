@@ -168,8 +168,9 @@ const adminStep = {
   "Records and Archives Officer": ["Human Resource Management Directorate"],
   "Human Resource Management Directorate": ["APPROVED"],
 };
+
 let steps;
- 
+
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -205,7 +206,9 @@ const Status = ({studentStepData,adminStepData,academicStepData}) => {
       adminStep[data.name] = data.nextSteps;
     });
     steps = { ...adminStep };
+    
     delete steps.Director;
+   
   } else {
     let studentStep = {};
     studentStepData.forEach((data, index) => {
