@@ -5,6 +5,7 @@ import RejectionMessageBox from "@/components/Modals/RejectionMessageBox";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 const stages = {
   Head: ["College Dean"],
   "College Dean": [
@@ -22,29 +23,14 @@ const stages = {
   Registrar: ["APPROVED"],
 };
 
-// Replace this with your actual office data
-const officeData = [
-  { id: 1, name: "Office 1" },
-  { id: 2, name: "Office 2" },
-  { id: 3, name: "Office 3" },
-  // Add more office data here
-];
-const collegeData = [
-  { id: 1, name: "College of Computing and Informatics" },
-  { id: 2, name: "Engineering" },
-  { id: 3, name: "Social sciences and Humanities" },
-  { id: 4, name: "College of behavioral science" },
-
-  // Add more office data here
-];
-
 const columns = [
-  { field: "userId", headerName: "ID", width: "100" },
-  { field: "firstname", headerName: "First name", width: "160" },
-  { field: "middlename", headerName: "Last name", width: "160" },
+  { field: "userId", headerName: "ID", width: "120" },
+  { field: "firstname", headerName: "First Name", width: "140" },
+  { field: "middlename", headerName: "Last Name", width: "140" },
+  { field: "departmentName", headerName: "Department", width: "200" },
+  { field: "collegeName", headerName: "College", width: "200" },
   { field: "reason", headerName: "Reason", width: "160" },
-  { field: "status", headerName: "Status", width: "160" },
-  { field: "attachedFile", headerName: "Attachement", width: "160" },
+  { field: "attachedFile", headerName: "Attachment", width: "100" },
 ];
 
 const fetcher = async (url) => {
@@ -130,15 +116,15 @@ const ApproveStudent = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
-  const clickableColumns = [5];
+  const clickableColumns = [6];
   return (
-    <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
-      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
-        Student Approval
-      </h1>
+    <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
+      <Breadcrumb
+        title="Student Approval"
+        mainRoute="User"
+        subRoute="Student Approval"
+      />
       <div className="pt-2 px-4 grid grid-cols-12 gap-4 md:gap-6 2xl:gap-4.5">
-        <Filter officeData={officeData} collegeData={collegeData} />
-
         <UserContainer
           columns={columns}
           rows={previlage !== "Head" ? filteredData : userData}

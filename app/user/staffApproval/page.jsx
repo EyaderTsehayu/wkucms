@@ -7,15 +7,17 @@ import RegisterStaff from "@/components/Modals/RegisterStaff";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import RejectionMessageBox from "@/components/Modals/RejectionMessageBox";
+import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
 const columns = [
   { field: "userId", headerName: "ID", width: "120" },
   { field: "firstname", headerName: "First Name", width: "140" },
   { field: "middlename", headerName: "Last Name", width: "140" },
+  { field: "director", headerName: "Director", width: "140" },
+  { field: "departmentName", headerName: "Department Name", width: "200" },
+  { field: "collegeName", headerName: "College Name", width: "200" },
   { field: "reason", headerName: "Reason", width: "160" },
-  //{ field: "director", headerName: "Director", width: "140" },
-  { field: "departmentName", headerName: "Department Name", width: "240" },
-  { field: "collegeName", headerName: "College Name", width: "240" },
+  { field: "attachedFile", headerName: "Attachment", width: "100" },
 ];
 
 const academicStep = {
@@ -179,14 +181,10 @@ const ApproveStaff = () => {
   const previlage = session?.user?.privilege;
   //console.log("previlage inside staff approval", previlage);
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
-  const { data: userData, error } = useSWR(
-    `/api/staffApproval`,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
-    }
-  );
+  const { data: userData, error } = useSWR(`/api/staffApproval`, fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
+  });
 
   // console.log("USER DATA inside approval", userData);
 
@@ -269,12 +267,14 @@ const ApproveStaff = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  const clickableColumns = [7];
   return (
-    <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
-      <h1 className="pt-8 pb-5 pl-4 font-extrabold text-4xl text-primary dark:text-white">
-        Staff Approval
-      </h1>
+    <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
+      <Breadcrumb
+        title="Staff Approval"
+        mainRoute="User"
+        subRoute="Staff Approval"
+      />
       <div className="pt-2 px-4  ">
         <input
           type="text"
@@ -289,6 +289,7 @@ const ApproveStaff = () => {
             columns={columns}
             rows={previlage !== "Head" ? filteredData : userData}
             modal={RejectionMessageBox}
+            clickableColumns={clickableColumns}
           />
         </div>
       </div>

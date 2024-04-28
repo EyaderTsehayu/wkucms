@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import SendIcon from "@mui/icons-material/Send";
 const requestForStud = [
   {
     value: "Withdrawal",
@@ -44,6 +45,8 @@ const requestForStaff = [
 
 const TaskItem = () => {
   const [selectedTask, setSelectedTask] = useState(null);
+  const [guarantorName, setGuarantorName] = useState("");
+  const [guarantorId, setGuarantorId] = useState("");
 
   // fetch the steps from db
   const [stepData, setStepData] = useState(null);
@@ -71,7 +74,9 @@ const TaskItem = () => {
     stepType = session?.data?.user.role;
     const fetchData = async () => {
       try {
-        const url = "/api/step"; // Define the URL
+
+        const url = "/api/steps"; // Define the URL
+
 
         // Construct URL with query parameter
         const fullUrl = `${url}?stepType=${stepType}`;
@@ -138,6 +143,15 @@ const TaskItem = () => {
   const handleTaskSelection = (task) => {
     setSelectedTask(task);
   };
+  // Event handler to update guarantor's name
+  const handleGuarantorNameChange = (event) => {
+    setGuarantorName(event.target.value);
+  };
+
+  // Event handler to update guarantor's ID
+  const handleGuarantorIdChange = (event) => {
+    setGuarantorId(event.target.value);
+  };
 
   const handleSend = async () => {
     if (selectedTask != null) {
@@ -173,58 +187,155 @@ const TaskItem = () => {
       }
 
       if (session?.data?.user.role == "STAFF") {
+        let staffType;
+        let director;
         try {
-          const response = await fetch("/api/staffRequest", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: userId,
-              reason: selectedTask,
-              status: ["Head"],
-              staffType: "Academic",
-              firstname: firstname,
-              middlename: middlename,
-              collegeName: collegeName,
-              departmentName: departmentName,
-              _userId: _userId,
-              role: "STAFF",
-              attachedFile: imageBase64,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const url = "/api/user/byUserId"; // Define the URL
 
-          if (response.ok) {
-            const responseData = await response.text();
-            toast.success(responseData);
+          // Construct URL with query parameter
+          const fullUrl = `${url}?userId=${userId}`;
+
+          // Make the GET request using fetch
+          const response = await fetch(fullUrl);
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
+          const fetchedData = await response.json();
+
+          staffType = fetchedData[0].staffType;
+          director = fetchedData[0].director;
         } catch (error) {
-          toast.error("Invalid request");
-          console.log(error);
+          console.error("Error fetching user data:", error);
+        }
+
+        if (guarantorName != "" && guarantorId != "") {
+          if (staffType == "Academic") {
+            try {
+              const response = await fetch("/api/staffRequest", {
+                method: "POST",
+                body: JSON.stringify({
+                  userId: userId,
+                  reason: selectedTask,
+                  status: ["Head"],
+                  staffType: staffType,
+                  firstname: firstname,
+                  middlename: middlename,
+                  collegeName: collegeName,
+                  departmentName: departmentName,
+                  _userId: _userId,
+                  role: "STAFF",
+                  attachedFile: imageBase64,
+                  guarantorName: guarantorName,
+                  guarantorId: guarantorId,
+                }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+
+              if (response.ok) {
+                const responseData = await response.text();
+                toast.success(responseData);
+              }
+            } catch (error) {
+              toast.error("Invalid request");
+              console.log(error);
+            }
+          } else if (staffType == "Admin") {
+            try {
+              const response = await fetch("/api/staffRequest", {
+                method: "POST",
+                body: JSON.stringify({
+                  userId: userId,
+                  reason: selectedTask,
+                  status: [director],
+                  staffType: staffType,
+                  firstname: firstname,
+                  middlename: middlename,
+                  collegeName: collegeName,
+                  departmentName: departmentName,
+                  _userId: _userId,
+                  role: "STAFF",
+                  attachedFile: imageBase64,
+                  guarantorName: guarantorName,
+                  guarantorId: guarantorId,
+                }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+
+              if (response.ok) {
+                const responseData = await response.text();
+                toast.success(responseData);
+              }
+            } catch (error) {
+              toast.error("Invalid request");
+              console.log(error);
+            }
+          }
+        } else {
+          toast.error("Please fill the guarantor's information");
         }
       }
     } else {
-      toast.info("Select your reason first");
+      toast.error("Select your reason first");
     }
   };
 
   return (
-    <div className="flex flex-row">
-      <div className="md:mt-7 mt-4 md:py-7 py-4 2xl:h-[60vh] border shadow-default flex flex-col  rounded-lg bg-white  border-bodydark1  dark:border-strokedark dark:bg-boxdark">
-        <div className="px-4 sm:px-7">
-          <h5 className="dark:text-white font-satoshi text-4xl font-bold mb-4 text-primary sm:text-left">
-            Choose the cause for your clearance
-          </h5>
-          <div className="pt-5  grid grid-cols-6  sm:gap-6 gap-4">
-            <div className="md:ml-26 ml-4 grid grid-cols-1 lg:grid-cols-2 col-span-3 xl:gap-8 gap-5">
+    <div class="rounded-md border border-stroke bg-white px-5 sm:pt-4 shadow-default dark:border-strokedark dark:bg-boxdark ">
+      <div class="lg:px-12 md:px-6">
+        <div class="mt-7.5 mb-3  text-left">
+          {role == "STAFF" && (
+            <div className="mb-7.5">
+              {" "}
+              <h2 class="sm:mb-6 mb-4 px-4 py-2 sm:text-xl text-lg sm:font-bold font-semibold bg-gray-2 text-black dark:text-white font-satoshi">
+                Guarantor's information
+              </h2>
+              <div className="grid sm:grid-cols-2 grid-cols-1 items-center md:mx-12 lg:mx-20 gap-4">
+                <div>
+                  <label class="mb-3 block text-base font-medium font-satoshi text-black  dark:text-white">
+                    Guaranter's Full Name
+                  </label>
+                  <input
+                    placeholder="Guaranter's Full Name"
+                    class="w-full rounded-lg border-[1px] border-stroke bg-transparent px-5 py-3 text-boxdark outline-none    dark:border-form-strokedark dark:bg-form-input dark:text-white"
+                    type="text"
+                    value={guarantorName}
+                    onChange={handleGuarantorNameChange}
+                  />
+                </div>{" "}
+                <div>
+                  <label class="mb-3 block text-base font-medium font-satoshi text-boxdark dark:text-white">
+                    Guaranter's Id
+                  </label>
+                  <input
+                    placeholder=" Guaranter's Id"
+                    class="w-full rounded-lg border-[1px] border-stroke bg-transparent px-5 py-3 text-black outline-none    dark:border-form-strokedark dark:bg-form-input dark:text-white"
+                    type="text"
+                    value={guarantorId}
+                    onChange={handleGuarantorIdChange}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h2 class="sm:mb-6 mb-4  px-4 py-2  sm:text-xl text-lg sm:font-bold font-semibold bg-gray-2 text-black dark:text-white font-satoshi">
+              Select your clearance reason
+            </h2>
+            <div className="grid sm:grid-cols-2 grid-cols-1 items-center md:mx-12 lg:mx-20 gap-4">
               {(role == "STUDENT" ? requestForStud : requestForStaff).map(
                 (req) => (
                   <label
                     htmlFor={req.value}
-                    className="cursor-pointer text-primary text-lg font-md"
-                    key={req.value}
+                    for={req.value}
+                    class="flex mr-4 gap-3 cursor-pointer select-none items-center font-satoshi text-base font-medium text-boxdark-2 dark:text-white bg-gray-2 dark:bg-black/60 px-4 py-3 rounded-md"
                   >
-                    <div className="flex items-center pt-0.5">
+                    <div>
                       <input
                         type="radio"
                         id={req.value}
@@ -232,107 +343,108 @@ const TaskItem = () => {
                         value={req.value}
                         checked={selectedTask === req.value}
                         onChange={() => handleTaskSelection(req.value)}
-                        className="dark:text-white marker:text-white"
+                        class="sm:scale-105 scale-90 bg-primary"
                       />
-                      <div className="dark:text-white box  flex h-5 w-5 items-center justify-center  dark-border-strokedark ">
-                        <span
-                          className={`text-white ${
-                            selectedTask === req.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          }`}
-                        ></span>
-                      </div>
-                      <p className="dark:text-white">{req.label}</p>
+                      {/* <div class="mr-4 flex h-5 w-5 items-center justify-center rounded-full border border-primary">
+                      <span class="h-2.5 w-2.5 rounded-full bg-transparent !bg-primary">
+                        {" "}
+                      </span>
+                    </div> */}
                     </div>
+                    {req.label}
                   </label>
                 )
               )}
-            </div>
+            </div>{" "}
+          </div>
+          <div className="mt-7.5 mb-3  text-left">
+            <h2 className="sm:mb-6 mb-4  px-4 py-2 sm:text-xl text-lg sm:font-bold font-semibold bg-gray-2 text-black dark:text-white font-satoshi">
+              Upload additional documents (Optional)
+            </h2>
 
-            {/* upload file */}
-            {/* {selectedTask == "Health issues withdraw" && ( */}
-            <div
-              id="FileUpload"
-              className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border-2 border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5"
-            >
-              <input
-                type="file"
-                accept="image/*"
-                className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
-                onChange={handleFileChange}
-                // {...register("profilePic")}
-
-                // {...register("profilePic", { onChange: handleFileChange })}
-              />
-              <div className="flex flex-col items-center justify-center space-y-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white dark:border-strokedark dark:bg-boxdark">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <div className=" md:mx-12 lg:mx-20 gap-4 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+              <div class="p-6.5">
+                <label
+                  for="fileInput"
+                  class="rounded-md  dark:bg-graydark  dz-clickable"
+                >
+                  <div
+                    id="FileUpload"
+                    class="flex flex-col items-center cursor-pointer justify-center py-4 border-dashed border-2 border-bodydark1 hover:border-bodydark2 dark:hover:border-primary dark:border-strokedark"
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M1.99967 9.33337C2.36786 9.33337 2.66634 9.63185 2.66634 10V12.6667C2.66634 12.8435 2.73658 13.0131 2.8616 13.1381C2.98663 13.2631 3.1562 13.3334 3.33301 13.3334H12.6663C12.8431 13.3334 13.0127 13.2631 13.1377 13.1381C13.2628 13.0131 13.333 12.8435 13.333 12.6667V10C13.333 9.63185 13.6315 9.33337 13.9997 9.33337C14.3679 9.33337 14.6663 9.63185 14.6663 10V12.6667C14.6663 13.1971 14.4556 13.7058 14.0806 14.0809C13.7055 14.456 13.1968 14.6667 12.6663 14.6667H3.33301C2.80257 14.6667 2.29387 14.456 1.91879 14.0809C1.54372 13.7058 1.33301 13.1971 1.33301 12.6667V10C1.33301 9.63185 1.63148 9.33337 1.99967 9.33337Z"
-                      fill="#3C50E0"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M7.5286 1.52864C7.78894 1.26829 8.21106 1.26829 8.4714 1.52864L11.8047 4.86197C12.0651 5.12232 12.0651 5.54443 11.8047 5.80478C11.5444 6.06513 11.1223 6.06513 10.8619 5.80478L8 2.94285L5.13807 5.80478C4.87772 6.06513 4.45561 6.06513 4.19526 5.80478C3.93491 5.54443 3.93491 5.12232 4.19526 4.86197L7.5286 1.52864Z"
-                      fill="#3C50E0"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M7.99967 1.33337C8.36786 1.33337 8.66634 1.63185 8.66634 2.00004V10C8.66634 10.3682 8.36786 10.6667 7.99967 10.6667C7.63148 10.6667 7.33301 10.3682 7.33301 10V2.00004C7.33301 1.63185 7.63148 1.33337 7.99967 1.33337Z"
-                      fill="#3C50E0"
-                    />
-                  </svg>
-                </span>
-                <p>
-                  <span className="text-primary">Click to upload a file</span>{" "}
-                  or drag and drop it if you need to submit important documents
-                  for processing.
-                </p>
-                <p className="mt-1.5">SVG, PNG, JPG or GIF</p>
-                <p>(max, 800 X 800px)</p>
+                    {!selectedImage && (
+                      <>
+                        <div class="mb-2.5 flex justify-center ">
+                          <div class="flex h-15 w-15 items-center justify-center rounded-full bg-gray-2 text-black shadow-10 dark:bg-black dark:text-white">
+                            <svg
+                              class="fill-current"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g clip-path="url(#clip0_1867_11682)">
+                                <path
+                                  d="M18.75 13.75C18.375 13.75 18.0313 14.0625 18.0313 14.4687V17.25C18.0313 17.5312 17.8125 17.75 17.5312 17.75H2.46875C2.1875 17.75 1.96875 17.5312 1.96875 17.25V14.4687C1.96875 14.0625 1.625 13.75 1.25 13.75C0.875 13.75 0.53125 14.0625 0.53125 14.4687V17.25C0.53125 18.3125 1.375 19.1562 2.4375 19.1562H17.5312C18.5938 19.1562 19.4375 18.3125 19.4375 17.25V14.4687C19.4688 14.0625 19.125 13.75 18.75 13.75Z"
+                                  fill=""
+                                ></path>
+                                <path
+                                  d="M5.96875 6.46875L9.3125 3.21875V14.0313C9.3125 14.4063 9.625 14.75 10.0312 14.75C10.4062 14.75 10.75 14.4375 10.75 14.0313V3.21875L14.0937 6.46875C14.2187 6.59375 14.4062 6.65625 14.5938 6.65625C14.7812 6.65625 14.9688 6.59375 15.0938 6.4375C15.375 6.15625 15.3438 5.71875 15.0938 5.4375L10.5 1.0625C10.2187 0.8125 9.78125 0.8125 9.53125 1.0625L4.96875 5.46875C4.6875 5.75 4.6875 6.1875 4.96875 6.46875C5.25 6.71875 5.6875 6.75 5.96875 6.46875Z"
+                                  fill=""
+                                ></path>
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1867_11682">
+                                  <rect
+                                    width="20"
+                                    height="20"
+                                    fill="white"
+                                  ></rect>
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </div>
+                        </div>
+                        <span class="font-medium px-2 text-center sm:text-base font-satoshi text-primary dark:text-white">
+                          Upload additional documents that help you for
+                          clearance approval.
+                        </span>
+                        <p className="mt-1.5 text-sm">SVG, PNG, JPG </p>
+                      </>
+                    )}
+                    <div>
+                      {selectedImage && (
+                        <Image
+                          src={selectedImage} // Use the selected image URL
+                          width={195}
+                          height={175}
+                          alt="User"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </label>
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                  accept=".svg, .png, .jpg"
+                  onChange={handleFileChange}
+                />
               </div>
             </div>
-            <div className="h-94 w-57 ">
-              {
-                selectedImage && (
-                  <Image
-                    src={selectedImage} // Use the selected image URL
-                    width={195}
-                    height={175}
-                    alt="User"
-                  />
-                )
-                // :
-                //   <Image
-                //     src={"/images/user/default.png"}
-                //     width={115}
-                //     height={155}
-                //     alt="User"
-                //   />
-              }
-            </div>
-            {/* )} */}
-            {/*  */}
           </div>
-          <button
-            className="md:ml-26 ml-4 mt-10 flex text-lg justify-center rounded-lg bg-primary py-3 px-6 font-semibold text-gray hover:bg-opacity-95"
-            onClick={handleSend}
-            type="submit"
-          >
-            Send Request
-          </button>
-        </div>
+          <div className=" md:mx-12 mt-4 mb-12 lg:mx-20 gap-4">
+            <button
+              onClick={handleSend}
+              class="flex w-full items-center justify-center gap-3 font-satoshi rounded bg-primary px-4.5 py-2.5 font-medium text-white hover:bg-opacity-90"
+            >
+              <SendIcon />
+              Send Request
+            </button>
+          </div>
+        </div>{" "}
       </div>
     </div>
   );

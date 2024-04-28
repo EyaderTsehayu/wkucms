@@ -1,4 +1,3 @@
-
 import { connectToDB } from "@/utils/database";
 import StudentClearnceReq from "@/models/studentClearanceRequest";
 import { useSession } from "next-auth/react";
@@ -12,15 +11,12 @@ export const GET = async () => {
   const id = session?.user?.userId;
   const role = session?.user?.role;
   try {
-
-
     await connectToDB();
     let request;
     if (role == ROLES.STUDENT) {
-      request = await StudentClearnceReq.find({ userId: id});
-    }else{
-      request = await StaffClearnceReq.find({ userId: id});
-      
+      request = await StudentClearnceReq.find({ userId: id });
+    } else {
+      request = await StaffClearnceReq.find({ userId: id });
     }
 
     //   console.log("session from studentApproval ",requests)

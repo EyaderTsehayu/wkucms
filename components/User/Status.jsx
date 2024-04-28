@@ -169,7 +169,9 @@ const adminStep = {
   "Human Resource Management Directorate": ["APPROVED"],
 };
 
+
 let steps;
+
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -182,10 +184,12 @@ const fetcher = async (url) => {
   return updatedData;
 };
 
-const Status = ({ studentStepData, adminStepData, academicStepData }) => {
+
+const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest}) => {
   console.log("studentStepData", studentStepData);
   console.log("adminStepData", adminStepData);
   console.log("academicStepData", academicStepData);
+
   const { data: userData, error } = useSWR(
     "/api/userStatus",
     fetcher,
@@ -286,8 +290,39 @@ const Status = ({ studentStepData, adminStepData, academicStepData }) => {
 
   return (
     <>
+      {" "}
+      {userData && userData.length == 0 && (
+        <div class="rounded-md border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+          <div class="mx-auto max-w-[490px]">
+            <div class="mt-7.5 mb-3 text-center">
+              <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">
+                You have not any clearance process in progress!
+              </h2>
+              <p class="font-medium font-satoshi">
+                Thank you so much for choosing us. Please press the button to
+                request clearance approval.
+              </p>
+              <button
+                onClick={handleRequest}
+                class="mt-7.5 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 font-medium font-satoshi text-white hover:bg-opacity-90"
+              >
+                Request Clearance
+              </button>
+            </div>{" "}
+            <Image
+              alt="illustration"
+              loading="lazy"
+              width="400"
+              height="200"
+              decoding="async"
+              data-nimg="1"
+              src="/images/illustration/illustration-02.svg"
+            />
+          </div>
+        </div>
+      )}
       {userData && userData.length > 0 && userData[0].status != "APPROVED" && (
-        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="rounded-md border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex flex-col ">
             <div className="grid  rounded-sm bg-gray-2 dark:bg-meta-4 grid-cols-2">
               <div className="p-2.5 sm:ml-16  text-center xl:p-3">
@@ -364,7 +399,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData }) => {
         </div>
       )}
       {userData && userData.length > 0 && userData[0].status == "APPROVED" && (
-        <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+        <div class="rounded-md border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
           <div class="mx-auto max-w-[490px]">
             <div class="mt-7.5 mb-3 text-center">
               <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">

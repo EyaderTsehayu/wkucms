@@ -2,8 +2,8 @@ import React from "react";
 
 const Breadcrumb = (props) => {
   return (
-    <div class="pt-6 pb-2 px-4">
-      <div className="mt-2 py-4 px-4 bg-gray-2 dark:bg-meta-4 flex flex-col gap-3 rounded-md  sm:flex-row sm:items-center sm:justify-between">
+    <div class="pt-4  pb-2 px-4">
+      <div className="mt-2 py-3 px-4 bg-gray-2 dark:bg-meta-4 flex flex-col gap-3 rounded-md  sm:flex-row sm:items-center sm:justify-between">
         <h1 class="sm:text-3xl text-2xl  font-extrabold text-primary dark:text-white font-satoshi">
           {props.title}
         </h1>

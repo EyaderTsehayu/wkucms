@@ -50,6 +50,12 @@ const StaffRequestSchema = new Schema({
     type: String,
     // required: [true, "departmentId is required!"],
   },
+  guarantorName: {
+    type: String,
+  },
+  guarantorId: {
+    type: String,
+  },
   _userId: {
     type: String,
   },

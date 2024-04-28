@@ -17,9 +17,6 @@ import { useState, useEffect } from "react";
 import useSWR from "swr";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
-const iconStyle = {
-  marginRight: "8px", // Adjust the margin as needed
-};
 const fetcher = async (url) => {
   console.log("notuseEffect");
   const response = await fetch(url);
@@ -39,7 +36,16 @@ export default function LabTabs() {
   const [academicStepData, setAcademicStepData] = useState([]);
   const [userStatusData, setUserData] = useState([]);
 
+
   const [stepError, setStepError] = useState(null);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const handleRequest = () => {
+    setValue("1");
+  };
+
   const a = [];
   // Step 3: Use useEffect to trigger the API request
   const { data: userData, error } = useSWR(
@@ -125,7 +131,7 @@ console.log("studentStepData from myclearance", studentStepData);
 
 
   return (
-    <div className="bg-white sm:px-14 dark:bg-black dark:border-black">
+    <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
       <Breadcrumb
         title="My Clearance"
         mainRoute="Dashboard"
@@ -203,11 +209,14 @@ console.log("studentStepData from myclearance", studentStepData);
               <History />
             </TabPanel>
             <TabPanel value="3">
+
               <Status 
               studentStepData={studentStepData} 
               adminStepData={adminStepData} 
               academicStepData={academicStepData}
+              handleRequest={handleRequest}
                />
+
             </TabPanel>
           </>
         </TabContext>
