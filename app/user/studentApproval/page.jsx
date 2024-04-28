@@ -59,6 +59,7 @@ const fetcher = async (url) => {
 };
 
 const ApproveStudent = () => {
+  let steps = {};
   // Use useSWR to fetch data
   const [searchTerm, setSearchTerm] = useState("");
   const { data: session } = useSession();
@@ -76,29 +77,49 @@ const ApproveStudent = () => {
   );
   //console.log("data from student request", userData);
   useEffect(() => {
-    if (userData && previlage && previlage !== "Head") {
-      const filtered = userData.filter((request) => {
-        const approvalRoles = request.approvals.map(
-          (approval) => approval.role
-        );
+    const fetchSteps = async () => {
+      // fetch student steps before filtering
+      
+      const studentType = "STUDENT";
+      // fetch the steps for academic staff
+      const url = "/api/steps";
+      const fullStaffUrl = `${url}?stepType=${studentType}`;
+      const staffResponse = await fetch(fullStaffUrl);
+      const staffData = await staffResponse.json();
+      staffData.forEach((data, index) => {
+        steps[data.name] = data.nextSteps;
+      }
+      );
+     
 
-        const stageKeys = Object.keys(stages).filter((key) =>
-          stages[key].includes(previlage)
-        );
 
-        // Check if the request has approvals for all stageKeys
-        const hasAllApprovals = stageKeys.every((key) =>
-          approvalRoles.includes(key)
-        );
+      if (userData && previlage && previlage !== "Head") {
+        const filtered = userData.filter((request) => {
+          const approvalRoles = request.approvals.map(
+            (approval) => approval.role
+          );
 
-        // Check if the previlage is not in the rejections array
-        const notRejected = !request.rejections.includes(previlage);
+          const stageKeys = Object.keys(steps).filter((key) =>
+            steps[key].includes(previlage)
+          );
 
-        return hasAllApprovals && notRejected;
-      });
-      setFilteredData(filtered);
+          // Check if the request has approvals for all stageKeys
+          const hasAllApprovals = stageKeys.every((key) =>
+            approvalRoles.includes(key)
+          );
+
+          // Check if the previlage is not in the rejections array
+          const notRejected = !request.rejections.includes(previlage);
+
+          return hasAllApprovals && notRejected;
+        });
+        setFilteredData(filtered);
+      }
     }
-  }, [userData, previlage]);
+    fetchSteps();
+    
+  }, [userData, previlage, steps]);
+ 
 
   // Handle loading and fetch errors
   if (!userData && !error) {

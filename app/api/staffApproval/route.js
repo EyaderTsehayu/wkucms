@@ -11,28 +11,42 @@ export const GET = async () => {
   const collegeName = session?.user?.collegeName;
   const departmentName = session?.user?.departmentName;
   // const director = session?.user?.director;
+  let director;
 
   try {
     await connectToDB();
+    // first fetch myprofile to get the director name
+    const myprofile = await User.find({ userId: id });
+    if (myprofile.length == 0) {
+      return new Response("User not found", { status: 404 });
+    }
+
+    director = myprofile[0].director;
 
     const requests =
-      collegeName && departmentName
-        ? await StaffRequestSchema.find({
-            status: privilage,
-            userId: { $ne: id },
-            collegeName: collegeName,
-            departmentName: departmentName,
-          })
+      director ?
+        await StaffRequestSchema.find({
+          status: privilage,
+          userId: { $ne: id },
+          director: director,
+        })
         : collegeName
-        ? await StaffRequestSchema.find({
+          ? await StaffRequestSchema.find({
             status: privilage,
             userId: { $ne: id },
             collegeName: collegeName,
+
           })
-        : await StaffRequestSchema.find({
-            status: privilage,
-            userId: { $ne: id },
-          });
+          : departmentName
+            ? await StaffRequestSchema.find({
+              status: privilage,
+              userId: { $ne: id },
+              departmentName: departmentName,
+            })
+            : await StaffRequestSchema.find({
+              status: privilage,
+              userId: { $ne: id },
+            });
 
     // Return a success response with the users data
     return new Response(JSON.stringify(requests), { status: 200 });

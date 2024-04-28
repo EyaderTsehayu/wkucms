@@ -211,7 +211,7 @@ export const PATCH = async (request) => {
 
     if (existingRequest && existingRequest.staffType == "ACADEMIC") {
       const currentStatus = existingRequest.status;
-      const nextApprovers = academicSteps[privilege];
+      const nextApprovers = step[privilege];
 
       const approvalTime = new Date(); // Get the current time for approval
 
@@ -280,8 +280,8 @@ export const PATCH = async (request) => {
       }
       const isDirectorApproved = isDirectorInApprovals();
       if (!isDirectorApproved) {
-        if (adminSteps["Director"].includes(existingRequest.director)) {
-          nextApprovers = adminSteps["Director"].filter(
+        if (step["Director"].includes(existingRequest.director)) {
+          nextApprovers = step["Director"].filter(
             (role) => role !== existingRequest.director
           );
 
@@ -289,11 +289,11 @@ export const PATCH = async (request) => {
             adminSteps[existingRequest.director]
           );
         } else {
-          nextApprovers = adminSteps[privilege].concat(adminSteps["Director"]);
+          nextApprovers = step[privilege].concat(step["Director"]);
         }
       } else {
         // console.log("Director is approved");
-        nextApprovers = adminSteps[privilege];
+        nextApprovers = step[privilege];
       }
 
       const approvalTime = new Date(); // Get the current time for approval

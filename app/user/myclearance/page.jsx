@@ -206,7 +206,7 @@ console.log("studentStepData from myclearance", studentStepData);
               <Status 
               studentStepData={studentStepData} 
               adminStepData={adminStepData} 
-              academicStepData={adminStepData}
+              academicStepData={academicStepData}
                />
             </TabPanel>
           </>
