@@ -109,132 +109,67 @@ const Header = (props) => {
               alt="Logo"
             />
           </Link>
-          <h5 className="text-md font-semibold text-primary pl-1 lg:hidden dark:text-white">
-            CMS
+          <h5 className="text-base font-extrabold font-satoshi text-primary pl-1 lg:hidden dark:text-white">
+            WKU-CMS
           </h5>
         </div>
 
-        {(pathname == "/user" || pathname.includes("/user")) && (
-          <div className="flex flex-row gap-2 items-center">
-            <Link className=" flex-shrink-0 lg:block hidden" href="/">
-              <Image
-                width={50}
-                height={50}
-                src={"/images/logo/logo.png"}
-                alt="Logo"
-              />
-            </Link>
-            <h5 className="text-lg font-semibold text-primary lg:block hidden dark:text-bodydark1">
-              CMS
-            </h5>
-          </div>
-        )}
+        {(pathname == "/user" || pathname.includes("/user")) &&
+          !session?.user?.privilege && (
+            <div className="flex flex-row gap-2 items-center">
+              <Link className=" flex-shrink-0 lg:block hidden" href="/">
+                <Image
+                  width={50}
+                  height={50}
+                  src={"/images/logo/logo.png"}
+                  alt="Logo"
+                />
+              </Link>
+              <h5 className="text-xl font-extrabold font-satoshi text-primary lg:block hidden dark:text-bodydark1">
+                WKU-CMS
+              </h5>
+            </div>
+          )}
         <div className="hidden lg:block "></div>
         <div className="flex items-center gap-3 2xsm:gap-7 ">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {(pathname == "/user" || pathname.includes("/user")) && (
-              <div className="hidden lg:block">
-                <div className="flex items-center gap-5 ">
-                  <>
-                    <Link
-                      className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${
-                        pathname === "/user" &&
-                        "py-1 px-3 transition-all border border-primary rounded-full"
-                      }`}
-                      href="/user"
-                    >
-                      Home
-                    </Link>
-                    <Link
-                      className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md${
-                        pathname === "/user/myclearance" &&
-                        "py-1 px-3 transition-all border border-primary rounded-full"
-                      }`}
-                      href="/user/myclearance"
-                    >
-                      My Clearance
-                    </Link>
-
-                    <Link
-                      className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${
-                        pathname === "/user/help" &&
-                        "py-1 px-3 transition-all border border-primary rounded-full"
-                      }`}
-                      href="/user/help"
-                    >
-                      Help
-                    </Link>
-                  </>
-
-                  {session?.user?.privilege && (
-                    <div className="relative">
+            {(pathname == "/user" || pathname.includes("/user")) &&
+              !session?.user?.privilege && (
+                <div className="hidden lg:block">
+                  <div className="flex items-center gap-5 ">
+                    <>
                       <Link
-                        className={`  text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${
-                          pathname === "/user/staff" &&
+                        className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${
+                          pathname === "/user" &&
                           "py-1 px-3 transition-all border border-primary rounded-full"
                         }`}
-                        href="/user/studentApproval"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
+                        href="/user"
                       >
-                        Approve
+                        Home
                       </Link>
-                      {showDropdown && (
-                        <div
-                          ref={dropdownRef} // Assign the ref to the dropdown element
-                          className="absolute top-10 right-0 z-10 bg-white p-2 dark:bg-boxdark"
-                          onMouseEnter={handleMouseEnter}
-                          onMouseLeave={handleMouseLeave}
-                        >
-                          <ul className="text-sm border border-whiten rounded-lg dark:border-boxdark dark:text-white text-primary px-4">
-                            <li className="pb-4">
-                              <Link
-                                href="/user/studentApproval"
-                                onClick={() =>
-                                  handleDropdownItemClick("/student")
-                                }
-                              >
-                                Student
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="/user/staffApproval"
-                                onClick={() =>
-                                  handleDropdownItemClick("/staff")
-                                }
-                              >
-                                Staff
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* may change */}
-                  {((session?.user?.privilege=="Registrar")||
-                  (session?.user?.privilege=="Head")||
-                  (session?.user?.privilege=="Hr"))
-                   && (
-                    <div className="relative">
                       <Link
-                      className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md${
-                        pathname === "/user/ApprovedUsers" &&
-                        "py-1 px-3 transition-all border border-primary rounded-full"
-                      }`}
-                      href="/user/ApprovedUsers"
-                    >
-                      Approved users
-                    </Link>
-                      
-                    </div>
-                  )}
-                  {/* may change */}
+                        className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md${
+                          pathname === "/user/myclearance" &&
+                          "py-1 px-3 transition-all border border-primary rounded-full"
+                        }`}
+                        href="/user/myclearance"
+                      >
+                        My Clearance
+                      </Link>
+
+                      <Link
+                        className={` text-lg font-semibold border-primary bg-transparent py-1 px-3 text-primary transition-all hover:border hover:border-primary hover:rounded-full text-center font-inter flex items-center justify-center dark:text-bodydark1 dark:text-md ${
+                          pathname === "/user/help" &&
+                          "py-1 px-3 transition-all border border-primary rounded-full"
+                        }`}
+                        href="/user/help"
+                      >
+                        Help
+                      </Link>
+                    </>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             {(pathname == "/user" || pathname.includes("/user")) && (
               <>
                 {" "}
