@@ -265,7 +265,7 @@ const Status = ({ handleRequest }) => {
     <>
       {" "}
       {userData && userData.length == 0 && (
-        <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+        <div class="rounded-md border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
           <div class="mx-auto max-w-[490px]">
             <div class="mt-7.5 mb-3 text-center">
               <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">
@@ -295,7 +295,7 @@ const Status = ({ handleRequest }) => {
         </div>
       )}
       {userData && userData.length > 0 && userData[0].status != "APPROVED" && (
-        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+        <div className="rounded-md border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="flex flex-col ">
             <div className="grid  rounded-sm bg-gray-2 dark:bg-meta-4 grid-cols-2">
               <div className="p-2.5 sm:ml-16  text-center xl:p-3">
@@ -373,7 +373,7 @@ const Status = ({ handleRequest }) => {
         </div>
       )}
       {userData && userData.length > 0 && userData[0].status == "APPROVED" && (
-        <div class="rounded-sm border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
+        <div class="rounded-md border border-stroke bg-white px-5 pt-10 shadow-default dark:border-strokedark dark:bg-boxdark ">
           <div class="mx-auto max-w-[490px]">
             <div class="mt-7.5 mb-3 text-center">
               <h2 class="mb-3 text-2xl font-bold text-black dark:text-white font-satoshi">

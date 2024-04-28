@@ -35,8 +35,6 @@ const UserContainer = ({
     setIsFiltering(false);
   }, [rows]);
 
-console.log("filteredRows before search",filteredRows );
-
   // start searching
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -54,9 +52,7 @@ console.log("filteredRows before search",filteredRows );
     setIsFiltering(true);
     // Update the state with the filtered rows
     setFilteredRows(filteredRows);
-    
   };
-
 
   const handleApproveAll = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {
@@ -125,12 +121,7 @@ console.log("filteredRows before search",filteredRows );
   };
 
   return (
-    <div
-      className={`rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  ${
-        (pathname.includes("student") || pathname.includes("ApprovedUsers")) &&
-        "col-span-9"
-      } col-span-12 xs:col-span-9 `}
-    >
+    <div className="rounded-md border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5  col-span-12 ">
       <div className="flex-grow"></div>
       <div className="flex w-full justify-between items-center mb-4">
         <div className="flex w-1/3 ">
