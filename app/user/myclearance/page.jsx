@@ -18,6 +18,7 @@ import useSWR from "swr";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
 const fetcher = async (url) => {
+  console.log("notuseEffect");
   const response = await fetch(url);
   const data = await response.json();
   const updatedData = data.map((user) => ({
@@ -27,9 +28,16 @@ const fetcher = async (url) => {
   }));
   return updatedData;
 };
-
+let keyValuePairs = {};
 export default function LabTabs() {
   const [value, setValue] = useState("3");
+  const [studentStepData, setStudentStepData] = useState([]);
+  const [adminStepData, setAdminStepData] = useState([]);
+  const [academicStepData, setAcademicStepData] = useState([]);
+  const [userStatusData, setUserData] = useState([]);
+
+
+  const [stepError, setStepError] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -37,10 +45,11 @@ export default function LabTabs() {
   const handleRequest = () => {
     setValue("1");
   };
+
   const a = [];
   // Step 3: Use useEffect to trigger the API request
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/userStatus",
+    "/api/userStatus",
     fetcher,
     {
       initialData: a,
@@ -49,6 +58,62 @@ export default function LabTabs() {
     }
   );
 
+  // console.log("userData from useEffect", userData[0]?.staffType);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const responseData = await fetch("/api/userStatus");
+        // if (!responseData.ok) {
+        //   throw new Error("Network response was not ok");
+        // }
+        // const userData = await responseData.json();
+        // setUserData(userData);
+        // console.log("data from fetchUserData", userData[0].role);
+        // let stepType;
+        // if(userData[0]?.role === "STUDENT"){
+        //    stepType = "STUDENT";
+        // }else if(userData[0]?.stepType === "ADMIN"){
+        //    stepType = "ADMIN";
+        // }else if(userData[0]?.stepType === "ACADEMIC"){
+        //    stepType = "ACADEMIC";
+        // }
+       const studentType = "STUDENT";
+       const adminType = "ADMIN";
+      const academicType = "ACADEMIC";
+        const url = "/api/steps";
+        const fullStudentUrl = `${url}?stepType=${studentType}`;
+        const fullAdmintUrl = `${url}?stepType=${adminType}`;
+        const fullAcademicUrl = `${url}?stepType=${academicType}`;
+
+        const studentResponse = await fetch(fullStudentUrl);
+        const adminResponse = await fetch(fullAdmintUrl);
+        const academicResponse = await fetch(fullAcademicUrl);
+        if (!academicResponse.ok || !adminResponse.ok || !studentResponse.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const studentData = await studentResponse.json();
+        const adminData = await adminResponse.json();
+        const academicData = await academicResponse.json();
+
+        setStudentStepData(studentData);
+        setAdminStepData(adminData);
+        setAcademicStepData(academicData);
+      } catch (error) {
+        setStepError(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
+console.log("studentStepData from myclearance", studentStepData);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+ 
   useEffect(() => {
     if (userData && userData[0]?.status[0]) {
       setValue("3");
@@ -63,6 +128,7 @@ export default function LabTabs() {
   if (error) {
     return <p>Failed to fetch data</p>;
   }
+
 
   return (
     <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
@@ -143,7 +209,14 @@ export default function LabTabs() {
               <History />
             </TabPanel>
             <TabPanel value="3">
-              <Status handleRequest={handleRequest} />
+
+              <Status 
+              studentStepData={studentStepData} 
+              adminStepData={adminStepData} 
+              academicStepData={academicStepData}
+              handleRequest={handleRequest}
+               />
+
             </TabPanel>
           </>
         </TabContext>

@@ -5,6 +5,7 @@ import StepSchema from "@/models/step";
 import { STUDENTSTEPS } from "@/utils/constants";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import DynamicSteps from "@/models/DynamicSteps";
 // const studentApproval = STUDENTSTEPS;
 //var studentApproval;
 export const PATCH = async (request) => {
@@ -15,32 +16,47 @@ export const PATCH = async (request) => {
 
     await connectToDB();
 
+
+    const studentType = "STUDENT";
+   
+    
+      const requests = await DynamicSteps.find({stepType: studentType});
+      //return new Response(JSON.stringify(requests), { status: 200 })
+   // console.log("studentData from myclearance on", requests);
+
+      let studentSteps = {};
+      requests.forEach((data, index) => {
+        studentSteps[data.name] = data.nextSteps;
+      }
+    );
+   // console.log("studentData from myclearance studentStep", studentStep);
+
     // first fetch the steps
     // const steps = await StepSchema.findOne({ stepType: "STUDENT" });
     //studentApproval = steps.steps;
 
-    const stages = {
-      Head: ["College Dean"],
-      "College Dean": [
-        "Dormitory",
-        "Cafteria",
-        "Sport And Recreation",
-        "College Book Store",
-      ],
-      Dormitory: ["Dean Of Student"],
-      Cafteria: ["Dean Of Student"],
-      "Sport And Recreation": ["Dean Of Student"],
-      "College Book Store": ["Library Chief"],
-      "Dean Of Student": ["Registrar"],
-      "Library Chief": ["Registrar"],
-      Registrar: ["APPROVED"],
-    };
+    // const stages = {
+    //   Head: ["College Dean"],
+    //   "College Dean": [
+    //     "Dormitory",
+    //     "Cafteria",
+    //     "Sport And Recreation",
+    //     "College Book Store",
+    //   ],
+    //   Dormitory: ["Dean Of Student"],
+    //   Cafteria: ["Dean Of Student"],
+    //   "Sport And Recreation": ["Dean Of Student"],
+    //   "College Book Store": ["Library Chief"],
+    //   "Dean Of Student": ["Registrar"],
+    //   "Library Chief": ["Registrar"],
+    //   Registrar: ["APPROVED"],
+    // };
 
     const existingRequest = await StudentClearnceReq.findById(objectId);
 
     if (existingRequest) {
       const currentStatus = existingRequest.status;
-      const nextApprovers = stages[privilege];
+      const nextApprovers = studentSteps[privilege];
       // const currentaprover = existingRequest.approvals;
       // console.log("current status ", currentStatus);
       // console.log("current approver ", currentaprover);

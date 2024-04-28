@@ -5,7 +5,7 @@
 // // Define the schema for the steps data
 // const StepsSchema = new Schema({
 //   // Define a single field to store key-value pairs
- 
+
 //   steps: [
 //     {
 //       key: String,
@@ -32,23 +32,25 @@ const StepsSchema = new Schema({
   //     // required: true, // This is the simplest way
   //   },
   // ],
-
+  stepId: {
+    type: String,
+    required: true,
+  },
   name: {
-        type: String,
-        required: true,
-        unique: true // Ensures no duplicate step names
-    },
-    nextSteps: {
-        type: [String],
-        default: []
-    },
-    stepType:{
-      type: String,
-      required: true,
-     
+    type: String,
+    
+  },
+  nextSteps: {
+    type: [String],
+    default: []
+  },
+  stepType: {
+    type: String,
+    required: true,
+
   },
 });
 
-const DynamicSteps =models.DynamicSteps || model("DynamicSteps", StepsSchema);
+const DynamicSteps = models.DynamicSteps || model("DynamicSteps", StepsSchema);
 
 export default DynamicSteps;

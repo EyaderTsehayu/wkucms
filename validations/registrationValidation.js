@@ -23,7 +23,7 @@ export const registerOfficerSchema = yup.object({
 
 });
 export const registerOfficeSchema = yup.object({
-  officeName: yup.string().required("Office name is required"),
+  // officeName: yup.string().required("Office name is required"),
   officeId: yup.string().required("office id is required"),
 });
 export const registerAdminSchema = yup.object({

@@ -168,7 +168,10 @@ const adminStep = {
   "Records and Archives Officer": ["Human Resource Management Directorate"],
   "Human Resource Management Directorate": ["APPROVED"],
 };
-let steps = studentStep;
+
+
+let steps;
+
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -181,36 +184,60 @@ const fetcher = async (url) => {
   return updatedData;
 };
 
-const Status = ({ handleRequest }) => {
+
+const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest}) => {
+  console.log("studentStepData", studentStepData);
+  console.log("adminStepData", adminStepData);
+  console.log("academicStepData", academicStepData);
+
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/userStatus",
+    "/api/userStatus",
     fetcher,
     {
       revalidateOnFocus: false,
       refreshInterval: 2000,
     }
   );
-  if (userData && userData[0]?.staffType == "Academic") {
-    steps = academicStep;
-  } else if (userData && userData[0]?.staffType == "Admin") {
-    steps = { ...adminStep };
-    delete steps.Director;
-  } else {
-    steps = studentStep;
-  }
-  if (!userData && !error) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    console.error("Error fetching data:", error);
-    return <p>Failed to fetch data</p>;
-  }
 
   const router = useRouter();
   const [requestStatus, setRequestStatus] = useState([]);
 
   useEffect(() => {
+
     if (userData) {
+      // fetch the steps
+      if (userData && userData[0]?.staffType == "ACADEMIC") {
+        let academicStep = {};
+        academicStepData.forEach((data, index) => {
+          academicStep[data.name] = data.nextSteps;
+        });
+        steps = academicStep;
+      } else if (userData && userData[0]?.staffType == "ADMIN") {
+        let adminStep = {};
+        adminStepData.forEach((data, index) => {
+          adminStep[data.name] = data.nextSteps;
+        });
+        steps = { ...adminStep };
+
+        delete steps.Director;
+
+      } else {
+        let studentStep = {};
+        studentStepData.forEach((data, index) => {
+          studentStep[data.name] = data.nextSteps;
+        });
+        console.log("studentStep", studentStep);
+        steps = studentStep;
+      }
+      if (!userData && !error) {
+        return <p>Loading...</p>;
+      }
+      if (error) {
+        console.error("Error fetching data:", error);
+        return <p>Failed to fetch data</p>;
+      }
+
+      // end fetch
       const dataDisplay = [];
       const currentStatus = userData[0]?.status;
       Object.keys(steps).forEach((key) => {
@@ -241,7 +268,7 @@ const Status = ({ handleRequest }) => {
 
       setRequestStatus(dataDisplay);
     }
-  }, [userData]);
+  }, [userData, studentStepData, adminStepData, academicStepData]);
 
   const handleReinitate = async (key) => {
     // alert(requestStatus[key].name);
@@ -312,11 +339,10 @@ const Status = ({ handleRequest }) => {
 
             {requestStatus.map((request, key) => (
               <div
-                className={`grid grid-cols-2  ${
-                  key === requestStatus.length - 1
+                className={`grid grid-cols-2  ${key === requestStatus.length - 1
                     ? ""
                     : "border-b border-stroke dark:border-strokedark"
-                }`}
+                  }`}
                 key={key}
               >
                 <div className="flex items-center  justify-center sm:ml-16 p-2.5 xl:p-5">

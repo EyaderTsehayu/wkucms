@@ -15,7 +15,7 @@ const fetcher = async (url) => {
 };
 const History = () => {
   const { data: userData, error } = useSWR(
-    "http://localhost:3000/api/approvalHistory",
+    "/api/approvalHistory",
     fetcher,
     {
       initialData: rows,

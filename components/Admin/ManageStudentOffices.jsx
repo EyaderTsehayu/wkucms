@@ -29,32 +29,15 @@ const ManageStudentOffices = () => {
     }
   };
 
-  const [steps, setSteps] = useState({
-    Head: ["College Dean"],
-    "College Dean": [
-      "Dormitory",
-      "Cafteria",
-      "Sport And Recreation",
-      "College Book Store",
-    ],
-    Dormitory: ["Dean Of Student"],
-    Cafteria: ["Dean Of Student"],
-    "Sport And Recreation": ["Dean Of Student"],
-    "College Book Store": ["Library Chief"],
-    "Dean Of Student": ["Registrar"],
-    "Library Chief": ["Registrar"],
-    Registrar: ["APPROVED"],
-  });
-  // const [steps, setSteps] = useState({});
+  const [steps, setSteps] = useState({});
+  
   const [selectedKey, setSelectedKey] = useState(null); // State for selected key
-  //  setSteps({"yes":["College Dean"]})
+ 
   const [stepData, setStepData] = useState([]);
   const [stepError, setStepError] = useState(null)
-  // console.log("ooooo", steps);
+ 
   useEffect(() => {
-    console.log("oooooooowaaw");
-
-    const fetchData = async () => {
+ const fetchData = async () => {
       try {
         const stepType = "STUDENT"; // Define your stepType here
         const url = "/api/steps"; // Define the URL
@@ -112,15 +95,7 @@ const ManageStudentOffices = () => {
 
 
   const list = [];
-  console.log("stepData[0].name", stepData[0]?.name);
-  // for (let index = 0; index < stepData[0].length; index++) {
-  //     const key =stepData[0].name;
-  //     list.push(key);
-  // }
-  //     stepData[0].name.forEach(element => {
-  //         list.push(element);
-
-  //    });
+ 
   const data = stepData[0];
   // console.log("data",data);
   for (let index = 0; index < stepData.length; index++) {
@@ -179,7 +154,7 @@ const ManageStudentOffices = () => {
 
   const addItem = (key, value) => {
     keyValuePairs[key].push(value)
-    // console.log("ttttttttttttttttttttt","yyy",value);
+   
     if (key !== value && key !== "Select a Step") {
       setKeyValuePairs(prevKeyValuePairs => {
         const updatedPairs = { ...prevKeyValuePairs };
@@ -187,7 +162,7 @@ const ManageStudentOffices = () => {
         return updatedPairs;
       });
     }
-    // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
+   
   };
 
 
@@ -200,7 +175,7 @@ const ManageStudentOffices = () => {
   };
 
 
-  console.log("steps", steps);
+ 
 
 
 

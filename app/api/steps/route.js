@@ -7,25 +7,13 @@ import { KeyOutlined } from "@mui/icons-material";
 export const POST = async (req) => {
   try {
     await connectToDB();
-    // const {
-    //     title,
-    //     description,
-    //     image,
-    //   } = await req.json();
-    const { steps, stepType, key, value } = await req.json(); // Extract the 'steps' array from the request body
-    console.log("steps", steps);
+    const { steps, stepType, key, value } = await req.json();
 
-    // Iterate over each step and create a document for each one
     if (steps) {
-      const keys = Object.keys(steps);
-      const values = Object.values(steps);
-
-      const len = keys.length;
-      //   const newStep = new DynamicSteps({ steps: newSteps });
       await populateSteps(steps, stepType);
     } else if (key && value) {
-      console.log("key", key, ">value", value);
       const currentStep = new DynamicSteps({
+        stepId: key+stepType,
         name: key,
         nextSteps: value,
         stepType,
@@ -47,12 +35,15 @@ export const POST = async (req) => {
 // Helper function to iterate and create Step documents
 async function populateSteps(data, stepType) {
   //   const keys = Object.keys(data);
+  //console.log("dataa", data);
   for (const key in data) {
-    if (data[key] != null) {
+    
+    if (data[key] != null ) {
       console.log("data", data);
 
-      console.log(data[key]);
+     // console.log(data[key]);
       const currentStep = new DynamicSteps({
+        stepId: key+stepType,
         name: key,
         nextSteps: data[key],
         stepType,

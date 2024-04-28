@@ -189,37 +189,69 @@ const ApproveStaff = () => {
   // console.log("USER DATA inside approval", userData);
 
   useEffect(() => {
-    if (userData && previlage && previlage !== "Head") {
-      const filtered = userData.filter((request) => {
-        const approvalRoles = request.approvals.map(
-          (approval) => approval.role
-        );
-        const staffType = request.staffType;
-        let step;
+    const fetchSteps = async () => {
+      if (userData && previlage && previlage !== "Head") {
+        const filtered = userData.filter(async (request) => {
+          const approvalRoles = request.approvals.map(
+            (approval) => approval.role
+          );
+          const staffType = request.staffType;
+          let step;
 
-        if (staffType == "Academic") {
-          step = academicStep;
-        } else if (staffType == "Admin") {
-          step = { ...adminStep };
-          delete step.Director;
-        }
+          if (staffType == "ACADEMIC") {
+            let steps = {};
+            // fetch the steps for academic staff
+            const url = "/api/steps";
+            const fullStaffUrl = `${url}?stepType=${staffType}`;
+            const staffResponse = await fetch(fullStaffUrl);
+            const staffData = await staffResponse.json();
+            staffData.forEach((data, index) => {
+              steps[data.name] = data.nextSteps;
+            }
+            );
+            console.log("steps from staffApproval", steps);
 
-        const stageKeys = Object.keys(step).filter((key) =>
-          step[key].includes(previlage)
-        );
+            // end fetch
 
-        // Check if the request has approvals for all stageKeys
-        const hasAllApprovals = stageKeys.every((key) =>
-          approvalRoles.includes(key)
-        );
+            step = steps;
+          } else if (staffType == "Admin") {
+            // fetch adminstaff steps
+            let steps = {};
+            // fetch the steps for academic staff
+            const url = "/api/steps";
+            const fullStaffUrl = `${url}?stepType=${staffType}`;
+            const staffResponse = await fetch(fullStaffUrl);
+            const staffData = await staffResponse.json();
+            staffData.forEach((data, index) => {
+              steps[data.name] = data.nextSteps;
+            }
+            );
+            console.log("steps from staffApproval", steps);
 
-        // Check if the previlage is not in the rejections array
-        const notRejected = !request.rejections.includes(previlage);
 
-        return hasAllApprovals && notRejected;
-      });
-      setFilteredData(filtered);
+            step = { ...steps };
+            delete step.Director;
+          }
+
+          const stageKeys = Object.keys(step).filter((key) =>
+            step[key].includes(previlage)
+          );
+
+          // Check if the request has approvals for all stageKeys
+          const hasAllApprovals = stageKeys.every((key) =>
+            approvalRoles.includes(key)
+          );
+
+          // Check if the previlage is not in the rejections array
+          const notRejected = !request.rejections.includes(previlage);
+
+          return hasAllApprovals && notRejected;
+        });
+        setFilteredData(filtered);
+      }
     }
+    fetchSteps();
+
   }, [userData, previlage]);
 
   // Handle loading and fetch errors

@@ -21,7 +21,7 @@ export const mailOptions = {
 
 export async function sendVerificationEmail(email, token) {
     
-  const verificationUrl = `http://localhost:3000/activate/${token}`; // Nowy format URL
+  const verificationUrl = `/activate/${token}`; // Nowy format URL
   await transporter.sendMail({
     from: userEmail,
     to: email,
@@ -42,7 +42,7 @@ export async function sendPasswordResetEmail(email, token) {
     }catch(error){
       console.log("Error in connecting to email server");
     }
-  const resetPasswordUrl = `http://localhost:3000/resetPassword/${encodeURIComponent(token)}`;
+  const resetPasswordUrl = `/resetPassword/${encodeURIComponent(token)}`;
   await transporter.sendMail({
     
     from: userEmail,

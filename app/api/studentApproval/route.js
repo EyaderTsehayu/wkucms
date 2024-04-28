@@ -10,26 +10,37 @@ export const GET = async () => {
   const privilege = session?.user?.privilege;
   const collegeName = session?.user?.collegeName;
   const departmentName = session?.user?.departmentName;
+  let registrarName ;
   const userId = session?.user?.userId;
 
   try {
     await connectToDB();
+    const myprofile = await User.find({ userId: userId });
+    if (myprofile.length == 0) {
+      return new Response("User not found", { status: 404 });
+    }
+    
+    registrarName = myprofile[0].registrarName;
 
     const fetchStudent = await User.find({ userId: userId });
     // console.log("fetchStudent for dorm", privilege);
 
     // find all requests where the previlage is included inside the status array which is one field in the schema
     const requests =
-      collegeName && departmentName
+       registrarName
         ? await StudentClearnceReq.find({
             status: privilege,
-            collegeName: collegeName,
-            departmentName: departmentName,
+            registrarName: registrarName,
           })
         : collegeName
         ? await StudentClearnceReq.find({
             status: privilege,
             collegeName: collegeName,
+          })
+        : departmentName 
+        ? await StudentClearnceReq.find({
+            status: privilege,
+            departmentName: departmentName,
           })
         : privilege == "Dormitory"
         ? await StudentClearnceReq.find({
@@ -47,3 +58,4 @@ export const GET = async () => {
     return new Response("Failed to fetch requests", { status: 500 });
   }
 };
+   

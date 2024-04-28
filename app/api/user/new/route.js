@@ -49,7 +49,7 @@ export const POST = async (req) => {
       staffType
     });
 
-    console.log(
+    console.log("stafffffffffff",
       userId,
       firstname,
       middlename,

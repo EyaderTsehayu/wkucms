@@ -18,7 +18,7 @@ const RegisterStaff = ({ onCancel }) => {
 
   let keys = [];
   // Mock data for staff types
-  const staffTypes = ["Academic", "Admin"];
+  const staffTypes = ["ACADEMIC", "ADMIN"];
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
@@ -112,28 +112,43 @@ const RegisterStaff = ({ onCancel }) => {
 
 
   useEffect(() => {
+    console.log("fetching data from the server ...");
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
 
         const studentStepType = "STUDENT"
 
-        const staffUrl = new URL("http://localhost:3000/api/step");
-        staffUrl.searchParams.append("stepType", staffStepType);
-        const responseStaff = await fetch(staffUrl);
-        // fetch students step
-        const studentUrl = new URL("http://localhost:3000/api/step");
-        studentUrl.searchParams.append("stepType", studentStepType);
-        const responseStudent = await fetch(studentUrl);
+        // const staffUrl = new URL("/api/step");
+        // staffUrl.searchParams.append("stepType", staffStepType);
+        // const responseStaff = await fetch(staffUrl);
+        // // fetch students step
+        // const studentUrl = new URL("/api/step");
+        // studentUrl.searchParams.append("stepType", studentStepType);
+        // const responseStudent = await fetch(studentUrl);
 
-
-
+// searchStaffType
+    let fetchData;
         try {
-          const fetchedData = await fetch(`/api/steps`);
-          if (!fetchedData.ok) {
-            throw new Error(`Failed to fetch data. Status: ${fetchedData.status}`);
+          if(searchStaffType){
+            const url = "/api/steps"; // Define the URL
+  
+  
+            const fullUrl = `${url}?stepType=${searchStaffType}`;
+            fetchData = await fetch(fullUrl);
+
+          }else{
+
+            fetchData = await fetch(`/api/steps`);
           }
-          const data = await fetchedData.json();
+
+
+
+
+          if (!fetchData.ok) {
+            throw new Error(`Failed to fetch data. Status: ${fetchData.status}`);
+          }
+          const data = await fetchData.json();
           const keyValuePairs = {};
           data.forEach((item) => {
             keyValuePairs[item.name] = item.nextSteps;
@@ -146,35 +161,35 @@ const RegisterStaff = ({ onCancel }) => {
         }
 
 
-        if (!responseStaff.ok && !responseStudent.ok) {
-          throw new Error("Network responseStaff was not ok");
-        }
-        const staffData = await responseStaff.json();
-        const updatedStaffData = staffData.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
+        // if (!responseStaff.ok && !responseStudent.ok) {
+        //   throw new Error("Network responseStaff was not ok");
+        // }
+        // const staffData = await responseStaff.json();
+        // const updatedStaffData = staffData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
 
-        const studentData = await responseStudent.json();
-        const updatedStudentData = studentData.map((user) => ({
-          ...user,
-          id: user._id,
-        }));
+        // const studentData = await responseStudent.json();
+        // const updatedStudentData = studentData.map((user) => ({
+        //   ...user,
+        //   id: user._id,
+        // }));
 
         // Assuming setStepData and setStepError are state updating functions
         // setStepData(updatedStaffData);
         // setDraggedData(updatedStaffData[0].steps);
-        const concatenatedArray = [
-          ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
-          ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
-        ];
+        // const concatenatedArray = [
+        //   ...updatedStaffData[0].steps.filter((step) => step !== "APPROVED"),
+        //   ...updatedStudentData[0].steps.filter((step) => step !== "APPROVED"),
+        // ];
 
         const previlege = keys.map((role, index) => ({
 
           id: (index + 1).toString(),
           name: role,
         }));
-
+        //console.log("previlege",searchStaffType);
         setDirector(previlege);
         setPrevilege(previlege);
 
@@ -234,8 +249,8 @@ const RegisterStaff = ({ onCancel }) => {
     //   setFilteredPrevilege(filteredResults);
     // }
 
-  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector]);
-
+  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector,searchStaffType]);
+// searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -395,8 +410,8 @@ const RegisterStaff = ({ onCancel }) => {
     setSearchCollege(college.name);
     setShowCollegeDropdown(false);
   };
-  console.log(console.log("directorprevilege",Previlege));
-  console.log(console.log("director",director));
+  // console.log(console.log("directorprevilege",Previlege));
+  // console.log(console.log("director",director));
 
 
   const onSubmit = async (data) => {
@@ -418,7 +433,7 @@ const RegisterStaff = ({ onCancel }) => {
           departmentName: data.departmentName,
           role: ROLES.STAFF,
 
-          staffType: data.staffType,
+          staffType:searchStaffType ,
           director:data.directorName,
           blockNo: data.blockNo,
 
@@ -627,7 +642,7 @@ const RegisterStaff = ({ onCancel }) => {
 
 
         {/*  */}
-        {searchStaffType && searchStaffType == "Academic" && (
+        {searchStaffType && searchStaffType == "ACADEMIC" && (
           <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
             <div className="w-full sm:w-1/2">
@@ -717,7 +732,7 @@ const RegisterStaff = ({ onCancel }) => {
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 
 
-          {searchStaffType && searchStaffType == "Admin" && (
+          {searchStaffType && searchStaffType == "ADMIN" && (
             // <div className="w-full sm:w-1/2">
             //   <label
             //     className="mb-3 block text-sm font-medium text-black dark:text-white"
