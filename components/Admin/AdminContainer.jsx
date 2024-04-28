@@ -108,7 +108,12 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
             toast.success(responsedata);
             toastShown = true;
           } else if (selectedRowsData.length === 1) {
-            toast.success("activate Successfully");
+            if(selectedRowsData[0].status == "active"){
+              toast.success("Diactivate  Successfully");
+
+            }else if(selectedRowsData[0].status == "inactive"){
+              toast.success("Activate  Successfully");
+            }
           }
         }
       });
