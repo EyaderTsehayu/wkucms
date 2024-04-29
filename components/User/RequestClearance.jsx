@@ -52,7 +52,7 @@ const TaskItem = () => {
   const [stepData, setStepData] = useState(null);
   const [stepError, setStepError] = useState(null);
 
-  const [draggedData, setDraggedData] = useState();
+  const [draggedData, setDraggedData] = useState([]);
 
   const [selectedImage, setProfilePic] = useState(null);
   const [imageBase64, setImageBase64] = useState(null);
@@ -75,39 +75,37 @@ const TaskItem = () => {
     const fetchData = async () => {
       try {
 
-        const url = "/api/steps"; // Define the URL
-
-
-        // Construct URL with query parameter
+        const url = "/api/steps"; 
         const fullUrl = `${url}?stepType=${stepType}`;
-  
-        // Make the GET request using fetch
         const response = await fetch(fullUrl);
-
-
-
-
-        // const url = new URL("/api/step");
-        // url.searchParams.append("stepType", stepType);
-        
-        // const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        let steps={};
         const data = await response.json();
+       
+        data.forEach((data, index) => {
+          steps[data.name] = data.nextSteps;
+        });
+        const key = Object.keys(steps);
+       
+        const firstkey= [];
+        firstkey.push(key[0]);
+        
         const updatedData = data.map((user) => ({
           ...user,
           id: user._id,
         }));
         setStepData(updatedData);
-        setDraggedData(updatedData[0].steps[0]);
+        setDraggedData(firstkey);
+        //firstkey.pop();
       } catch (error) {
         setStepError(error);
       }
     };
 
     fetchData(); // Fetch data once when component mounts
-
+    
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
