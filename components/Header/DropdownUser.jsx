@@ -18,7 +18,7 @@ const DropdownUser = () => {
   //fetch user data
 
   useEffect(() => {
-    console.log("oooooo", Id);
+   
     const fetchUserData = async () => {
       try {
         const response = await fetch(`/api/user/new/${Id}`);

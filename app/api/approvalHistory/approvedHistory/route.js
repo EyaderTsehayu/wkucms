@@ -21,7 +21,7 @@ export const GET = async () => {
      if((previlege == "Hr")||(previlege == "HR")||(previlege == "hr")){
          requests = await History.find({role:"STAFF"});
      }else{
-         requests = await History.find({role:"STUDENT"});
+         requests = await History.find({role:"STUDENT"}).sort({ dateApproved: -1 });
      }
   
   

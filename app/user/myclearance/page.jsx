@@ -18,7 +18,7 @@ import useSWR from "swr";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
 const fetcher = async (url) => {
-  console.log("notuseEffect");
+
   const response = await fetch(url);
   const data = await response.json();
   const updatedData = data.map((user) => ({
@@ -105,9 +105,7 @@ export default function LabTabs() {
   
     fetchData();
   }, []);
-  
 
-console.log("studentStepData from myclearance", studentStepData);
 
   
  
