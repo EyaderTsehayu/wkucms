@@ -67,14 +67,26 @@ const TaskItem = () => {
   const _userId = session?.data?.user.id;
   const role = session?.data?.user.role;
 
-  var stepType;
+  let stepType;
   var status;
 
   useEffect(() => {
-    stepType = session?.data?.user.role;
+  
     const fetchData = async () => {
       try {
-
+        const userUrl = "/api/user/byUserId"; 
+        const fullUserUrl = `${userUrl}?userId=${userId}`;
+        const userResponse = await fetch(fullUserUrl);
+        const userData = await userResponse.json();
+        console.log("userResponse", userData);
+         if(userData[0].role == "STUDENT"){
+          stepType = "STUDENT";
+          
+        }else{
+          stepType = userData[0].staffType;
+         
+        }
+       // stepType = session?.data?.user.role;
         const url = "/api/steps"; 
         const fullUrl = `${url}?stepType=${stepType}`;
         const response = await fetch(fullUrl);
@@ -88,7 +100,9 @@ const TaskItem = () => {
           steps[data.name] = data.nextSteps;
         });
         const key = Object.keys(steps);
-       
+        console.log("stepType",stepType);
+        console.log("steps",steps);
+       console.log("key",key);
         const firstkey= [];
         firstkey.push(key[0]);
         
@@ -111,6 +125,7 @@ const TaskItem = () => {
 
   // upload file
   const handleFileChange = async (event) => {
+   
     const selectedFile = event.target.files[0];
     // console.log("Image selectedImage:", selectedFile);
     if (selectedFile) {
@@ -185,6 +200,7 @@ const TaskItem = () => {
       }
 
       if (session?.data?.user.role == "STAFF") {
+        console.log("draggedData", draggedData);
         let staffType;
         let director;
         try {
@@ -208,14 +224,14 @@ const TaskItem = () => {
         }
 
         if (guarantorName != "" && guarantorId != "") {
-          if (staffType == "Academic") {
+          if (staffType == "ACADEMIC") {
             try {
               const response = await fetch("/api/staffRequest", {
                 method: "POST",
                 body: JSON.stringify({
                   userId: userId,
                   reason: selectedTask,
-                  status: ["Head"],
+                  status: draggedData,
                   staffType: staffType,
                   firstname: firstname,
                   middlename: middlename,
@@ -240,7 +256,7 @@ const TaskItem = () => {
               toast.error("Invalid request");
               console.log(error);
             }
-          } else if (staffType == "Admin") {
+          } else if (staffType == "ADMIN") {
             try {
               const response = await fetch("/api/staffRequest", {
                 method: "POST",

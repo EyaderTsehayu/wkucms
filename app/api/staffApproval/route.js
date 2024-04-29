@@ -29,7 +29,7 @@ export const GET = async () => {
         await StaffRequestSchema.find({
           status: privilage,
           userId: { $ne: id },
-          director: director,
+         
         })
         : collegeName
           ? await StaffRequestSchema.find({

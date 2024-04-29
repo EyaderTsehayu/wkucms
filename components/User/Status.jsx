@@ -92,7 +92,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
           status = "Rejected";
         } else if (currentStatus && currentStatus.includes(key)) {
           for (const element of currentStatus) {
-            console.log("element", steps[steps[element][0]]);
+        
             if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
               status = "Not Started";
               break;
