@@ -19,7 +19,7 @@ export const GET = async () => {
       await connectToDB();
       let requests;
      if((previlege == "Hr")||(previlege == "HR")||(previlege == "hr")){
-         requests = await History.find({role:"STAFF"});
+         requests = await History.find({role:"STAFF"}).sort({ dateApproved: -1 });
      }else{
          requests = await History.find({role:"STUDENT"}).sort({ dateApproved: -1 });
      }
