@@ -11,7 +11,7 @@ export const GET = async () => {
   try {
     await connectToDB();
 
-    const requests = await History.find({ userId: userId });
+    const requests = await History.find({ userId: userId }).sort({ dateApproved: -1 });
 
     // Return a success response with the users data
     return new Response(JSON.stringify(requests), { status: 200 });

@@ -9,166 +9,6 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const studentStep = {
-  Head: ["College Dean"],
-  "College Dean": [
-    "Dormitory",
-    "Cafteria",
-    "Sport And Recreation",
-    "College Book Store",
-  ],
-  Dormitory: ["Dean Of Student"],
-  Cafteria: ["Dean Of Student"],
-  "Sport And Recreation": ["Dean Of Student"],
-  "College Book Store": ["Library Chief"],
-  "Dean Of Student": ["Registrar"],
-  "Library Chief": ["Registrar"],
-  Registrar: ["APPROVED"],
-};
-
-const academicStep = {
-  Head: "College Dean",
-  "College Dean": [
-    "Library Chief1",
-    "Library Chief2",
-    "Library Chief3",
-    "Accountant",
-    "Store Keeper (Electronics)",
-    "Store Keeper (Furniture)",
-    "Store Keeper (Ender/SemiEnder)",
-    "Teachers and Staff Savings Association Accountant",
-    "Registrar",
-    "Housing Management Coordinator",
-    "University Industry Linkage Directorate",
-    "Community Service Directorate",
-    "Indigenous Knowledge Directorate",
-    "Research Directorate",
-  ],
-
-  "Library Chief1": ["Library Director"],
-  "Library Chief2": ["Library Director"],
-  "Library Chief3": ["Library Director"],
-  Accountant: ["Main Treasurer"],
-  "Library Director": ["Human Resource Management Directorate"],
-  "Main Treasurer": ["Finance Directorate"],
-  "Finance Directorate": ["Human Resource Management Directorate"],
-
-  "Store Keeper (Electronics)": [
-    "Procurement and Asset Management Directorate",
-  ],
-  "Store Keeper (Furniture)": ["Procurement and Asset Management Directorate"],
-  "Store Keeper (Ender/SemiEnder)": [
-    "Procurement and Asset Management Directorate",
-  ],
-  "Procurement and Asset Management Directorate": [
-    "Human Resource Management Directorate",
-  ],
-
-  "Teachers and Staff Savings Association Accountant": [
-    "Human Resource Management Directorate",
-  ],
-  Registrar: ["Human Resource Management Directorate"],
-
-  "Housing Management Coordinator": ["Human Resource Management Directorate"],
-
-  "University Industry Linkage Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Community Service Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Indigenous Knowledge Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Research Directorate": ["Research and Community Service Vice President"],
-
-  "Research and Community Service Vice President": [
-    "Academic Affairs Vice president",
-  ],
-
-  "ICT Directorate": ["Human Resource Management Directorate"],
-
-  "Academic Affairs Vice president": [
-    "Administration Corporate Management Vice President",
-  ],
-  "Administration Corporate Management Vice President": [
-    "Records and Archives Officer",
-  ],
-  "Records and Archives Officer": ["Human Resource Management Directorate"],
-  "Human Resource Management Directorate": ["APPROVED"],
-};
-
-const adminStep = {
-  Director: [
-    "Library Chief1",
-    "Library Chief2",
-    "Library Chief3",
-    "Accountant",
-    "Store Keeper (Electronics)",
-    "Store Keeper (Furniture)",
-    "Store Keeper (Ender/SemiEnder)",
-    "Teachers and Staff Savings Association Accountant",
-    "Dean Of Student",
-    "Housing Management Coordinator",
-    "University Industry Linkage Directorate",
-    "Community Service Directorate",
-    "Indigenous Knowledge Directorate",
-    "Research Directorate",
-    "ICT Directorate",
-  ],
-
-  "Library Chief1": ["Library Director"],
-  "Library Chief2": ["Library Director"],
-  "Library Chief3": ["Library Director"],
-  Accountant: ["Main Treasurer"],
-
-  "Store Keeper (Electronics)": [
-    "Procurement and Asset Management Directorate",
-  ],
-  "Store Keeper (Furniture)": ["Procurement and Asset Management Directorate"],
-  "Store Keeper (Ender/SemiEnder)": [
-    "Procurement and Asset Management Directorate",
-  ],
-
-  "Teachers and Staff Savings Association Accountant": [
-    "Human Resource Management Directorate",
-  ],
-  "Dean Of Student": ["Human Resource Management Directorate"],
-
-  "Housing Management Coordinator": ["Human Resource Management Directorate"],
-
-  "University Industry Linkage Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Community Service Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Indigenous Knowledge Directorate": [
-    "Research and Community Service Vice President",
-  ],
-  "Research Directorate": ["Research and Community Service Vice President"],
-  "ICT Directorate": ["Human Resource Management Directorate"],
-
-  "Library Director": ["Human Resource Management Directorate"],
-  "Main Treasurer": ["Finance Directorate"],
-  "Finance Directorate": ["Human Resource Management Directorate"],
-  "Procurement and Asset Management Directorate": [
-    "Human Resource Management Directorate",
-  ],
-  "Research and Community Service Vice President": [
-    "Academic Affairs Vice president",
-  ],
-
-  "Academic Affairs Vice president": [
-    "Administration Corporate Management Vice President",
-  ],
-  "Administration Corporate Management Vice President": [
-    "Records and Archives Officer",
-  ],
-  "Records and Archives Officer": ["Human Resource Management Directorate"],
-  "Human Resource Management Directorate": ["APPROVED"],
-};
-
 
 let steps;
 
@@ -186,10 +26,7 @@ const fetcher = async (url) => {
 
 
 const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest}) => {
-  console.log("studentStepData", studentStepData);
-  console.log("adminStepData", adminStepData);
-  console.log("academicStepData", academicStepData);
-
+  
   const { data: userData, error } = useSWR(
     "/api/userStatus",
     fetcher,
@@ -226,7 +63,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
         studentStepData.forEach((data, index) => {
           studentStep[data.name] = data.nextSteps;
         });
-        console.log("studentStep", studentStep);
+      
         steps = studentStep;
       }
       if (!userData && !error) {
@@ -255,7 +92,8 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
           status = "Rejected";
         } else if (currentStatus && currentStatus.includes(key)) {
           for (const element of currentStatus) {
-            if (steps[element] && steps[element].includes(stepKey)) {
+        
+            if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
               status = "Not Started";
               break;
             }

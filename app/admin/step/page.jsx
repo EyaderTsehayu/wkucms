@@ -113,9 +113,9 @@ const StepsComponent = () => {
     //  setSteps({"yes":["College Dean"]})
     const [stepData, setStepData] = useState();
     const [stepError, setStepError] = useState(null)
-    console.log("ooooo", steps);
+  
     useEffect(() => {
-        console.log("ooooo");
+    
         const fetchData = async () => {
             try {
                 const stepType = "STUDENT"; // Define your stepType here

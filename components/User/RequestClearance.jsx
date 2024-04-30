@@ -52,7 +52,7 @@ const TaskItem = () => {
   const [stepData, setStepData] = useState(null);
   const [stepError, setStepError] = useState(null);
 
-  const [draggedData, setDraggedData] = useState();
+  const [draggedData, setDraggedData] = useState([]);
 
   const [selectedImage, setProfilePic] = useState(null);
   const [imageBase64, setImageBase64] = useState(null);
@@ -67,52 +67,65 @@ const TaskItem = () => {
   const _userId = session?.data?.user.id;
   const role = session?.data?.user.role;
 
-  var stepType;
+  let stepType;
   var status;
 
   useEffect(() => {
-    stepType = session?.data?.user.role;
+  
     const fetchData = async () => {
       try {
-
-        const url = "/api/steps"; // Define the URL
-
-
-        // Construct URL with query parameter
+        const userUrl = "/api/user/byUserId"; 
+        const fullUserUrl = `${userUrl}?userId=${userId}`;
+        const userResponse = await fetch(fullUserUrl);
+        const userData = await userResponse.json();
+        console.log("userResponse", userData);
+         if(userData[0].role == "STUDENT"){
+          stepType = "STUDENT";
+          
+        }else{
+          stepType = userData[0].staffType;
+         
+        }
+       // stepType = session?.data?.user.role;
+        const url = "/api/steps"; 
         const fullUrl = `${url}?stepType=${stepType}`;
-  
-        // Make the GET request using fetch
         const response = await fetch(fullUrl);
-
-
-
-
-        // const url = new URL("/api/step");
-        // url.searchParams.append("stepType", stepType);
-        
-        // const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        let steps={};
         const data = await response.json();
+       
+        data.forEach((data, index) => {
+          steps[data.name] = data.nextSteps;
+        });
+        const key = Object.keys(steps);
+        console.log("stepType",stepType);
+        console.log("steps",steps);
+       console.log("key",key);
+        const firstkey= [];
+        firstkey.push(key[0]);
+        
         const updatedData = data.map((user) => ({
           ...user,
           id: user._id,
         }));
         setStepData(updatedData);
-        setDraggedData(updatedData[0].steps[0]);
+        setDraggedData(firstkey);
+        //firstkey.pop();
       } catch (error) {
         setStepError(error);
       }
     };
 
     fetchData(); // Fetch data once when component mounts
-
+    
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
   // upload file
   const handleFileChange = async (event) => {
+   
     const selectedFile = event.target.files[0];
     // console.log("Image selectedImage:", selectedFile);
     if (selectedFile) {
@@ -187,6 +200,7 @@ const TaskItem = () => {
       }
 
       if (session?.data?.user.role == "STAFF") {
+        console.log("draggedData", draggedData);
         let staffType;
         let director;
         try {
@@ -210,14 +224,14 @@ const TaskItem = () => {
         }
 
         if (guarantorName != "" && guarantorId != "") {
-          if (staffType == "Academic") {
+          if (staffType == "ACADEMIC") {
             try {
               const response = await fetch("/api/staffRequest", {
                 method: "POST",
                 body: JSON.stringify({
                   userId: userId,
                   reason: selectedTask,
-                  status: ["Head"],
+                  status: draggedData,
                   staffType: staffType,
                   firstname: firstname,
                   middlename: middlename,
@@ -242,7 +256,7 @@ const TaskItem = () => {
               toast.error("Invalid request");
               console.log(error);
             }
-          } else if (staffType == "Admin") {
+          } else if (staffType == "ADMIN") {
             try {
               const response = await fetch("/api/staffRequest", {
                 method: "POST",
