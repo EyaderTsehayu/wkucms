@@ -36,7 +36,6 @@ export default function LabTabs() {
   const [academicStepData, setAcademicStepData] = useState([]);
   const [userStatusData, setUserData] = useState([]);
 
-
   const [stepError, setStepError] = useState(null);
 
   const handleChange = (event, newValue) => {
@@ -48,15 +47,11 @@ export default function LabTabs() {
 
   const a = [];
   // Step 3: Use useEffect to trigger the API request
-  const { data: userData, error } = useSWR(
-    "/api/userStatus",
-    fetcher,
-    {
-      initialData: a,
-      revalidateOnFocus: false,
-      refreshInterval: 2000,
-    }
-  );
+  const { data: userData, error } = useSWR("/api/userStatus", fetcher, {
+    initialData: a,
+    revalidateOnFocus: false,
+    refreshInterval: 2000,
+  });
 
   // console.log("userData from useEffect", userData[0]?.staffType);
   useEffect(() => {
@@ -77,9 +72,9 @@ export default function LabTabs() {
         // }else if(userData[0]?.stepType === "ACADEMIC"){
         //    stepType = "ACADEMIC";
         // }
-       const studentType = "STUDENT";
-       const adminType = "ADMIN";
-      const academicType = "ACADEMIC";
+        const studentType = "STUDENT";
+        const adminType = "ADMIN";
+        const academicType = "ACADEMIC";
         const url = "/api/steps";
         const fullStudentUrl = `${url}?stepType=${studentType}`;
         const fullAdmintUrl = `${url}?stepType=${adminType}`;
@@ -102,18 +97,12 @@ export default function LabTabs() {
         setStepError(error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
-console.log("studentStepData from myclearance", studentStepData);
+  console.log("studentStepData from myclearance", studentStepData);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
- 
   useEffect(() => {
     if (userData && userData[0]?.status[0]) {
       setValue("3");
@@ -128,7 +117,6 @@ console.log("studentStepData from myclearance", studentStepData);
   if (error) {
     return <p>Failed to fetch data</p>;
   }
-
 
   return (
     <div className="bg-white sm:px-6 px-2 dark:bg-black dark:border-black">
@@ -209,14 +197,12 @@ console.log("studentStepData from myclearance", studentStepData);
               <History />
             </TabPanel>
             <TabPanel value="3">
-
-              <Status 
-              studentStepData={studentStepData} 
-              adminStepData={adminStepData} 
-              academicStepData={academicStepData}
-              handleRequest={handleRequest}
-               />
-
+              <Status
+                studentStepData={studentStepData}
+                adminStepData={adminStepData}
+                academicStepData={academicStepData}
+                handleRequest={handleRequest}
+              />
             </TabPanel>
           </>
         </TabContext>
