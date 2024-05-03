@@ -39,7 +39,6 @@ const faq = [
     ans: "After your clearance application is approved, you will receive confirmation, and you will be considered cleared to leave the university. You may also receive a clearance certificate as proof of your clearance status.",
   },
 ];
-
 const Faq = () => {
   const [accordionOpen, setAccordionOpen] = useState(
     Array(faq.length).fill(false)
