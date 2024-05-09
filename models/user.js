@@ -42,25 +42,26 @@ const UserSchema = new Schema({
   role: {
     type: String,
   },
-  privilege:{
-    type:String,
+  privilege: {
+    type: String,
   },
-  email:{
-    type:String
+  email: {
+    type: String,
   },
-  profilePic:{
-    type:String
+  profilePic: {
+    type: String,
   },
-  blockNo:{
-    type:String
+  blockNo: {
+    type: String,
   },
-  status:{
-    type:String
+  status: {
+    type: String,
+    default: "active",
   },
-  emailResetPassword:{
-    type:String
+  emailResetPassword: {
+    type: String,
   },
- verificationCode: {
+  verificationCode: {
     type: String,
   },
   director: {
@@ -69,7 +70,7 @@ const UserSchema = new Schema({
   staffType: {
     type: String,
   },
- 
+
   passwordResetTokenExpires: { type: Date, default: null },
 
   createdAt: {
