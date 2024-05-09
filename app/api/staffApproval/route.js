@@ -7,7 +7,7 @@ import User from "@/models/user";
 
 export const GET = async () => {
   const session = await getServerSession(authOptions);
-  const privilage = session?.user?.privilege;
+  const privilege = session?.user?.privilege;
   const id = session?.user?.userId;
   const collegeName = session?.user?.collegeName;
   const departmentName = session?.user?.departmentName;
@@ -27,25 +27,25 @@ export const GET = async () => {
     const requests =
       director ?
         await StaffRequestSchema.find({
-          status: privilage,
+          status: privilege,
           userId: { $ne: id },
          
         })
-        : collegeName
+        : (collegeName &&( privilege == "College Dean" || privilege == "College Registrar"))
           ? await StaffRequestSchema.find({
-            status: privilage,
+            status: privilege,
             userId: { $ne: id },
             collegeName: collegeName,
 
           })
-          : departmentName
+          :(departmentName && privilege == "Head")
             ? await StaffRequestSchema.find({
-              status: privilage,
+              status: privilege,
               userId: { $ne: id },
               departmentName: departmentName,
             })
             : await StaffRequestSchema.find({
-              status: privilage,
+              status: privilege,
               userId: { $ne: id },
             });
 

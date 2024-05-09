@@ -6,22 +6,7 @@ import useSWR from "swr";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
-const stages = {
-  Head: ["College Dean"],
-  "College Dean": [
-    "Dormitory",
-    "Cafteria",
-    "Sport And Recreation",
-    "College Book Store",
-  ],
-  Dormitory: ["Dean Of Student"],
-  Cafteria: ["Dean Of Student"],
-  "Sport And Recreation": ["Dean Of Student"],
-  "College Book Store": ["Library Chief"],
-  "Dean Of Student": ["Registrar"],
-  "Library Chief": ["Registrar"],
-  Registrar: ["APPROVED"],
-};
+
 
 const columns = [
   { field: "userId", headerName: "ID", width: "120" },

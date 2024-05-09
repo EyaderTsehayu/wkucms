@@ -240,7 +240,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         <Groups2Icon /> Staff Approval
                       </Link>
                     </li>
-                    {(session?.user?.privilege == "Registrar" ||
+                    {(session?.user?.privilege == "College Registrar" ||
                       session?.user?.privilege == "Head" ||
                       session?.user?.privilege ==
                         "Human Resource Management Directorate") && (
