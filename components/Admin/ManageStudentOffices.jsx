@@ -1,17 +1,9 @@
 "use client";
-
-import AdminContainer from "@/components/Admin/AdminContainer";
 import React, { useState, useEffect, useRef } from "react";
 
 import RegisterOffice from "@/components/Modals/RegisterOffice";
-import useSWR from "swr";
-import { usePathname } from "next/navigation";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
-import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
-import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import AddIcon from "@mui/icons-material/Add";
 
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
@@ -342,7 +334,7 @@ const ManageStudentOffices = () => {
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <RegisterOffice />
+          <RegisterOffice onCancel={handleClose} />
         </div>
       </Modal>
     </div>
