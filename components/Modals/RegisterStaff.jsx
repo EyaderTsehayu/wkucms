@@ -23,8 +23,7 @@ const RegisterStaff = ({ onCancel }) => {
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedCollege, setSelectedCollege] = useState(null);
   const [selectedPrevilege, setSelectedPrevilege] = useState(null);
-   const [selectedDirector, setSelectedDirector] = useState(null);
-
+  const [selectedDirector, setSelectedDirector] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCollege, setSearchCollege] = useState("");
@@ -38,13 +37,11 @@ const RegisterStaff = ({ onCancel }) => {
   const [filteredStaffType, setFilteredStaffType] = useState([]);
   const [filteredDirector, setFilteredDirector] = useState(null);
 
-
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCollegeDropdown, setShowCollegeDropdown] = useState(false);
   const [showPrevilegeDropdown, setShowPrevilegeDropdown] = useState(false);
   const [showStaffType, setShowStaffType] = useState(false);
   const [showDirectorDropdown, setShowDirectorDropdown] = useState(false);
-
 
   const collegeDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -52,20 +49,14 @@ const RegisterStaff = ({ onCancel }) => {
   const staffTypeDropdownRef = useRef(null);
   const directorDropdownRef = useRef(null);
 
-
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
 
-
-  const [Previlege, setPrevilege] = useState([])
-  const [staffType, setStaffType] = useState([])
-  const [director, setDirector] = useState([])
+  const [Previlege, setPrevilege] = useState([]);
+  const [staffType, setStaffType] = useState([]);
+  const [director, setDirector] = useState([]);
 
   // const staffType = ["Acadamic", "Admin"];
-
-
-
- 
 
   const handleSearchInputFocus = () => {
     if (searchTerm) {
@@ -94,8 +85,6 @@ const RegisterStaff = ({ onCancel }) => {
     }
   };
 
-
-
   const handleSearchStaffTypeChange = (event) => {
     setSearchStaffType(event.target.value);
     setShowStaffType(true);
@@ -106,10 +95,9 @@ const RegisterStaff = ({ onCancel }) => {
       setShowDirectorDropdown(true);
     } else {
       setFilteredDirector(director);
-      setShowDirectorDropdown(true);  
+      setShowDirectorDropdown(true);
     }
   };
-
 
   useEffect(() => {
     console.log("fetching data from the server ...");
@@ -117,7 +105,7 @@ const RegisterStaff = ({ onCancel }) => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
 
-        const studentStepType = "STUDENT"
+        const studentStepType = "STUDENT";
 
         // const staffUrl = new URL("/api/step");
         // staffUrl.searchParams.append("stepType", staffStepType);
@@ -127,26 +115,22 @@ const RegisterStaff = ({ onCancel }) => {
         // studentUrl.searchParams.append("stepType", studentStepType);
         // const responseStudent = await fetch(studentUrl);
 
-// searchStaffType
-    let fetchData;
+        // searchStaffType
+        let fetchData;
         try {
-          if(searchStaffType){
+          if (searchStaffType) {
             const url = "/api/steps"; // Define the URL
-  
-  
+
             const fullUrl = `${url}?stepType=${searchStaffType}`;
             fetchData = await fetch(fullUrl);
-
-          }else{
-
+          } else {
             fetchData = await fetch(`/api/steps`);
           }
 
-
-
-
           if (!fetchData.ok) {
-            throw new Error(`Failed to fetch data. Status: ${fetchData.status}`);
+            throw new Error(
+              `Failed to fetch data. Status: ${fetchData.status}`
+            );
           }
           const data = await fetchData.json();
           const keyValuePairs = {};
@@ -157,9 +141,8 @@ const RegisterStaff = ({ onCancel }) => {
           const values = Object.values(keyValuePairs);
           console.log("keys fetch", keys, ">> values", values);
         } catch (error) {
-          console.error('Error fetching or processing data:', error);
+          console.error("Error fetching or processing data:", error);
         }
-
 
         // if (!responseStaff.ok && !responseStudent.ok) {
         //   throw new Error("Network responseStaff was not ok");
@@ -185,14 +168,12 @@ const RegisterStaff = ({ onCancel }) => {
         // ];
 
         const previlege = keys.map((role, index) => ({
-
           id: (index + 1).toString(),
           name: role,
         }));
         //console.log("previlege",searchStaffType);
         setDirector(previlege);
         setPrevilege(previlege);
-
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
@@ -248,9 +229,15 @@ const RegisterStaff = ({ onCancel }) => {
     //  else {
     //   setFilteredPrevilege(filteredResults);
     // }
-
-  }, [searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector,searchStaffType]);
-// searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector
+  }, [
+    searchTerm,
+    DepartmentData,
+    searchCollege,
+    searchPrevilege,
+    searchDirector,
+    searchStaffType,
+  ]);
+  // searchTerm, DepartmentData, searchCollege, searchPrevilege,searchDirector
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -304,7 +291,7 @@ const RegisterStaff = ({ onCancel }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -364,7 +351,6 @@ const RegisterStaff = ({ onCancel }) => {
     setShowStaffType(true);
   };
 
-
   const handleDropdownItemClick = (office) => {
     setValue("departmentName", office.name);
     setValue("departmentId", office.id);
@@ -392,7 +378,6 @@ const RegisterStaff = ({ onCancel }) => {
     setShowDirectorDropdown(false);
   };
 
-
   const handleDropdownStaffTypeItemClick = (staffType) => {
     setSearchStaffType(staffType);
     setShowStaffType(false);
@@ -413,6 +398,43 @@ const RegisterStaff = ({ onCancel }) => {
   // console.log(console.log("directorprevilege",Previlege));
   // console.log(console.log("director",director));
 
+  const handleFileUpload = (e) => {
+    const reader = new FileReader();
+    reader.readAsBinaryString(e.target.files[0]);
+    reader.onload = async (e) => {
+      const data = e.target.result;
+      const workbook = XLSX.read(data, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const parsedData = XLSX.utils.sheet_to_json(sheet);
+      const da = JSON.stringify(parsedData);
+      // console.log("data stringified", da);
+      try {
+        const response = await fetch("/api/user/import", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other headers if needed
+          },
+          body: JSON.stringify(parsedData),
+        });
+
+        if (response.ok) {
+          const responseData = await response.text();
+          // Handle the response data from the server if needed
+          toast.success(responseData);
+          //console.log("Data sent successfully!", responseData);
+        } else {
+          ///  console.log("Response from importing", response.error);
+          toast.error(
+            "There is duplicated user id, please check your data again"
+          );
+        }
+      } catch (error) {
+        console.error("Error sending data:", error);
+      }
+    };
+  };
 
   const onSubmit = async (data) => {
     const fromFirstName = data.firstName.toLowerCase();
@@ -433,11 +455,9 @@ const RegisterStaff = ({ onCancel }) => {
           departmentName: data.departmentName,
           role: ROLES.STAFF,
 
-          staffType:searchStaffType ,
-          director:data.directorName,
+          staffType: searchStaffType,
+          director: data.directorName,
           blockNo: data.blockNo,
-
-
         }),
       });
 
@@ -455,11 +475,21 @@ const RegisterStaff = ({ onCancel }) => {
     onCancel();
   };
 
-  const handleDownload = () => {
+  const handleDownloadAcademicForm = () => {
     // Constructing a temporary link element
     const link = document.createElement("a");
-    link.href = "/files/studentsTrial.xlsx";
-    link.setAttribute("download", "studentsTrial.xlsx");
+    link.href = "/files/AcademicForm.xlsx";
+    link.setAttribute("download", "AcademicForm.xlsx");
+    // Simulating a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  const handleDownloadAdminForm = () => {
+    // Constructing a temporary link element
+    const link = document.createElement("a");
+    link.href = "/files/AdminForm.xlsx";
+    link.setAttribute("download", "AdminForm.xlsx");
     // Simulating a click event to trigger the download
     document.body.appendChild(link);
     link.click();
@@ -468,10 +498,16 @@ const RegisterStaff = ({ onCancel }) => {
   return (
     <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <button
-        onClick={handleDownload}
-        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+        onClick={handleDownloadAdminForm}
+        className="absolute top-1 right-12 text-sm   hover:text-primary text-meta-5 font-satoshi "
       >
-        Get Importing Format
+        Get Importing Format (Admin)
+      </button>
+      <button
+        onClick={handleDownloadAcademicForm}
+        className="absolute top-6 right-12 text-sm hover:text-primary text-meta-5 font-satoshi "
+      >
+        Get Importing Format (Academic)
       </button>
       <div className="flex flex-row place-content-between">
         <div>
@@ -479,6 +515,36 @@ const RegisterStaff = ({ onCancel }) => {
             Register Staff
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
+        </div>
+        <div className=" px-3 ">
+          <div className="flex flex-row gap-3">
+            <label
+              htmlFor="file-upload"
+              className="flex flex-row gap-3 rounded-md border border-primary bg-primary px-6 py-2 text-center font-medium text-white transition hover:bg-opacity-90"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fff"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+              </svg>
+              Import
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleFileUpload}
+              accept=".xlsx , .xls"
+            />
+          </div>
         </div>
       </div>
 
@@ -562,33 +628,32 @@ const RegisterStaff = ({ onCancel }) => {
 
         {/*  */}
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
           <div className="w-full sm:w-1/2">
-
             <label
               className="mb-3 block text-sm font-medium text-black dark:text-white"
-              htmlFor="staffType">Staff Type</label>
+              htmlFor="staffType"
+            >
+              Staff Type
+            </label>
             <input
               className="w-full rounded border border-stroke bg-gray py-3  px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
               type="text"
-
               name="staffType"
               id="staffType"
               placeholder="Search for a staff type..."
               value={searchStaffType}
               onFocus={handleSearchStaffType}
               onChange={handleSearchStaffTypeChange}
-
             />
 
             {showStaffType && (
               <div
                 className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-                ref={staffTypeDropdownRef}>
+                ref={staffTypeDropdownRef}
+              >
                 {filteredStaffType.map((type) => (
                   <div
                     className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-
                     key={type}
                     onClick={() => handleDropdownStaffTypeItemClick(type)}
                   >
@@ -598,7 +663,6 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
-
 
           <div className="w-full sm:w-1/2">
             <label className="mb-3 block text-sm font-medium text-black dark:text-white">
@@ -613,9 +677,7 @@ const RegisterStaff = ({ onCancel }) => {
               onFocus={handleSearchPrevilegeFocus}
               onChange={handleSearchPrevilegeChange}
               className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-
             />
-
 
             <p>{errors.collegeName?.message}</p>
 
@@ -636,15 +698,11 @@ const RegisterStaff = ({ onCancel }) => {
               </div>
             )}
           </div>
-
         </div>
-
-
 
         {/*  */}
         {searchStaffType && searchStaffType == "ACADEMIC" && (
           <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
             <div className="w-full sm:w-1/2">
               <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                 College
@@ -658,7 +716,6 @@ const RegisterStaff = ({ onCancel }) => {
                 onFocus={handleSearchCollegeFocus}
                 onChange={handleSearchCollegeChange}
                 className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-
               />
 
               <p>{errors.collegeName?.message}</p>
@@ -681,7 +738,6 @@ const RegisterStaff = ({ onCancel }) => {
               )}
             </div>
 
-
             <div className="w-full sm:w-1/2">
               <label
                 className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -698,7 +754,7 @@ const RegisterStaff = ({ onCancel }) => {
                 onFocus={handleSearchInputFocus}
                 onChange={handleSearchInputChange}
                 className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              //  {...register("departmentName")}
+                //  {...register("departmentName")}
               />
               <input
                 type="hidden"
@@ -730,8 +786,6 @@ const RegisterStaff = ({ onCancel }) => {
         )}
 
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
-
-
           {searchStaffType && searchStaffType == "ADMIN" && (
             // <div className="w-full sm:w-1/2">
             //   <label
@@ -751,42 +805,39 @@ const RegisterStaff = ({ onCancel }) => {
             //   <p>{errors.director?.message}</p>
             // </div>
             <div className="w-full sm:w-1/2">
-            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-            Director
-            </label>
-            <input
-              type="text"
-              name="directorName"
-              id="directorName"
-              placeholder="Search for a Director..."
-              value={searchDirector}
-              onFocus={handleSearchDirectorFocus}
-              onChange={handleSearchDirectorChange}
-              className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                Director
+              </label>
+              <input
+                type="text"
+                name="directorName"
+                id="directorName"
+                placeholder="Search for a Director..."
+                value={searchDirector}
+                onFocus={handleSearchDirectorFocus}
+                onChange={handleSearchDirectorChange}
+                className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+              />
 
-            />
+              <p>{errors.collegeName?.message}</p>
 
-
-            <p>{errors.collegeName?.message}</p>
-
-            {showDirectorDropdown && (
-              <div
-                ref={directorDropdownRef} // Use the college dropdown ref
-                className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
-              >
-                {filteredDirector?.map((director) => (
-                  <div
-                    key={director.id}
-                    onClick={() => handleDropdownDirectorItemClick(director)}
-                    className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
-                  >
-                    {director.name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
+              {showDirectorDropdown && (
+                <div
+                  ref={directorDropdownRef} // Use the college dropdown ref
+                  className="w-full py-1 rounded-md  border border-stroke bg-gray  text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                >
+                  {filteredDirector?.map((director) => (
+                    <div
+                      key={director.id}
+                      onClick={() => handleDropdownDirectorItemClick(director)}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-100 hover:bg-bodydark1 dark:hover:bg-body"
+                    >
+                      {director.name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {/*for dormitory */}
@@ -810,11 +861,7 @@ const RegisterStaff = ({ onCancel }) => {
               <p>{errors.blockNo?.message}</p>
             </div>
           )}
-
-
         </div>
-
-
 
         <div className="-mx-3 mt-10 flex flex-wrap gap-y-4">
           <div className="w-full px-3 2xsm:w-1/2">
@@ -838,4 +885,3 @@ const RegisterStaff = ({ onCancel }) => {
 };
 
 export default RegisterStaff;
-
