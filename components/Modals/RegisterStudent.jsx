@@ -37,7 +37,6 @@ const RegisterStudent = ({ onCancel }) => {
   const initialDropdownItems = DepartmentData.slice(0, 1);
   const initialDropdownColleges = CollegeData.slice(0, 1);
 
-
   const handleSearchInputFocus = () => {
     if (searchTerm) {
       setShowDropdown(true);
@@ -168,7 +167,7 @@ const RegisterStudent = ({ onCancel }) => {
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
       const da = JSON.stringify(parsedData);
-      console.log("data stringified", da);
+      // console.log("data stringified", da);
       try {
         const response = await fetch("/api/user/import", {
           method: "POST",
@@ -185,10 +184,10 @@ const RegisterStudent = ({ onCancel }) => {
           toast.success(responseData);
           //console.log("Data sent successfully!", responseData);
         } else {
-          // Handle error cases
-          toast.error("Failed to send data");
-
-          //          console.error();
+          ///  console.log("Response from importing", response.error);
+          toast.error(
+            "There is duplicated user id, please check your data again"
+          );
         }
       } catch (error) {
         console.error("Error sending data:", error);
@@ -202,8 +201,8 @@ const RegisterStudent = ({ onCancel }) => {
   const handleDownload = () => {
     // Constructing a temporary link element
     const link = document.createElement("a");
-    link.href = "/files/studentsTrial.xlsx";
-    link.setAttribute("download", "studentsTrial.xlsx");
+    link.href = "/files/StudentForm.xlsx";
+    link.setAttribute("download", "StudentForm.xlsx");
     // Simulating a click event to trigger the download
     document.body.appendChild(link);
     link.click();
@@ -214,7 +213,7 @@ const RegisterStudent = ({ onCancel }) => {
     <div className="relative w-full max-w-142.5 rounded-lg bg-white py-12 px-8  dark:bg-boxdark md:py-15 md:px-8.5">
       <button
         onClick={handleDownload}
-        className="absolute top-6 right-12 text-sm text-primary font-satoshi "
+        className="absolute top-6 right-12 text-sm hover:text-primary text-meta-5 font-satoshi "
       >
         Get Importing Format
       </button>
