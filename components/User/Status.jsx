@@ -9,9 +9,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-
 let steps;
-
 
 const fetcher = async (url) => {
   const response = await fetch(url);
@@ -24,23 +22,21 @@ const fetcher = async (url) => {
   return updatedData;
 };
 
-
-const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest}) => {
-  
-  const { data: userData, error } = useSWR(
-    "/api/userStatus",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 2000,
-    }
-  );
+const Status = ({
+  studentStepData,
+  adminStepData,
+  academicStepData,
+  handleRequest,
+}) => {
+  const { data: userData, error } = useSWR("/api/userStatus", fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 2000,
+  });
 
   const router = useRouter();
   const [requestStatus, setRequestStatus] = useState([]);
 
   useEffect(() => {
-
     if (userData) {
       // fetch the steps
       if (userData && userData[0]?.staffType == "ACADEMIC") {
@@ -57,13 +53,12 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
         steps = { ...adminStep };
 
         delete steps.Director;
-
       } else {
         let studentStep = {};
         studentStepData.forEach((data, index) => {
           studentStep[data.name] = data.nextSteps;
         });
-      
+
         steps = studentStep;
       }
       if (!userData && !error) {
@@ -92,8 +87,11 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
           status = "Rejected";
         } else if (currentStatus && currentStatus.includes(key)) {
           for (const element of currentStatus) {
-        
-            if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
+            if (
+              (steps[element] && steps[element].includes(stepKey)) ||
+              (steps[steps[element][0]] &&
+                steps[steps[element][0]].includes(stepKey))
+            ) {
               status = "Not Started";
               break;
             }
@@ -177,10 +175,11 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
 
             {requestStatus.map((request, key) => (
               <div
-                className={`grid grid-cols-2  ${key === requestStatus.length - 1
+                className={`grid grid-cols-2  ${
+                  key === requestStatus.length - 1
                     ? ""
                     : "border-b border-stroke dark:border-strokedark"
-                  }`}
+                }`}
                 key={key}
               >
                 <div className="flex items-center  justify-center sm:ml-16 p-2.5 xl:p-5">

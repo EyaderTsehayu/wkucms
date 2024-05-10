@@ -59,7 +59,7 @@ module.exports = {
     },
     extend: {
       fontSize: {
-        "title-xxl": ["44px", "55px"],
+        "title-xxl": ["44px", "50px"],
         "title-xl": ["36px", "45px"],
         "title-xl2": ["33px", "45px"],
         "title-lg": ["28px", "35px"],
