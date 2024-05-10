@@ -39,9 +39,7 @@ async function populateSteps(data, stepType) {
   for (const key in data) {
     
     if (data[key] != null ) {
-      console.log("data", data);
-
-     // console.log(data[key]);
+    
       const currentStep = new DynamicSteps({
         stepId: key+stepType,
         name: key,
@@ -60,16 +58,14 @@ async function populateSteps(data, stepType) {
 }
 
 export const GET = async (request) => {
-  console.log("yturytrtytuyuuu");
+ 
   // Parse the stepType from the URL query parameters
   const params = new URL(request.url).searchParams;
   const stepType = params.get("stepType");
 
   const session = await getServerSession(authOptions);
   const privilage = session?.user?.privilege;
-  // console.log("sendtoapi", stepType);
-console.log("steptype",stepType);
-  // console.log("session from studentApproval ", session?.user?.privilege)
+  
   try {
     await connectToDB();
     if(stepType){
@@ -94,7 +90,7 @@ console.log("steptype",stepType);
 export const PATCH = async (request) => {
   try {
     const { key, value, stepType } = await request.json();
-    console.log("key", key, "value", value, "stepType", stepType);
+   
     await connectToDB();
 
     const updateSteps = await DynamicSteps.findOne({

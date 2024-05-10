@@ -139,7 +139,7 @@ const StepsComponent = () => {
                 }));
                 setStepData(data);
 
-                console.log("setDraggedData", data);
+                // console.log("setDraggedData", data);
             } catch (error) {
                 setStepError(error);
             }
@@ -240,8 +240,7 @@ const StepsComponent = () => {
             });
             if (response.ok) {
                 toast.success("Steps updated successfully!")
-                console.log("Steps updated successfully!");
-                console.log("keyValuePairs", keyValuePairs);
+               
                 // Optionally, you can redirect or show a success message here
             } else {
                 console.error("Failed to create steps");
@@ -303,15 +302,12 @@ const StepsComponent = () => {
     };
 
 
-    console.log("steps", steps);
-
-    
-
+   
     // Iterate over the key-value pairs of the object
-    Object.entries(keyValuePairs).forEach(([key, value]) => {
-        console.log("Key:", key);
-        console.log("Value:", value);
-    });
+    // Object.entries(keyValuePairs).forEach(([key, value]) => {
+    //     console.log("Key:", key);
+    //     console.log("Value:", value);
+    // });
     const keys = Object.keys(keyValuePairs);
     const value = Object.values(keyValuePairs);
 

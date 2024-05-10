@@ -37,7 +37,7 @@ export const GET = async (request) => {
 export const PATCH = async (request) => {
   try {
     const { stepType, updatedSteps } = await request.json();
-    console.log("updatedSteps",updatedSteps)
+ 
     await connectToDB();
 
     const updateSteps = await StepSchema.findOne({ stepType: stepType });
@@ -67,7 +67,7 @@ export const POST = async (req) => {
 
   // await connectToDB();
   const requests = await StepSchema.find({ stepType: stepType });
-  console.log("post steps", steps)
+
   if (requests.length > 0 && requests != null) {
     return new Response(
       `Cannot request clearance. An active request is already in progress`,

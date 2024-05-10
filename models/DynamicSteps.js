@@ -25,13 +25,7 @@
 import { Schema, model, models } from "mongoose";
 
 const StepsSchema = new Schema({
-  // steps: [
-  //   {
-  //     key: String,
-  //     value: [String],
-  //     // required: true, // This is the simplest way
-  //   },
-  // ],
+ 
   stepId: {
     type: String,
     required: true,

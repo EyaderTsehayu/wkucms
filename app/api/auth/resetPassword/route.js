@@ -24,8 +24,7 @@ export const POST = async (request) => {
   if (user && userEmail === email) {
     // Generate a unique token for password reset
     const passwordResetToken = uuidv4();
-     console.log("passwordResetToken",passwordResetToken);
-     console.log("email     oo",email);
+    
     // Set the token to emailResetPassword field in the user document
     user.emailResetPassword = passwordResetToken;
     // user.email = email;
@@ -36,7 +35,7 @@ export const POST = async (request) => {
   
     // Hash the new password before saving it to the database
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    console.log("hashedPassword",hashedPassword);
+    
     // Update the user's password and clear the reset token and its expiry
     user.verificationCode = hashedPassword;
     // user.emailResetPassword = null;

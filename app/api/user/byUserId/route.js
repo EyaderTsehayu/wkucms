@@ -7,7 +7,7 @@ export const GET = async (request) => {
       const params = new URL(request.url).searchParams;
       const userId = params.get("userId");
   
-      console.log("paramuserId", userId);
+     
   try {
     await connectToDB();
     const user = await User.find({ userId: userId });

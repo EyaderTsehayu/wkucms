@@ -31,14 +31,14 @@ const RegisterOffice = ({ onCancel }) => {
 
       const stepType = data.program; // Define your stepType here
 
-      const url = new URL("/api/step");
-      url.searchParams.append("stepType", stepType);
+      // const url = new URL("/api/step");
+      // url.searchParams.append("stepType", stepType);
 
-      const responsed = await fetch(url);
+      // const responsed = await fetch(url);
 
-      // const url = "/api/steps"; // Define the URL
-      // const fullUrl = `${url}?stepType=${stepType}`;
-      // const response = await fetch(fullUrl);
+      const url = "/api/steps"; // Define the URL
+      const fullUrl = `${url}?stepType=${stepType}`;
+      const responsed = await fetch(fullUrl);
 
       if (!responsed.ok) {
         throw new Error("Network responsed was not ok");
@@ -48,9 +48,10 @@ const RegisterOffice = ({ onCancel }) => {
         ...user,
         id: user._id,
       }));
+   
       // setStepData(updatedData);
-      setStepData(updatedData[0].steps);
-      const UpdatedSteps = [...updatedData[0].steps];
+      setStepData(data2[0].nextSteps);
+      const UpdatedSteps = [...data2[0].nextSteps];
       // console.log("erekoy eski",updatedData[0].steps)
 
       const response = await fetch("/api/office", {
