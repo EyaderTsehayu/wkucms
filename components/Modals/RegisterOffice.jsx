@@ -50,8 +50,8 @@ const RegisterOffice = ({ onCancel }) => {
       }));
    
       // setStepData(updatedData);
-      setStepData(data2[0].nextSteps);
-      const UpdatedSteps = [...data2[0].nextSteps];
+      setStepData(data2[0]?.nextSteps);
+      const UpdatedSteps = [...data2[0]?.nextSteps];
       // console.log("erekoy eski",updatedData[0].steps)
 
       const response = await fetch("/api/office", {
@@ -87,7 +87,7 @@ const RegisterOffice = ({ onCancel }) => {
 
 
         });
-
+console.log("stepType",stepType);
         // Check if step insertion was successful
         if (response.ok) {
           toast.success("Office and Steps registered Successfully!");

@@ -73,7 +73,7 @@ const ApproveStaff = () => {
             // end fetch
 
             step = steps;
-          } else if (staffType == "Admin") {
+          } else if (staffType == "ADMIN") {
             // fetch adminstaff steps
             let steps = {};
             // fetch the steps for academic staff

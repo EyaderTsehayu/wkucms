@@ -106,13 +106,13 @@ const ManageAcademicStaffOffices = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STAFF",
+          stepType: "ACADEMIC",
         }),
       });
       if (response.ok) {
         toast.success("Steps updated successfully!");
-        console.log("Steps updated successfully!");
-        console.log("keyValuePairs", keyValuePairs);
+        // console.log("Steps updated successfully!");
+        // console.log("keyValuePairs", keyValuePairs);
         // Optionally, you can redirect or show a success message here
       } else {
         console.error("Failed to create steps");
@@ -221,7 +221,7 @@ const ManageAcademicStaffOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "Human Resource Management Directorate" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 text-black dark:text-white text-md font-satoshi font-medium  bg-gray dark:bg-boxdark-2 flex space-x-3 border-none rounded p-2  mb-5 mr-3 ">

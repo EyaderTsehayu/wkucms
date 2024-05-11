@@ -454,7 +454,7 @@ const EditStaff = ({ userData,onCancel }) => {
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-            Register Staff
+            Edit Staff previlege
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>

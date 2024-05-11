@@ -122,7 +122,7 @@ const TaskItem = () => {
     
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
-
+console.log("draggedData",draggedData);
   // upload file
   const handleFileChange = async (event) => {
    
@@ -175,7 +175,7 @@ const TaskItem = () => {
             body: JSON.stringify({
               userId: userId,
               reason: selectedTask,
-              status: draggedData,
+              status: ["Head"],
               firstname: firstname,
               middlename: middlename,
               collegeName: collegeName,
@@ -219,6 +219,7 @@ const TaskItem = () => {
 
           staffType = fetchedData[0].staffType;
           director = fetchedData[0].director;
+          
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -271,6 +272,7 @@ const TaskItem = () => {
                   departmentName: departmentName,
                   _userId: _userId,
                   role: "STAFF",
+                  director: director,
                   attachedFile: imageBase64,
                   guarantorName: guarantorName,
                   guarantorId: guarantorId,

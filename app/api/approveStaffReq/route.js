@@ -135,12 +135,14 @@ export const PATCH = async (request) => {
           nextApprovers = step["Director"].filter(
             (role) => role !== existingRequest.director
           );
-
+   
           nextApprovers = nextApprovers.concat(
-            adminSteps[existingRequest.director]
+            step[existingRequest.director]
           );
+         
         } else {
           nextApprovers = step[privilege].concat(step["Director"]);
+          
         }
       } else {
         // console.log("Director is approved");

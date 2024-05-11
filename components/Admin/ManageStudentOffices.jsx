@@ -241,7 +241,7 @@ const ManageStudentOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "College Registrar" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">

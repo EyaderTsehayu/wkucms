@@ -11,8 +11,10 @@ import { useRouter } from "next/navigation";
 
 
 let steps;
-
-
+let bool = []
+let statusAssigned = [];
+let ifInElse = false;
+let isApprove=true;
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -25,8 +27,8 @@ const fetcher = async (url) => {
 };
 
 
-const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest}) => {
-  
+const Status = ({ studentStepData, adminStepData, academicStepData, handleRequest }) => {
+
   const { data: userData, error } = useSWR(
     "/api/userStatus",
     fetcher,
@@ -63,7 +65,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
         studentStepData.forEach((data, index) => {
           studentStep[data.name] = data.nextSteps;
         });
-      
+
         steps = studentStep;
       }
       if (!userData && !error) {
@@ -77,31 +79,103 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
       // end fetch
       const dataDisplay = [];
       const currentStatus = userData[0]?.status;
+
+      // Get an array of all values
+      const allValues = Object.values(steps);
+
+      // Get the length of the array of values
+      const lengthOfValues = allValues.length - 1;
       Object.keys(steps).forEach((key) => {
+      
+
         const stepKey = key;
         const approvals = userData[0]?.approvals.map(
           (approval) => approval.role
         );
         const rejections = userData[0]?.rejections;
+        const lengthOfApprovals = approvals?.length;
 
         let status = "Not Started";
 
         if (approvals && approvals.includes(key)) {
           status = "Approved";
+          dataDisplay.push({ name: key, status: status });
+          return;
         } else if (rejections && rejections.includes(key)) {
           status = "Rejected";
-        } else if (currentStatus && currentStatus.includes(key)) {
+
+
+        }
+        else if (userData[0].director && userData[0].director == key) {
+          status = "Pending";
+        }
+        else if (key == "Human Resource Management Directorate" && (lengthOfValues != lengthOfApprovals)) {
+          status = "Not Started";
+
+
+        }
+        else if (currentStatus && currentStatus.includes(key)) {
+          ifInElse = true;
+         
           for (const element of currentStatus) {
-        
+            let cnt = 0;
+            let cn = 0;
+            let arr = {}
+            bool = [];
+            console.log("element", element);
             if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
               status = "Not Started";
+              isApprove=false;
               break;
             }
-            status = "Pending";
-          }
-        }
+            else {
+             isApprove=true;
+              let countStatus = 0;
+              Object.keys(steps).forEach((keys) => {
+                let pend = [];
+                if (steps[keys].includes(element)) {
+                  if (approvals.includes(keys)) {
+                    bool.push("yes");
+                    cn += 1;
+                  } else {
+                    bool.push("no");
+                    cnt += 1;
+                  }
 
-        dataDisplay.push({ name: key, status: status });
+                }
+              })
+
+              let stat = bool.includes("no");
+              if (bool.includes("no")) {
+
+                statusAssigned.push("Not Started");
+              }
+              else {
+                statusAssigned.push("Pending");
+               
+              }
+              
+         
+            }
+
+
+          }
+
+        }
+        let finalstatus = statusAssigned[0];
+        console.log("fiifinalstatus",statusAssigned);
+       
+          if(statusAssigned.includes("Pending")){
+          finalstatus = "Pending";
+          console.log("finalstatus",finalstatus);
+        
+        }
+        if (ifInElse && isApprove) {
+          dataDisplay.push({ name: key, status: finalstatus});
+          ifInElse = false;
+        } else {
+          dataDisplay.push({ name: key, status: status });
+        }
       });
 
       setRequestStatus(dataDisplay);
@@ -109,7 +183,6 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
   }, [userData, studentStepData, adminStepData, academicStepData]);
 
   const handleReinitate = async (key) => {
-    // alert(requestStatus[key].name);
     const response = await fetch(`/api/reinitiateRejected`, {
       method: "PATCH",
       body: JSON.stringify({
@@ -178,8 +251,8 @@ const Status = ({ studentStepData, adminStepData, academicStepData,handleRequest
             {requestStatus.map((request, key) => (
               <div
                 className={`grid grid-cols-2  ${key === requestStatus.length - 1
-                    ? ""
-                    : "border-b border-stroke dark:border-strokedark"
+                  ? ""
+                  : "border-b border-stroke dark:border-strokedark"
                   }`}
                 key={key}
               >

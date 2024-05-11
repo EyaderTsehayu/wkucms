@@ -96,6 +96,7 @@ export const PATCH = async (request) => {
     const updateSteps = await DynamicSteps.findOne({
       // stepType: stepType,
       name: key,
+      stepType
     });
 
     if (updateSteps) {

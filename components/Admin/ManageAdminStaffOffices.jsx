@@ -106,7 +106,7 @@ const ManageAdminStaffOffices = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STAFF",
+          stepType: "ADMIN",
         }),
       });
       if (response.ok) {
@@ -219,7 +219,7 @@ const ManageAdminStaffOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "Human Resource Management Directorate" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 text-black dark:text-white text-md font-satoshi font-medium  bg-gray dark:bg-boxdark-2 flex space-x-3 border-none rounded p-2  mb-5 mr-3 ">
