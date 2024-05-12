@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumb/breadcrumb";
 
-
 const columns = [
   { field: "userId", headerName: "ID", width: "120" },
   { field: "firstname", headerName: "First Name", width: "140" },
@@ -38,19 +37,15 @@ const ApproveStudent = () => {
   const previlage = session?.user?.privilege;
   //console.log("previlage inside student approval", previlage);
   // Use SWR to fetch and cache data with automatic refresh every 10 seconds
-  const { data: userData, error } = useSWR(
-    "/api/studentApproval",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      refreshInterval: 2000,
-    }
-  );
+  const { data: userData, error } = useSWR("/api/studentApproval", fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 2000,
+  });
   //console.log("data from student request", userData);
   useEffect(() => {
     const fetchSteps = async () => {
       // fetch student steps before filtering
-      
+
       const studentType = "STUDENT";
       // fetch the steps for academic staff
       const url = "/api/steps";
@@ -59,10 +54,7 @@ const ApproveStudent = () => {
       const staffData = await staffResponse.json();
       staffData.forEach((data, index) => {
         steps[data.name] = data.nextSteps;
-      }
-      );
-     
-
+      });
 
       if (userData && previlage && previlage !== "Head") {
         const filtered = userData.filter((request) => {
@@ -86,11 +78,9 @@ const ApproveStudent = () => {
         });
         setFilteredData(filtered);
       }
-    }
+    };
     fetchSteps();
-    
   }, [userData, previlage, steps]);
- 
 
   // Handle loading and fetch errors
   if (!userData && !error) {
