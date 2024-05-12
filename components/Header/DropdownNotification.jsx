@@ -3,11 +3,25 @@ import Link from "next/link";
 import { useSocket } from "@/context/SocketContext";
 import { useSession } from "next-auth/react";
 import { format } from "timeago.js";
+import useSWR from "swr";
 
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  const updatedData = data.map((user) => ({
+    ...user,
+    id: user._id,
+    roleId: user._id,
+  }));
+  return updatedData;
+};
 const DropdownNotification = () => {
+  let steps = {};
+
   const socket = useSocket();
   const { data: session } = useSession();
   const user = session?.user;
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
 
@@ -15,9 +29,16 @@ const DropdownNotification = () => {
   const dropdown = useRef(null);
 
   const [notifications, setNotifications] = useState([]);
-  const [messages, setMessages] = useState([]);
   const [arrivalNotification, setArrivalNotification] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // const [studentData, setStudentData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  // const [staffData, setStaffData] = useState([]);
+  const [filteredStaffData, setFilteredStaffData] = useState([]);
+
+  const previlage = session?.user?.privilege;
 
   useEffect(() => {
     if (arrivalNotification) {
@@ -39,7 +60,6 @@ const DropdownNotification = () => {
     });
   }, []);
 
-  //console.log("Internal conversations", conversations);
   useEffect(() => {
     const getNotification = async () => {
       try {
@@ -56,7 +76,6 @@ const DropdownNotification = () => {
     };
     getNotification();
   }, [user?.id]);
-  // console.log("fetched notifications ", notifications);
 
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -86,6 +105,7 @@ const DropdownNotification = () => {
   });
 
   const displayNotification = ({
+    length,
     senderId,
     type,
     notificationId,
@@ -93,10 +113,13 @@ const DropdownNotification = () => {
   }) => {
     let action;
 
-    if (type === 1) {
-      action = "your clearance is rejected please check the reason";
-    } else if (type === 2) {
-      action = "commented";
+    if (type == 1) {
+      action =
+        "Your clearance request has been rejected. Please review the reason provided.";
+    } else if (type == 2) {
+      action = `You have ${length}  unapproved staff clearance requests. Please check it out.`;
+    } else if (type == 3) {
+      action = `You have ${length}  unapproved student clearance requests. Please check it out.`;
     } else {
       action = "shared";
     }
@@ -104,12 +127,11 @@ const DropdownNotification = () => {
     return (
       <li key={notificationId}>
         <Link
-          className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+          className="flex flex-col gap-2.5 border-t  border-stroke px-4.5 py-3 hover:bg-gray dark:border-strokedark dark:hover:bg-meta-4"
           href="#"
         >
           <p className="text-sm">
             <span className="text-black dark:text-white">{`${action} `}</span>{" "}
-            {`${action} `}
           </p>
           <p className="text-xs"> {format(createdAt)}</p>
         </Link>
@@ -118,11 +140,9 @@ const DropdownNotification = () => {
   };
 
   const handleRead = () => {
-    // setNotifications([]); // Clear the notifications
     setUnreadCount(0);
   };
 
-  //console.log("third unread count on top", unreadCount);
   const updateStatus = async () => {
     await fetch(`/api/notification/${user?.id}`, {
       method: "PATCH",
@@ -132,6 +152,270 @@ const DropdownNotification = () => {
       body: JSON.stringify({}),
     });
   };
+
+  // student request notification
+  // useEffect(() => {
+  //   const getStudentApprovals = async () => {
+  //     try {
+  //       const response = await fetch(`/api/studentApproval`);
+  //       const data = await response.json();
+  //       setStudentData(data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   if (previlage && session?.user?.role === "STAFF") {
+  //     getStudentApprovals();
+  //   }
+  // }, []);
+  const { data: studentData, error } = useSWR("/api/studentApproval", fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 2000,
+  });
+
+  useEffect(() => {
+    const fetchSteps = async () => {
+      // fetch student steps before filtering
+
+      const stepType = "STUDENT";
+      // fetch the steps for academic staff
+      const url = "/api/steps";
+      const fullStaffUrl = `${url}?stepType=${stepType}`;
+      const staffResponse = await fetch(fullStaffUrl);
+      const staffData = await staffResponse.json();
+
+      staffData.forEach((data, index) => {
+        steps[data.name] = data.nextSteps;
+      });
+
+      if (studentData && previlage && previlage !== "Head") {
+        const filtered = studentData.filter((request) => {
+          const approvalRoles = request.approvals.map(
+            (approval) => approval.role
+          );
+
+          const stageKeys = Object.keys(steps).filter((key) =>
+            steps[key].includes(previlage)
+          );
+
+          // Check if the request has approvals for all stageKeys
+          const hasAllApprovals = stageKeys.every((key) =>
+            approvalRoles.includes(key)
+          );
+
+          // Check if the previlage is not in the rejections array
+          const notRejected = !request.rejections.includes(previlage);
+
+          return hasAllApprovals && notRejected;
+        });
+        setFilteredData(filtered);
+      }
+    };
+    if (previlage && session?.user?.role === "STAFF") {
+      fetchSteps();
+    }
+  }, [studentData, previlage, steps]);
+
+  useEffect(() => {
+    const getStudentApprovals = async () => {
+      try {
+        let unApprovedLength;
+        if (previlage != "Head") {
+          unApprovedLength = filteredData.length;
+          // If there are unapproved requests, construct a notification
+          if (filteredData.length > 0) {
+            const newNotification = {
+              senderId: "system",
+              type: 3, // Assuming type 3 represents system notifications
+              notificationId: "system",
+              createdAt: Date.now(),
+              length: unApprovedLength,
+            };
+            // Check if the same notification already exists in the array
+            const existingNotification = notifications.find(
+              (notification) =>
+                notification.notificationId === newNotification.notificationId
+            );
+
+            if (!existingNotification) {
+              setArrivalNotification(newNotification);
+              setNotifying(true);
+            }
+          }
+        } else {
+          unApprovedLength = studentData.length;
+          // If there are unapproved requests, construct a notification
+          if (studentData.length > 0) {
+            const newNotification = {
+              senderId: "system",
+              type: 3, // Assuming type 3 represents system notifications
+              notificationId: "system",
+              createdAt: Date.now(),
+              length: unApprovedLength,
+            };
+            // Check if the same notification already exists in the array
+            const existingNotification = notifications.find(
+              (notification) =>
+                notification.notificationId === newNotification.notificationId
+            );
+
+            if (!existingNotification) {
+              setArrivalNotification(newNotification);
+              setNotifying(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (previlage && session?.user?.role === "STAFF") {
+      getStudentApprovals();
+    }
+  }, [studentData, filteredData]);
+
+  // staff request notification
+  // useEffect(() => {
+  //   const getStaffApprovals = async () => {
+  //     try {
+  //       const response = await fetch(`/api/staffApproval`);
+  //       const data = await response.json();
+  //       setStaffData(data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getStaffApprovals();
+  // }, []);
+  const { data: staffData } = useSWR("/api/staffApproval", fetcher, {
+    revalidateOnFocus: false,
+    refreshInterval: 2000,
+  });
+  //  console.log("Inside notificatio Staff data", staffData);
+
+  useEffect(() => {
+    const fetchSteps = async () => {
+      if (staffData && previlage && previlage !== "Head") {
+        const filtered = staffData.filter(async (request) => {
+          const approvalRoles = request.approvals.map(
+            (approval) => approval.role
+          );
+          const staffType = request.staffType;
+          let step;
+
+          if (staffType == "ACADEMIC") {
+            let steps = {};
+            // fetch the steps for academic staff
+            const url = "/api/steps";
+            const fullStaffUrl = `${url}?stepType=${staffType}`;
+            const staffResponse = await fetch(fullStaffUrl);
+            const staffData = await staffResponse.json();
+            staffData.forEach((data, index) => {
+              steps[data.name] = data.nextSteps;
+            });
+            //console.log("steps from staffApproval", steps);
+
+            // end fetch
+
+            step = steps;
+          } else if (staffType == "Admin") {
+            // fetch adminstaff steps
+            let steps = {};
+            // fetch the steps for academic staff
+            const url = "/api/steps";
+            const fullStaffUrl = `${url}?stepType=${staffType}`;
+            const staffResponse = await fetch(fullStaffUrl);
+            const staffData = await staffResponse.json();
+            staffData.forEach((data, index) => {
+              steps[data.name] = data.nextSteps;
+            });
+            //  console.log("steps from staffApproval", steps);
+
+            step = { ...steps };
+            delete step.Director;
+          }
+
+          const stageKeys = Object.keys(step).filter((key) =>
+            step[key].includes(previlage)
+          );
+
+          // Check if the request has approvals for all stageKeys
+          const hasAllApprovals = stageKeys.every((key) =>
+            approvalRoles.includes(key)
+          );
+
+          // Check if the previlage is not in the rejections array
+          const notRejected = !request.rejections.includes(previlage);
+
+          return hasAllApprovals && notRejected;
+        });
+
+        setFilteredStaffData(filtered);
+      }
+    };
+    if (user?.role === "STAFF" && previlage != null) {
+      fetchSteps();
+    }
+  }, [staffData, previlage]);
+
+  useEffect(() => {
+    const getStudentApprovals = async () => {
+      try {
+        let unApprovedLength;
+        if (previlage != "Head") {
+          unApprovedLength = filteredStaffData.length;
+          // If there are unapproved requests, construct a notification
+          if (filteredStaffData.length > 0) {
+            const newNotification = {
+              senderId: "system",
+              type: 2, // Assuming type 2 represents system notifications
+              notificationId: "systemstaff" + Date.now(),
+              createdAt: Date.now(),
+              length: unApprovedLength,
+            };
+            // Check if the same notification already exists in the array
+            const existingNotification = notifications.find(
+              (notification) =>
+                notification.notificationId === newNotification.notificationId
+            );
+
+            if (!existingNotification) {
+              setArrivalNotification(newNotification);
+              setNotifying(true);
+            }
+          }
+        } else {
+          unApprovedLength = staffData.length;
+          // If there are unapproved requests, construct a notification
+          if (staffData.length > 0) {
+            const newNotification = {
+              senderId: "system",
+              type: 2, // Assuming type 2 represents system notifications
+              notificationId: "systemstaff" + Date.now(),
+
+              createdAt: Date.now(),
+              length: unApprovedLength,
+            };
+            // Check if the same notification already exists in the array
+            const existingNotification = notifications.find(
+              (notification) =>
+                notification.notificationId === newNotification.notificationId
+            );
+
+            if (!existingNotification) {
+              setArrivalNotification(newNotification);
+              setNotifying(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (user?.role === "STAFF" && previlage != null) {
+      getStudentApprovals();
+    }
+  }, [staffData, filteredStaffData]);
 
   return (
     <li className="relative">
@@ -152,7 +436,7 @@ const DropdownNotification = () => {
           }`}
         >
           {unreadCount > 0 && (
-            <p className="absolute -z-1  text-black-2   ">{unreadCount}</p>
+            <p className="absolute -z-1  text-black-2 ">{unreadCount}</p>
           )}
         </span>
 
