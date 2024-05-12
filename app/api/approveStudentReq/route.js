@@ -99,7 +99,7 @@ export const PATCH = async (request) => {
           firstname: existingRequest.firstname,
           middlename: existingRequest.middlename,
           reason: existingRequest.reason,
-          status: "Approved",
+          status: "APPROVED",
           role: existingRequest.role,
           dateApproved: formattedDate,
           dateRequested: existingRequest.dateRequested,

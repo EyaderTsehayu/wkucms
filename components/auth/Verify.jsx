@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import NewPassword from './NewPassword';
 
 const Verify = ({ userData }) => {
+ 
   const [verificationCodes, setVerificationCodes] = useState(['', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [resend, setResend] = useState(false);
@@ -39,7 +40,14 @@ const Verify = ({ userData }) => {
 
       // fetch the resend button
       try {
-        const response = await fetch(`/api/user/byUserId/${userData[0].userId}`);
+        //const response = await fetch(`/api/user/byUserId/${userData[0].userId}`);
+        const url = "/api/user/byUserId"; // Define the URL
+
+        // Construct URL with query parameter
+        const fullUrl = `${url}?userId=${userData[0].userId}`;
+  
+        // Make the GET request using fetch
+        const response = await fetch(fullUrl);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -56,8 +64,10 @@ const Verify = ({ userData }) => {
   }
 
   const onSubmitHandler = async (event) => {
+    console.log('resetuserData9', userData[0]);
     event.preventDefault();
     const enteredCode = verificationCodes.join('');
+    console.log('enteredCode', enteredCode);
     if (resend) { 
       passwordMatch = await bcrypt.compare(enteredCode,  resendUserData[0]?.verificationCode);
     } else {  

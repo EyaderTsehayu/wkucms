@@ -77,11 +77,20 @@ const page = () => {
       const userId = data.userId;
       if (response.ok) {
         try {
-          const response = await fetch(`/api/user/byUserId/${userId}`);
+         // const response = await fetch(`/api/user/byUserId/${userId}`);
+          const url = "/api/user/byUserId"; // Define the URL
+
+          // Construct URL with query parameter
+          const fullUrl = `${url}?userId=${userId}`;
+    
+          // Make the GET request using fetch
+          const response = await fetch(fullUrl);
+    
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
           const fetchedData = await response.json();
+          console.log("fetchedData", fetchedData);
           setUserData(fetchedData);
         } catch (error) {
           console.error("Error fetching user data:", error);

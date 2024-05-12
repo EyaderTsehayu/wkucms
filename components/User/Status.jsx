@@ -110,7 +110,10 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
         else if (userData[0]?.director && userData[0]?.director == key) {
           status = "Pending";
         }
-        else if (key == "Human Resource Management Directorate" && (lengthOfValues != lengthOfApprovals)) {
+        else if (key == "Human Resource Management Directorate" && 
+        (lengthOfValues > lengthOfApprovals)
+        && !(userData[0]?.status?.length==1 &&
+           userData[0]?.status.includes("Human Resource Management Directorate")))  {
           status = "Not Started";
 
 

@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import User from "@/models/user";
 import DynamicSteps from "@/models/DynamicSteps";
+import { FamilyRestroomOutlined } from "@mui/icons-material";
 
 export const GET = async () => {
   const session = await getServerSession(authOptions);
@@ -23,25 +24,25 @@ export const GET = async () => {
     if (myprofile.length == 0) {
       return new Response("User not found", { status: 404 });
     }
-
+   
     director = myprofile[0]?.director;
     const staffType = myprofile[0]?.staffType;
-    let steps = {};
+    // let steps = {};
     // fetch steps
-    const stepRequests = await DynamicSteps.find({ stepType: staffType });
-   
-    if (stepRequests) {
-      stepRequests.forEach((data, index) => {
-        steps[data.name] = data.nextSteps;
-      });
-    }
+  //   const stepRequests = await DynamicSteps.find({ stepType: staffType });
+  //  console.log("stepRequests", stepRequests);
+  //   if (stepRequests) {
+  //     stepRequests.forEach((data, index) => {
+  //       steps[data.name] = data.nextSteps;
+  //     });
+  //   }
   
-    let stageKeys = [];
-    Object.keys(steps).forEach((key) => {
-      if (steps[key].includes(privilege)) {
-        stageKeys.push(key);
-      }
-    });
+  //   let stageKeys = [];
+  //   Object.keys(steps).forEach((key) => {
+  //     if (steps[key].includes(privilege)) {
+  //       stageKeys.push(key);
+  //     }
+  //   });
    
     const forApprovals = await StaffRequestSchema.find({
       status: privilege,
@@ -50,19 +51,49 @@ export const GET = async () => {
  
   const requests = [];
   for (const approvalEntry of forApprovals) {
+    let steps = {};
+    // console.log(approvalEntry,"approvalEntry stafftype", approvalEntry.staffType);
+    const stepRequests = await DynamicSteps.find({ stepType: approvalEntry.staffType });
+  //  console.log("stepRequests", stepRequests);
+     if (stepRequests) {
+       stepRequests.forEach((data, index) => {
+         steps[data.name] = data.nextSteps;
+       });
+     }
+   
+     let stageKeys = [];
+     Object.keys(steps).forEach((key) => {
+       if (steps[key].includes(privilege)) {
+         stageKeys.push(key);
+       }
+     });
+
+
+
+
+
   let allStageKeysInApprovals = false;
+  let inRejections = false;
+
   const approvals = approvalEntry.approvals.map((approval) => approval.role);
-  
+   const rejected = approvalEntry.rejections;
+
 const userFromRequests = approvalEntry.userId;
   // Check if all stage keys are present in the approvals for this user
    allStageKeysInApprovals = stageKeys.every((key) =>
     approvals.includes(key)
   );
+  
+ 
+  inRejections = rejected.includes(privilege);
+
   if(stageKeys.includes('Director')){
     // remove from stageKeys
     stageKeys = stageKeys.filter((key) => key !== 'Director');
   }
-  
+  if(stageKeys.length == 0){
+    allStageKeysInApprovals = true;    
+  }
 
 
   const query = {
@@ -73,13 +104,13 @@ const userFromRequests = approvalEntry.userId;
   };
 
  
-
+// console.log("allStageKeysInApprovals", allStageKeysInApprovals, "inRejections", !inRejections, "query", query);
+//console.log(approvalEntry.firstname,"stageKeys", stageKeys,"approvals",approvals);
   let userRequests = [];
-
-  if (director && allStageKeysInApprovals) {
+  if (director && allStageKeysInApprovals && !inRejections) {
     userRequests = await StaffRequestSchema.find(query);
   } else if (
-    allStageKeysInApprovals &&
+    allStageKeysInApprovals &&  !inRejections &&
     collegeName &&
     (privilege == "College Dean" || privilege == "College Registrar")
   ) {
@@ -89,14 +120,14 @@ const userFromRequests = approvalEntry.userId;
       collegeName: collegeName,
       userId: userFromRequests,
     });
-  } else if (allStageKeysInApprovals && departmentName && privilege == "Head") {
+  } else if (allStageKeysInApprovals && !inRejections && departmentName && privilege == "Head") {
     userRequests = await StaffRequestSchema.find({
       status: privilege,
       userId: { $ne: id },
       departmentName: departmentName,
       userId: userFromRequests,
     });
-  } else if (allStageKeysInApprovals) {
+  } else if (allStageKeysInApprovals && !inRejections) {
     userRequests = await StaffRequestSchema.find({
       status: privilege,
       userId: { $ne: id },

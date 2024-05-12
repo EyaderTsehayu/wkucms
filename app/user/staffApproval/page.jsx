@@ -45,9 +45,9 @@ const ApproveStaff = () => {
     refreshInterval: 2000, // Set the refresh interval in milliseconds (e.g., 10000 for 10 seconds)
   });
 
-  // console.log("USER DATA inside approval", userData);
-
+  
   useEffect(() => {
+    console.log("USER DATA inside approval", userData);
     const fetchSteps = async () => {
       if (userData && previlage && previlage !== "Head") {
         const filtered = userData.filter(async (request) => {
@@ -99,14 +99,14 @@ const ApproveStaff = () => {
           const hasAllApprovals = stageKeys.every((key) =>
             approvalRoles.includes(key)
           );
-//console.log("hasAllApprovals",approvalRoles);
+              //console.log("hasAllApprovals",approvalRoles);
           // Check if the previlage is not in the rejections array
           const notRejected = !request.rejections.includes(previlage);
           return hasAllApprovals && notRejected;
         });
-       // console.log("filtered", filtered);
-        setFilteredData(filtered);
-      }
+        console.log("filtered", filtered);
+            setFilteredData(filtered);
+          }
     }
     fetchSteps();
 
