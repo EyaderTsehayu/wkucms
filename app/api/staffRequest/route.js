@@ -1,5 +1,7 @@
 import { connectToDB } from "@/utils/database";
 import StaffRequestSchema from "@/models/staffClearanceRequest";
+import StudentClearnceReq from "@/models/studentClearanceRequest";
+import { toast } from "react-toastify";
 
 export const POST = async (req) => {
   const {
@@ -86,3 +88,30 @@ export const POST = async (req) => {
 //     return new Response("Failed to fetch requests", { status: 500 });
 //   }
 // };
+
+// implement the Delete method
+export const DELETE = async (req) => {
+  const { objectId,role } = await req.json();
+
+  try {
+    await connectToDB();
+    if(role=="STUDENT"){
+      const deleteRequest =await StudentClearnceReq.findByIdAndDelete(objectId);
+     
+    }else{
+      const deleteRequest =await StaffRequestSchema.findByIdAndDelete(objectId);
+    }
+    if (deleteRequest) {
+      toast.success("Sorry, your request has expired, and you can make a new request.");
+      return new Response(`Request deleted successfully!`, {
+        status: 200,
+      });
+    }
+    return new Response("Request not found", { status: 404 });
+  } catch (error) {
+    console.error("Error deleting request:", error);
+    return new Response("Failed to delete request", {
+      status: 500,
+    });
+  }
+};
