@@ -69,6 +69,7 @@ const RegisterClearanceDuration = ({ onCancel }) => {
             // });
 
             if (response.ok) {
+                toast.success('Day updated successfully');
                 // Handle the response from the API if needed
                 console.log('Day updated successfully');
             } else {
