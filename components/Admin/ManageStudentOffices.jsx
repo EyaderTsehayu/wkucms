@@ -56,7 +56,7 @@ const ManageStudentOffices = () => {
         // Set data into state
         setStepData(data);
 
-      
+
       } catch (error) {
         // Handle errors
         setStepError(error);
@@ -69,7 +69,7 @@ const ManageStudentOffices = () => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
- 
+
 
   // Render loading state
   if (!stepData && !stepError) {
@@ -79,10 +79,10 @@ const ManageStudentOffices = () => {
   const list = [];
 
   const data = stepData[0];
-  
+
   for (let index = 0; index < stepData.length; index++) {
     Object.keys(data).forEach((key) => {
-     
+
       if (key === "name") {
         list.push(data[key]);
       }
@@ -92,7 +92,7 @@ const ManageStudentOffices = () => {
 
   // const keys = Object.keys(steps);
   // const values = Object.values(steps);
- 
+
   const modifySteps = async (key, value) => {
     setSteps((prevSteps) => ({
       ...prevSteps,
@@ -111,7 +111,7 @@ const ManageStudentOffices = () => {
       });
       if (response.ok) {
         toast.success("Steps updated successfully!");
-       
+
         // Optionally, you can redirect or show a success message here
       } else {
         console.error("Failed to create steps");
@@ -129,28 +129,54 @@ const ManageStudentOffices = () => {
   });
 
   const addItem = (key, value) => {
-    keyValuePairs[key].push(value);
+    if(key!="Select an office for adjusting its step") {
+    keyValuePairs[key]?.push(value);
 
-    if (key !== value && key !== "Select a Step") {
+    if (keyValuePairs[key] && key != value && key != "Select an office for adjusting its step") {
       setKeyValuePairs((prevKeyValuePairs) => {
         const updatedPairs = { ...prevKeyValuePairs };
         updatedPairs[key] = [...(updatedPairs[key] || []), value];
         return updatedPairs;
       });
     }
+  }
   };
 
+  // const removeItem = (key, value) => {
+  //   keyValuePairs[key].pop(value);
+  //   setSteps((prevSteps) => ({
+  //     ...prevSteps,
+  //     [key]: prevSteps[key]?.filter((item) => item !== value),
+  //   }));
+  // };
+
   const removeItem = (key, value) => {
-    keyValuePairs[key].pop(value);
-    setSteps((prevSteps) => ({
+
+    if (keyValuePairs[key]) {
+      const index = keyValuePairs[key].indexOf(value);
+      if (index !== -1) {
+        keyValuePairs[key].splice(index, 1);
+      }
+    }
+
+    const updatedArray = keyValuePairs[key].filter(item => item !== value);
+
+    // Update keyValuePairs with the new array
+    keyValuePairs[key] = updatedArray;
+
+
+    setSteps(prevSteps => ({
       ...prevSteps,
-      [key]: prevSteps[key]?.filter((item) => item !== value),
+      [key]: updatedArray
     }));
+
+
   };
+
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-  
+
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
@@ -228,7 +254,7 @@ const ManageStudentOffices = () => {
                             </div>
                             <button
                               className="flex flex-1 justify-end"
-                              onClick={() => addItem(selectedKey, key)}
+                              onClick={() => selectedKey && addItem(selectedKey, key)}
                             >
                               {/* <ArrowCircleRightIcon /> */}
                               <AddIcon />
@@ -304,18 +330,18 @@ const ManageStudentOffices = () => {
 
             {((selectedKey && selectedKey == "Select a Step") ||
               !selectedKey) && (
-              <div className=" w-full px-1 ">
-                <button
-                  onClick={() =>
-                    modifySteps(selectedKey, keyValuePairs[selectedKey])
-                  }
-                  className="ml-5 block w-60 rounded border border-primary bg-primary p-3 text-center
+                <div className=" w-full px-1 ">
+                  <button
+                    onClick={() =>
+                      modifySteps(selectedKey, keyValuePairs[selectedKey])
+                    }
+                    className="ml-5 block w-60 rounded border border-primary bg-primary p-3 text-center
                  font-medium text-white transition hover:bg-opacity-90"
-                >
-                  Save
-                </button>
-              </div>
-            )}
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
           </main>
         </div>
       </div>
