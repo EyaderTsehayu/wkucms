@@ -79,6 +79,7 @@ export const PATCH = async (request) => {
         const newStatus = currentStatus.filter((item) => item !== privilege);
         existingRequest.status = newStatus;
       } else if (nextApprovers && nextApprovers.length == 1) {
+        // console.log("nextApprovers", nextApprovers);
         existingRequest.status = nextApprovers[0];
         existingRequest.approvals.push({ role: privilege, time: approvalTime });
       } else if (nextApprovers && nextApprovers.length > 1) {
@@ -103,7 +104,7 @@ export const PATCH = async (request) => {
           firstname: existingRequest.firstname,
           middlename: existingRequest.middlename,
           reason: existingRequest.reason,
-          status: "Approved",
+          status: "APPROVED",
           role: existingRequest.role,
           dateApproved: formattedDate,
           dateRequested: existingRequest.dateRequested,
@@ -202,7 +203,7 @@ export const PATCH = async (request) => {
           firstname: existingRequest.firstname,
           middlename: existingRequest.middlename,
           reason: existingRequest.reason,
-          status: "Approved",
+          status: "APPROVED",
           role: existingRequest.role,
           dateApproved: formattedDate,
           dateRequested: existingRequest.dateRequested,
