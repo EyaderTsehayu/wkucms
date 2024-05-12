@@ -13,7 +13,7 @@ export const POST = async (req) => {
       await populateSteps(steps, stepType);
     } else if (key && value) {
       const currentStep = new DynamicSteps({
-        stepId: key+stepType,
+        stepId: key + stepType,
         name: key,
         nextSteps: value,
         stepType,
@@ -37,11 +37,12 @@ async function populateSteps(data, stepType) {
   //   const keys = Object.keys(data);
   //console.log("dataa", data);
   for (const key in data) {
+
     
     if (data[key] != null ) {
-    
+   
       const currentStep = new DynamicSteps({
-        stepId: key+stepType,
+        stepId: key + stepType,
         name: key,
         nextSteps: data[key],
         stepType,
@@ -58,24 +59,23 @@ async function populateSteps(data, stepType) {
 }
 
 export const GET = async (request) => {
- 
+
   // Parse the stepType from the URL query parameters
   const params = new URL(request.url).searchParams;
   const stepType = params.get("stepType");
 
   const session = await getServerSession(authOptions);
   const privilage = session?.user?.privilege;
-  
+
   try {
     await connectToDB();
-    if(stepType){
-      const requests = await DynamicSteps.find({stepType: stepType});
+    if (stepType) {
+      const requests = await DynamicSteps.find({ stepType: stepType });
       return new Response(JSON.stringify(requests), { status: 200 });
-    }else{
+    } else {
       const requests = await DynamicSteps.find();
       return new Response(JSON.stringify(requests), { status: 200 });
     }
-    
 
     // Return a success response with the users data
     // return new Response(JSON.stringify(requests), { status: 200 });
@@ -102,7 +102,7 @@ export const PATCH = async (request) => {
     if (updateSteps) {
       // updateSteps.name = key;
       updateSteps.nextSteps = value;
-       updateSteps.stepType = stepType;
+      updateSteps.stepType = stepType;
       await updateSteps.save();
 
       return new Response(`Staff updated successfully`, {

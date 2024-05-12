@@ -101,9 +101,6 @@ export default function LabTabs() {
     fetchData();
   }, []);
 
-
-  
- 
   useEffect(() => {
     if (userData && userData[0]?.status[0]) {
       setValue("3");

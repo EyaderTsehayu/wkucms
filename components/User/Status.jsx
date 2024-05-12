@@ -9,12 +9,13 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-
 let steps;
+
 let bool = []
 let statusAssigned = [];
 let ifInElse = false;
 let isApprove=true;
+
 const fetcher = async (url) => {
   const response = await fetch(url);
   const data = await response.json();
@@ -25,6 +26,7 @@ const fetcher = async (url) => {
   }));
   return updatedData;
 };
+
 
 
 const Status = ({ studentStepData, adminStepData, academicStepData, handleRequest }) => {
@@ -38,11 +40,11 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
     }
   );
 
+
   const router = useRouter();
   const [requestStatus, setRequestStatus] = useState([]);
 
   useEffect(() => {
-
     if (userData) {
       // fetch the steps
       if (userData && userData[0]?.staffType == "ACADEMIC") {
@@ -59,7 +61,6 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
         steps = { ...adminStep };
 
         delete steps.Director;
-
       } else {
         let studentStep = {};
         studentStepData.forEach((data, index) => {
@@ -118,12 +119,14 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
           ifInElse = true;
          
           for (const element of currentStatus) {
+
             let cnt = 0;
             let cn = 0;
             let arr = {}
             bool = [];
       
             if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
+
               status = "Not Started";
               isApprove=false;
               break;
@@ -250,10 +253,13 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
 
             {requestStatus.map((request, key) => (
               <div
-                className={`grid grid-cols-2  ${key === requestStatus.length - 1
-                  ? ""
-                  : "border-b border-stroke dark:border-strokedark"
-                  }`}
+
+                className={`grid grid-cols-2  ${
+                  key === requestStatus.length - 1
+                    ? ""
+                    : "border-b border-stroke dark:border-strokedark"
+                }`}
+
                 key={key}
               >
                 <div className="flex items-center  justify-center sm:ml-16 p-2.5 xl:p-5">
