@@ -32,10 +32,9 @@ export async function sendVerificationEmail(email, token) {
 }
 
 export async function sendPasswordResetEmail(email, token) {
-    console.log("emailk",email);
-    console.log("tokenn",token);
+   
     globalEmail =email;
-    console.log("globalEmail",globalEmail);
+   
     try {
       const testResult =await transporter.verify();
       console.log("Connected to email server",testResult);

@@ -93,7 +93,7 @@ export const PATCH = async (request) => {
     await connectToDB();
 
     const updatedFields = {};
-console.log("password", password,"userId",userId);
+
     //     // Check if there are updated fields
     if (email) {
       updatedFields.email = email;
@@ -109,7 +109,7 @@ console.log("password", password,"userId",userId);
     }
 
 
-    console.log("blockNo", blockNo, "userId", userId, "previlege", userId)
+
     //     // Find and update the user document based on userId
     const updatedUser = await User.findOneAndUpdate({ userId: userId }, { $set: updatedFields }, { new: true });
     if (blockNo) {
@@ -131,7 +131,7 @@ console.log("password", password,"userId",userId);
     }
 
     // Success message (optional)
-    console.log(`email updated for user with ID: ${userId}`);
+ 
 
     return new Response("updated successfully", { status: 200 });
   } catch (error) {

@@ -23,7 +23,7 @@ const ManageReport = () => {
     fetchReasonReports();
   }, []);
 
-  //console.log("mange report", reasonReport);
+  
   return (
     <div>
       <ClearanceNums approvedNum={reasonReport.length} />

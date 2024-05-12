@@ -69,7 +69,7 @@ const page = () => {
       if (!response.ok) {
         throw new Error('There was an error sending the reset password email.');
       }
-      console.log("response", response);
+     
       // Show success message and possibly redirect
       toast.success('If the email is associated with an account, a password reset email will be sent.');
 

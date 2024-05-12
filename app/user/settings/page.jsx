@@ -14,11 +14,11 @@ const Setting = () => {
   const Id = session?.data?.user.id;
   useEffect(() => {
       const fetchUserData = async () => {
-        console.log("userId  aa",Id);
+       
         try {
           const response = await fetch(`/api/user/new/${Id}`);
           if (!response.ok) {
-            console.log("parent  ");
+           
             throw new Error('Network response was not ok');
           }
           const fetchedData = await response.json();

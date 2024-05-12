@@ -73,8 +73,7 @@ const RegisterOffice = ({ onCancel }) => {
 
         // Insert data.officeName at the specified index
         UpdatedSteps.splice(insertIndex, 0, data.officeName);
-       console.log("data.officeName",data.officeName);
-
+     
        
         const response = await fetch(`/api/steps`, {
           method: "POST",
@@ -87,7 +86,7 @@ const RegisterOffice = ({ onCancel }) => {
 
 
         });
-console.log("stepType",stepType);
+
         // Check if step insertion was successful
         if (response.ok) {
           toast.success("Office and Steps registered Successfully!");

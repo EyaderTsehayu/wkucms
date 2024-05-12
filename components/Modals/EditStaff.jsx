@@ -112,7 +112,7 @@ const EditStaff = ({ userData,onCancel }) => {
 
 
   useEffect(() => {
-    console.log("fetching data from the server ...");
+  
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
@@ -135,8 +135,7 @@ const EditStaff = ({ userData,onCancel }) => {
 
             fetchData = await fetch(`/api/steps`);
           }
-          console.log("userData",userData[0]);
-          console.log("userData",userData[0].staffType);
+         
 
 
           if (!fetchData.ok) {

@@ -7,7 +7,6 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  //console.log("user session when there is session", session);
   if (session) {
     const role = session?.user?.role;
     if (role == "ADMIN") {

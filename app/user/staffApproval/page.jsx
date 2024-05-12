@@ -68,7 +68,7 @@ const ApproveStaff = () => {
               steps[data.name] = data.nextSteps;
             }
             );
-            console.log("steps from staffApproval", steps);
+        
 
             // end fetch
 
@@ -85,8 +85,7 @@ const ApproveStaff = () => {
               steps[data.name] = data.nextSteps;
             }
             );
-            console.log("steps from staffApproval", steps);
-
+          
 
             step = { ...steps };
             delete step.Director;
@@ -100,12 +99,12 @@ const ApproveStaff = () => {
           const hasAllApprovals = stageKeys.every((key) =>
             approvalRoles.includes(key)
           );
-
+//console.log("hasAllApprovals",approvalRoles);
           // Check if the previlage is not in the rejections array
           const notRejected = !request.rejections.includes(previlage);
-
           return hasAllApprovals && notRejected;
         });
+       // console.log("filtered", filtered);
         setFilteredData(filtered);
       }
     }

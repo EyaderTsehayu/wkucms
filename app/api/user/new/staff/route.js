@@ -29,7 +29,7 @@ export const PATCH = async (request) => {
     await connectToDB();
     // first fetch the steps
     
-    console.log("objectId",objectId,"userId",userId,"previlege",privilege)
+    
     // const editUser = await StepSchema.findOne({ userId:userId});
     //   // Fetch the user by userId
     
@@ -44,7 +44,7 @@ export const PATCH = async (request) => {
       }
   
       // Success message (optional)
-      console.log(`Privilege updated for user with ID: ${userId}`);
+    
   
       return new Response("Privilege updated successfully", { status: 200 });
     } catch (error) {

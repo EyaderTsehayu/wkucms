@@ -55,7 +55,7 @@ export const POST = async (req) => {
       blockNo: fetchStudent[0].blockNo,
       dateRequested: formattedDate,
     });
-    console.log("attachedFile", attachedFile);
+
 
     await clearanceReq.save();
     return new Response(`Request sent Successfully!`, {

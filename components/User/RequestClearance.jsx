@@ -78,7 +78,7 @@ const TaskItem = () => {
         const fullUserUrl = `${userUrl}?userId=${userId}`;
         const userResponse = await fetch(fullUserUrl);
         const userData = await userResponse.json();
-        console.log("userResponse", userData);
+       
          if(userData[0].role == "STUDENT"){
           stepType = "STUDENT";
           
@@ -100,9 +100,7 @@ const TaskItem = () => {
           steps[data.name] = data.nextSteps;
         });
         const key = Object.keys(steps);
-        console.log("stepType",stepType);
-        console.log("steps",steps);
-       console.log("key",key);
+       
         const firstkey= [];
         firstkey.push(key[0]);
         
@@ -122,7 +120,7 @@ const TaskItem = () => {
     
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
-console.log("draggedData",draggedData);
+
   // upload file
   const handleFileChange = async (event) => {
    
@@ -200,7 +198,7 @@ console.log("draggedData",draggedData);
       }
 
       if (session?.data?.user.role == "STAFF") {
-        console.log("draggedData", draggedData);
+      
         let staffType;
         let director;
         try {

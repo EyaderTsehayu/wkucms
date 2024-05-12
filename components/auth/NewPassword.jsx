@@ -31,7 +31,7 @@ const NewPassword = ({ userData }) => {
     const onSubmit = async (data) => {
         if(data.newPassword===data.confirmPassword){
           const hashedPassword = await bcrypt.hash(data.newPassword, 10);
-          console.log("why");
+         
           try {
             const response = await fetch(`/api/user/new/`, {
               method: "PATCH",

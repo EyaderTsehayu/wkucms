@@ -129,7 +129,7 @@ export default function PrintClearance({
     const [history, setHistory] = useState([])
     // const [Clearance, setClearanceId] = useState('');
     const clearanceId = searchParams.get('clearanceId');
-    console.log("clearanceId www", clearanceId);
+    
     // useEffect(() => {
     //   // Retrieve the clearanceId parameter from the query object
     //   const { clearanceId } = router.query;
@@ -138,7 +138,7 @@ export default function PrintClearance({
     // }, [router.query]);
     useEffect(() => {
         const url = `${pathname}?${searchParams}`
-        console.log("url ", clearanceId)
+      
         // You can now use the current URL
         // ...
     }, [pathname, searchParams])
@@ -147,15 +147,11 @@ export default function PrintClearance({
     useEffect(() => {
         const getPromptDetails = async () => {
             try {
-                console.log("Fetching data...");
+              
                 const response = await fetch(`/api/approvalHistory/${clearanceId}`);
                 const data = await response.json();
                 setHistory(data[0]);
-                // setHistory({
-                //     prompt: data.prompt,
-                //     tag: data.tag,
-                // });
-               console.log("data",data)
+                
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -163,8 +159,6 @@ export default function PrintClearance({
         getPromptDetails();
     }, []);
 
-    console.log("history ", history)
-    // console.log("Clearance ", userData)
 
     const downloadPDF = () => {
         const capture = document.querySelector('.actual-receipt');
@@ -191,7 +185,7 @@ export default function PrintClearance({
                     </div>
                     {/* organization name */}
                     <h5>WKUCMS</h5>
-                    <h5>Congratulations on Your Clearance Certificate, {firstName} {middleName}!</h5>
+                    <h5>Congratulations on Your Clearance Certificate, {history.firstname} {history.middlename}!</h5>
                     <h5>Clearance ID: {history._id}</h5>
                     <h5>User ID: {history.userId}</h5>
                     <h5>Date Requested: {history.dateRequested}</h5>

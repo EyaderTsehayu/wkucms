@@ -106,7 +106,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
 
 
         }
-        else if (userData[0].director && userData[0].director == key) {
+        else if (userData[0]?.director && userData[0]?.director == key) {
           status = "Pending";
         }
         else if (key == "Human Resource Management Directorate" && (lengthOfValues != lengthOfApprovals)) {
@@ -122,7 +122,7 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
             let cn = 0;
             let arr = {}
             bool = [];
-            console.log("element", element);
+      
             if (steps[element] && steps[element].includes(stepKey) || (steps[steps[element][0]] && steps[steps[element][0]].includes(stepKey))) {
               status = "Not Started";
               isApprove=false;
@@ -163,11 +163,11 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
 
         }
         let finalstatus = statusAssigned[0];
-        console.log("fiifinalstatus",statusAssigned);
+       
        
           if(statusAssigned.includes("Pending")){
           finalstatus = "Pending";
-          console.log("finalstatus",finalstatus);
+        
         
         }
         if (ifInElse && isApprove) {

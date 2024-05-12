@@ -67,9 +67,7 @@ const ManageAdminStaffOffices = () => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
-  if (stepData) {
-    console.log("stepData ", stepData[0]);
-  }
+  
 
   // Render loading state
   if (!stepData && !stepError) {
@@ -79,10 +77,10 @@ const ManageAdminStaffOffices = () => {
   const list = [];
 
   const data = stepData[0];
-  // console.log("data",data);
+  
   for (let index = 0; index < stepData.length; index++) {
     Object.keys(data).forEach((key) => {
-      // console.log("key",key);
+      
       if (key === "name") {
         list.push(data[key]);
       }
@@ -149,8 +147,7 @@ const ManageAdminStaffOffices = () => {
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    console.log("Key:", key);
-    console.log("Value:", value);
+   
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);

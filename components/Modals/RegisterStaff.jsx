@@ -100,7 +100,7 @@ const RegisterStaff = ({ onCancel }) => {
   };
 
   useEffect(() => {
-    console.log("fetching data from the server ...");
+   
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
@@ -139,7 +139,7 @@ const RegisterStaff = ({ onCancel }) => {
           });
           keys = Object.keys(keyValuePairs);
           const values = Object.values(keyValuePairs);
-          console.log("keys fetch", keys, ">> values", values);
+        
         } catch (error) {
           console.error("Error fetching or processing data:", error);
         }

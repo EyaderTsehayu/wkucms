@@ -52,7 +52,7 @@ const ManageStaff = () => {
     console.error("Error fetching data:", error);
     return <p>Failed to fetch data</p>;
   }
-  //  console.log("userDatafilteredInfo",userData);
+  
   const filteredInfo = userData.filter(
     (info) =>
       info.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||

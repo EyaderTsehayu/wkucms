@@ -36,7 +36,7 @@ const History = () => {
 
   const handlePrintClearance = (id) => {
     // Navigate to the /user/PrintClearance route
-    console.log("userData[0]?._id", id);
+ 
     router.push(`/user/PrintClearance?clearanceId=${id}`);
   };
 
