@@ -139,7 +139,7 @@ const StepsComponent = () => {
                 }));
                 setStepData(data);
 
-                console.log("setDraggedData", data);
+                // console.log("setDraggedData", data);
             } catch (error) {
                 setStepError(error);
             }
@@ -151,42 +151,22 @@ const StepsComponent = () => {
         // No cleanup or dependency array needed as we only want to fetch data once
     }, []);
 
-    if (stepData) {
-
-        console.log("stepData ", stepData[0])
-    }
+   
 
     // Render loading state
     if (!stepData && !stepError) {
         return <p>Loading...</p>;
     }
 
-    // Render error state
-    //   if (stepError) {
-    //     console.error("Error fetching data:", stepError);
-    //     return <p>Failed to fetch data</p>;
-    //   }
-
-
-
-
 
     const list = [];
-    console.log("stepData[0].name", stepData[0].name);
-    // for (let index = 0; index < stepData[0].length; index++) {
-    //     const key =stepData[0].name;
-    //     list.push(key);
-    // }
-    //     stepData[0].name.forEach(element => {
-    //         list.push(element);
-
-    //    });
+  
     const data = stepData[0];
-    // console.log("data",data);
+    
     for (let index = 0; index < stepData.length; index++) {
 
         Object.keys(data).forEach(key => {
-            // console.log("key",key);
+            
             if (key === 'name') {
                 list.push(data[key]);
             }
@@ -198,12 +178,12 @@ const StepsComponent = () => {
 
     // const keys = Object.keys(steps);
     // const values = Object.values(steps);
-    console.log("list", list);
+    
     const modifySteps = async (key,value) => {
         setSteps(prevSteps => ({
             ...prevSteps,
             newProperty: ["New Value"],
-            // You can add more properties here if needed
+           
         }));
 // donot delete the commit
         // try {
@@ -240,8 +220,7 @@ const StepsComponent = () => {
             });
             if (response.ok) {
                 toast.success("Steps updated successfully!")
-                console.log("Steps updated successfully!");
-                console.log("keyValuePairs", keyValuePairs);
+               
                 // Optionally, you can redirect or show a success message here
             } else {
                 console.error("Failed to create steps");
@@ -260,29 +239,10 @@ const StepsComponent = () => {
     });
 
 
-    // const addItem = (key, value) => {
-    //     if (key !== value && key !== "Select a Step") {
-    //         {
-
-    //             const updatedSteps = { ...prevSteps };
-    //             updatedSteps[key] = [...updatedSteps[key], value];
-    //             return updatedSteps;
-    //             // keyValuePairs?.map((data, index) => (
-                   
-    //             //     setSteps((prevSteps) => ({
-    //             //         ...prevSteps,
-    //             //         [key]: [...prevSteps[key], value],
-    //             //     }))
-    //             // ))
-    //         }
-
-
-    //     }
-    // };
 
     const addItem = (key, value) => {
         keyValuePairs[key].push(value)
-        // console.log("ttttttttttttttttttttt","yyy",value);
+        
         if (key !== value && key !== "Select a Step") {
             setKeyValuePairs(prevKeyValuePairs => {
                 const updatedPairs = { ...prevKeyValuePairs };
@@ -290,7 +250,7 @@ const StepsComponent = () => {
                 return updatedPairs;
             });
         }
-        // console.log("ttttttttttttttttttttt","yyy",keyValuePairs);
+      
     };
     
 
@@ -303,15 +263,7 @@ const StepsComponent = () => {
     };
 
 
-    console.log("steps", steps);
-
-    
-
-    // Iterate over the key-value pairs of the object
-    Object.entries(keyValuePairs).forEach(([key, value]) => {
-        console.log("Key:", key);
-        console.log("Value:", value);
-    });
+   
     const keys = Object.keys(keyValuePairs);
     const value = Object.values(keyValuePairs);
 

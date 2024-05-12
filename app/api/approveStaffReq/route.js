@@ -5,6 +5,7 @@ import StepSchema from "@/models/step";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import DynamicSteps from "@/models/DynamicSteps";
+import History from "@/models/history";
 
 // const staffApproval = STAFFSTEPS;
 let staffApproval;
@@ -89,6 +90,7 @@ export const PATCH = async (request) => {
 
       // Create new document in History collection if status is APPROVED
       if (existingRequest.status.includes("APPROVED")) {
+      
         const today = new Date();
         const formattedDate = today.toLocaleDateString("en-US", {
           year: "2-digit",
@@ -106,10 +108,11 @@ export const PATCH = async (request) => {
           dateApproved: formattedDate,
           dateRequested: existingRequest.dateRequested,
           clearanceId: existingRequest._id,
+          staffType: existingRequest.staffType,
         });
         await clearanceReq.save();
       }
-
+      console.log("history created successfully");
       return new Response(`Approved successfully ${arrLength} requests`, {
         status: 201,
       });
@@ -135,12 +138,14 @@ export const PATCH = async (request) => {
           nextApprovers = step["Director"].filter(
             (role) => role !== existingRequest.director
           );
-
+   
           nextApprovers = nextApprovers.concat(
-            adminSteps[existingRequest.director]
+            step[existingRequest.director]
           );
+         
         } else {
           nextApprovers = step[privilege].concat(step["Director"]);
+          
         }
       } else {
         // console.log("Director is approved");

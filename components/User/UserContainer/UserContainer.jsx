@@ -13,7 +13,7 @@ const UserContainer = ({
   clickableColumns,
 }) => {
   const pathname = usePathname();
-  console.log("pathname", pathname);
+ 
   const [open, setOpen] = useState(false);
   const handleOpen = async (selectedRowsData) => {
     if (selectedRowsData.length > 0) {
@@ -46,7 +46,7 @@ const UserContainer = ({
       const reason = row.reason?.toLowerCase().includes(searchTerm);
       const dateApproved = row.dateApproved?.toLowerCase().includes(searchTerm);
       // Return true if any of the criteria match
-      console.log("userId", row.userId);
+     
       return userId || firstname || reason || dateApproved;
     });
     setIsFiltering(true);

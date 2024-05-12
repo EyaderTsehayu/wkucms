@@ -17,7 +17,7 @@ const RegisterAdmin = ({ onCancel }) => {
  
 
   const onSubmit = async (data) => {
-    console.log(data);
+  
 
     const fromFirstName = data.firstName.toLowerCase();
     const fromMiddleName = data.middleName.charAt(0).toLowerCase();

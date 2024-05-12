@@ -104,6 +104,7 @@ const ManageReport = () => {
     rejectedTotal = currentlyRejectedStudents.length;
   }
 
+
   return (
     <div>
       <AdminBreadcrumb title="Reports" mainRoute="Admin" subRoute="Reports" />

@@ -19,7 +19,7 @@ export const GET = async (request) => {
     const token = request.nextUrl.pathname.split('/').pop();
     
     await connectToDB();
-    console.log("token iiii",token);
+    
     // Find the user by the emailResetPassword token and check if the token has not expired
     const user = await User.findOne({
       emailResetPassword: token,
@@ -28,10 +28,7 @@ export const GET = async (request) => {
         { passwordResetTokenExpires: null },
       ],
     });
-    console.log(`Token: ${token}`);
-    console.log(`Current Time: ${new Date()}`);
-    // console.log(`Token Expiry: ${user.passwordResetTokenExpires}`);
-    console.log(`Current Time Expiry: ${new Date()}`);
+   
   
     
     if (user) {
@@ -40,7 +37,7 @@ export const GET = async (request) => {
   
       // Hash the new password before saving it to the database
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-      console.log("hashedPassword",hashedPassword);
+    
       // Update the user's password and clear the reset token and its expiry
       user.password = hashedPassword;
       // user.emailResetPassword = null;

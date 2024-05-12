@@ -16,6 +16,7 @@ export const POST = async (req) => {
     staffType,
     guarantorName,
     guarantorId,
+    director
   } = await req.json();
   const requests = await StaffRequestSchema.find({ userId: userId });
 
@@ -50,6 +51,7 @@ export const POST = async (req) => {
       _userId,
       role,
       staffType,
+      director,
       dateRequested: formattedDate,
       guarantorName,
       guarantorId,

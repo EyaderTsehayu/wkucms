@@ -24,7 +24,7 @@ export const PATCH = async (request) => {
 
   
     if (existingRequest) {
-        console.log("existing",existingRequest)
+      
     //   const currentIndex = studentApproval.indexOf(existingRequest.status);
     //     console.log("currentIndex",currentIndex)
       if (existingRequest.status == "active" ) {

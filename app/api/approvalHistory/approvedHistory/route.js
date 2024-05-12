@@ -12,7 +12,7 @@ export const GET = async () => {
     // first fetch previlege from user table for mapping
     const fetchStudent = await User.find({ userId: userId });
     const previlege = fetchStudent[0].privilege;
-    console.log("fetchStudent for dorm", fetchStudent[0].privilege); 
+    
     //  console.log("session from studentApproval ",session?.user?.privilege)
     try {
   

@@ -13,7 +13,6 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import StackedLineChartIcon from "@mui/icons-material/StackedLineChart";
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  //console.log("user session when there is session", session);
   if (session) {
     const role = session?.user?.role;
     if (role == "ADMIN") {

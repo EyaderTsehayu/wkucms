@@ -112,7 +112,7 @@ const EditStaff = ({ userData,onCancel }) => {
 
 
   useEffect(() => {
-    console.log("fetching data from the server ...");
+  
     const fetchData = async () => {
       try {
         const staffStepType = "STAFF"; // Define your stepType here
@@ -135,8 +135,7 @@ const EditStaff = ({ userData,onCancel }) => {
 
             fetchData = await fetch(`/api/steps`);
           }
-          console.log("userData",userData[0]);
-          console.log("userData",userData[0].staffType);
+         
 
 
           if (!fetchData.ok) {
@@ -454,7 +453,7 @@ const EditStaff = ({ userData,onCancel }) => {
       <div className="flex flex-row place-content-between">
         <div>
           <h3 className="pb-2 text-left text-lg font-bold text-black dark:text-white sm:text-2xl">
-            Register Staff
+            Edit Staff previlege
           </h3>
           <span className="mx-auto mb-6 inline-block h-1 w-22.5 rounded bg-primary"></span>
         </div>

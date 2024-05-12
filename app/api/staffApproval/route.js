@@ -4,6 +4,7 @@ import StaffRequestSchema from "@/models/staffClearanceRequest";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import User from "@/models/user";
+import DynamicSteps from "@/models/DynamicSteps";
 
 export const GET = async () => {
   const session = await getServerSession(authOptions);
@@ -16,41 +17,100 @@ export const GET = async () => {
 
   try {
     await connectToDB();
+
     // first fetch myprofile to get the director name
     const myprofile = await User.find({ userId: id });
     if (myprofile.length == 0) {
       return new Response("User not found", { status: 404 });
     }
 
-    director = myprofile[0].director;
+    director = myprofile[0]?.director;
+    const staffType = myprofile[0]?.staffType;
+    let steps = {};
+    // fetch steps
+    const stepRequests = await DynamicSteps.find({ stepType: staffType });
+   
+    if (stepRequests) {
+      stepRequests.forEach((data, index) => {
+        steps[data.name] = data.nextSteps;
+      });
+    }
+  
+    let stageKeys = [];
+    Object.keys(steps).forEach((key) => {
+      if (steps[key].includes(privilege)) {
+        stageKeys.push(key);
+      }
+    });
+   
+    const forApprovals = await StaffRequestSchema.find({
+      status: privilege,
+      userId: { $ne: id },
+    });
+ 
+  const requests = [];
+  for (const approvalEntry of forApprovals) {
+  let allStageKeysInApprovals = false;
+  const approvals = approvalEntry.approvals.map((approval) => approval.role);
+  
+const userFromRequests = approvalEntry.userId;
+  // Check if all stage keys are present in the approvals for this user
+   allStageKeysInApprovals = stageKeys.every((key) =>
+    approvals.includes(key)
+  );
+  if(stageKeys.includes('Director')){
+    // remove from stageKeys
+    stageKeys = stageKeys.filter((key) => key !== 'Director');
+  }
+  
 
-    const requests =
-      director ?
-        await StaffRequestSchema.find({
-          status: privilege,
-          userId: { $ne: id },
-         
-        })
-        : (collegeName &&( privilege == "College Dean" || privilege == "College Registrar"))
-          ? await StaffRequestSchema.find({
-            status: privilege,
-            userId: { $ne: id },
-            collegeName: collegeName,
 
-          })
-          :(departmentName && privilege == "Head")
-            ? await StaffRequestSchema.find({
-              status: privilege,
-              userId: { $ne: id },
-              departmentName: departmentName,
-            })
-            : await StaffRequestSchema.find({
-              status: privilege,
-              userId: { $ne: id },
-            });
+  const query = {
+    status: privilege,
+    userId: { $ne: id },
+    userId: userFromRequests,
+    // 'approvals': { $all: stageKeys }
+  };
 
-    // Return a success response with the users data
-    return new Response(JSON.stringify(requests), { status: 200 });
+ 
+
+  let userRequests = [];
+
+  if (director && allStageKeysInApprovals) {
+    userRequests = await StaffRequestSchema.find(query);
+  } else if (
+    allStageKeysInApprovals &&
+    collegeName &&
+    (privilege == "College Dean" || privilege == "College Registrar")
+  ) {
+    userRequests = await StaffRequestSchema.find({
+      status: privilege,
+      userId: { $ne: id },
+      collegeName: collegeName,
+      userId: userFromRequests,
+    });
+  } else if (allStageKeysInApprovals && departmentName && privilege == "Head") {
+    userRequests = await StaffRequestSchema.find({
+      status: privilege,
+      userId: { $ne: id },
+      departmentName: departmentName,
+      userId: userFromRequests,
+    });
+  } else if (allStageKeysInApprovals) {
+    userRequests = await StaffRequestSchema.find({
+      status: privilege,
+      userId: { $ne: id },
+      userId: userFromRequests,
+    });
+  }
+
+  // Concatenate the requests for this user to the overall requests list
+  requests.push(...userRequests);
+}
+
+return new Response(JSON.stringify(requests), { status: 200 });
+
+  
   } catch (error) {
     console.error("Error fetching requests:", error);
 

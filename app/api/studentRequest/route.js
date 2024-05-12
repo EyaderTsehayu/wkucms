@@ -38,7 +38,7 @@ export const POST = async (req) => {
     month: "2-digit",
     day: "2-digit",
   });
-  console.log("formattedDate");
+
   try {
     await connectToDB();
     const clearanceReq = new StudentClearnceReq({
@@ -55,7 +55,7 @@ export const POST = async (req) => {
       blockNo: fetchStudent[0].blockNo,
       dateRequested: formattedDate,
     });
-    console.log("attachedFile", attachedFile);
+
 
     await clearanceReq.save();
     return new Response(`Request sent Successfully!`, {

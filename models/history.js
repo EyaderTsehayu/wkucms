@@ -37,6 +37,10 @@ const HistorySchema = new Schema({
     type: String,
     required: [true, "role is required!"],
   },
+  staffType: {
+    type: String,
+    
+  },
 });
 
 const History =models.History || model("History", HistorySchema);

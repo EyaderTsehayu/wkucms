@@ -219,7 +219,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
           >
             Register
           </button>
-          {pathname == "/admin/staff" && selectedRows[0]?.privilege && (
+          {pathname == "/admin/staff" && selectedRows[0] && (
             <button
               onClick={handleEditOpen}
               className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"

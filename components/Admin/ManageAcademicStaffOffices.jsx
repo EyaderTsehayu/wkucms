@@ -57,7 +57,7 @@ const ManageAcademicStaffOffices = () => {
         // Set data into state
         setStepData(data);
 
-        console.log("setDraggedData", data);
+     
       } catch (error) {
         // Handle errors
         setStepError(error);
@@ -70,17 +70,14 @@ const ManageAcademicStaffOffices = () => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
-  if (stepData) {
-    console.log("stepData ", stepData[0]);
-  }
-
+  
   // Render loading state
   if (!stepData && !stepError) {
     return <p>Loading...</p>;
   }
 
   const list = [];
-  console.log("stepData[0].name", stepData[0]?.name);
+ 
 
   const data = stepData[0];
 
@@ -106,14 +103,12 @@ const ManageAcademicStaffOffices = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STAFF",
+          stepType: "ACADEMIC",
         }),
       });
       if (response.ok) {
         toast.success("Steps updated successfully!");
-        console.log("Steps updated successfully!");
-        console.log("keyValuePairs", keyValuePairs);
-        // Optionally, you can redirect or show a success message here
+        
       } else {
         console.error("Failed to create steps");
         // Handle the error, maybe show an error message to the user
@@ -151,8 +146,7 @@ const ManageAcademicStaffOffices = () => {
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    console.log("Key:", key);
-    console.log("Value:", value);
+    
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
@@ -221,7 +215,7 @@ const ManageAcademicStaffOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "Human Resource Management Directorate" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 text-black dark:text-white text-md font-satoshi font-medium  bg-gray dark:bg-boxdark-2 flex space-x-3 border-none rounded p-2  mb-5 mr-3 ">

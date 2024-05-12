@@ -56,7 +56,7 @@ const ManageStudentOffices = () => {
         // Set data into state
         setStepData(data);
 
-        console.log("setDraggedData", data);
+      
       } catch (error) {
         // Handle errors
         setStepError(error);
@@ -69,9 +69,7 @@ const ManageStudentOffices = () => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
-  if (stepData) {
-    console.log("stepData ", stepData[0]);
-  }
+ 
 
   // Render loading state
   if (!stepData && !stepError) {
@@ -81,10 +79,10 @@ const ManageStudentOffices = () => {
   const list = [];
 
   const data = stepData[0];
-  // console.log("data",data);
+  
   for (let index = 0; index < stepData.length; index++) {
     Object.keys(data).forEach((key) => {
-      // console.log("key",key);
+     
       if (key === "name") {
         list.push(data[key]);
       }
@@ -94,7 +92,7 @@ const ManageStudentOffices = () => {
 
   // const keys = Object.keys(steps);
   // const values = Object.values(steps);
-  console.log("list", list);
+ 
   const modifySteps = async (key, value) => {
     setSteps((prevSteps) => ({
       ...prevSteps,
@@ -113,8 +111,7 @@ const ManageStudentOffices = () => {
       });
       if (response.ok) {
         toast.success("Steps updated successfully!");
-        console.log("Steps updated successfully!");
-        console.log("keyValuePairs", keyValuePairs);
+       
         // Optionally, you can redirect or show a success message here
       } else {
         console.error("Failed to create steps");
@@ -153,8 +150,7 @@ const ManageStudentOffices = () => {
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    console.log("Key:", key);
-    console.log("Value:", value);
+  
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
@@ -241,7 +237,7 @@ const ManageStudentOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "College Registrar" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 flex space-x-3 border rounded p-2 bg-gray-100 mb-5 mr-3">

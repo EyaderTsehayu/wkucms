@@ -67,9 +67,7 @@ const ManageAdminStaffOffices = () => {
     // No cleanup or dependency array needed as we only want to fetch data once
   }, []);
 
-  if (stepData) {
-    console.log("stepData ", stepData[0]);
-  }
+  
 
   // Render loading state
   if (!stepData && !stepError) {
@@ -79,10 +77,10 @@ const ManageAdminStaffOffices = () => {
   const list = [];
 
   const data = stepData[0];
-  // console.log("data",data);
+  
   for (let index = 0; index < stepData.length; index++) {
     Object.keys(data).forEach((key) => {
-      // console.log("key",key);
+      
       if (key === "name") {
         list.push(data[key]);
       }
@@ -106,7 +104,7 @@ const ManageAdminStaffOffices = () => {
         body: JSON.stringify({
           key,
           value,
-          stepType: "STAFF",
+          stepType: "ADMIN",
         }),
       });
       if (response.ok) {
@@ -149,8 +147,7 @@ const ManageAdminStaffOffices = () => {
 
   // Iterate over the key-value pairs of the object
   Object.entries(keyValuePairs).forEach(([key, value]) => {
-    console.log("Key:", key);
-    console.log("Value:", value);
+   
   });
   const keys = Object.keys(keyValuePairs);
   const value = Object.values(keyValuePairs);
@@ -219,7 +216,7 @@ const ManageAdminStaffOffices = () => {
                         </div>
                       )
                   )}
-                  {selectedKey?.toUpperCase() === "HR" &&
+                  {selectedKey?.toUpperCase() === "Human Resource Management Directorate" &&
                     !keyValuePairs[selectedKey]?.includes(Approved.name) && (
                       <div key={Approved.name}>
                         <li className="relative w-1/1.5 text-black dark:text-white text-md font-satoshi font-medium  bg-gray dark:bg-boxdark-2 flex space-x-3 border-none rounded p-2  mb-5 mr-3 ">

@@ -33,7 +33,7 @@ export const POST = async (request) => {
       user.resetToken = passwordResetToken;
       user.passwordResetExpires = passwordResetExpires;
       const resultUrl = `/reset-password/${resetToken}`;
-      console.log("resultUrl",resultUrl);
+     
       await user.save();
     // Generate a unique token for password reset
     // const passwordResetToken = uuidv4();

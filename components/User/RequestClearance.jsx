@@ -78,7 +78,7 @@ const TaskItem = () => {
         const fullUserUrl = `${userUrl}?userId=${userId}`;
         const userResponse = await fetch(fullUserUrl);
         const userData = await userResponse.json();
-        console.log("userResponse", userData);
+       
          if(userData[0].role == "STUDENT"){
           stepType = "STUDENT";
           
@@ -100,9 +100,7 @@ const TaskItem = () => {
           steps[data.name] = data.nextSteps;
         });
         const key = Object.keys(steps);
-        console.log("stepType",stepType);
-        console.log("steps",steps);
-       console.log("key",key);
+       
         const firstkey= [];
         firstkey.push(key[0]);
         
@@ -175,7 +173,7 @@ const TaskItem = () => {
             body: JSON.stringify({
               userId: userId,
               reason: selectedTask,
-              status: draggedData,
+              status: ["Head"],
               firstname: firstname,
               middlename: middlename,
               collegeName: collegeName,
@@ -200,7 +198,7 @@ const TaskItem = () => {
       }
 
       if (session?.data?.user.role == "STAFF") {
-        console.log("draggedData", draggedData);
+      
         let staffType;
         let director;
         try {
@@ -219,6 +217,7 @@ const TaskItem = () => {
 
           staffType = fetchedData[0].staffType;
           director = fetchedData[0].director;
+          
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -271,6 +270,7 @@ const TaskItem = () => {
                   departmentName: departmentName,
                   _userId: _userId,
                   role: "STAFF",
+                  director: director,
                   attachedFile: imageBase64,
                   guarantorName: guarantorName,
                   guarantorId: guarantorId,
