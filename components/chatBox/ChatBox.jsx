@@ -32,7 +32,7 @@ const ChatBox = ({ message, own, currentUser }) => {
       getUser();
     }
   }, [currentUser, friendId]);
-  console.log("user in chat box", user);
+  // console.log("user in chat box", user);
 
   return (
     <>
