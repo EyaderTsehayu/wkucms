@@ -24,7 +24,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
   useEffect(() => {
     setIsFilter(false);
 
-  }, [rows])
+  }, [])
 
   const [isFilter, setIsFilter] = useState(false);
 
