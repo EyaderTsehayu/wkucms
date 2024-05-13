@@ -100,7 +100,7 @@ const DropdownMessage = () => {
       console.log(err);
     }
   };
-  console.log("Conversation inside dropdown message ", conversations);
+  // console.log("Conversation inside dropdown message ", conversations);
   return (
     <li className="relative">
       <Link
@@ -192,7 +192,7 @@ const DropdownMessage = () => {
               <ul className="flex h-auto flex-col overflow-y-auto">
                 <li>
                   <div
-                    className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+                    className="flex cursor-pointer gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
                     onClick={() => {
                       router.push(
                         `/user/message?chatid=${conversation._id}&member1=${conversation.members[0]}&member2=${conversation.members[1]}`
@@ -205,12 +205,29 @@ const DropdownMessage = () => {
                     // }}
                   >
                     <div className="h-12.5 w-12.5 rounded-full">
-                      <Image
+                      {/* <Image
                         width={112}
                         height={112}
                         src={"/images/user/user-02.png"}
                         alt="User"
-                      />
+                      /> */}
+                      {friendUsers[conversation._id]?.[0]?.profilePic ? (
+                        <Image
+                          src={friendUsers[conversation._id]?.[0]?.profilePic} // Use the selected image URL
+                          width={100}
+                          height={100}
+                          alt="User"
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <Image
+                          src="/images/user/default.png"
+                          width={100}
+                          height={100}
+                          alt="User"
+                          className="rounded-full"
+                        />
+                      )}
                     </div>
 
                     <div>
@@ -235,6 +252,12 @@ const DropdownMessage = () => {
                 </li>
               </ul>
             ))}
+        <Link
+          href="/user/message"
+          className="px-4.5 py-3 cursor-pointer text-center hover:bg-gray-2"
+        >
+          <h5 className="text-sm font-medium text-bodydark2">Go to messages</h5>
+        </Link>
       </div>
       {/* <!-- Dropdown End --> */}
     </li>
