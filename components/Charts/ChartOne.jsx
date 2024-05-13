@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import RegisterClearanceDuration from "@/components/Modals/RegisterClearanceDuration";
+import Modal from "@mui/material/Modal";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -155,16 +158,41 @@ const ChartOne = ({
 
   if (!isWindowAvailable()) return <></>;
 
+  // for modal
+  const [editOpen, setEditOpen] = useState(false);
+  const handleEditOpen = () => {
+    // setUserId(selectedRowsData[0]._id)
+    setEditOpen(true); // Assuming this state update is still needed
+    // const len = selectedRowsData.length;
+
+  };
+ 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+      handleEditClose();
+    }
+  };
+  const handleEditClose = () => setEditOpen(false);
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+        <div className="flex justify-between w-full flex-wrap gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
-            <div className="w-full">
+            <div className="w-full ">
               <p className="font-semibold text-lg text-primary">
                 Clearance Status Overviews
               </p>
             </div>
+          </div>
+          <div className="w-10 flex justify-end  2xsm:w-1/2">
+            <button
+              onClick={handleEditOpen}
+              className=" w-20 block rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+            >
+              <CalendarTodayIcon className="mr-2" />
+              <span>Date</span>
+            </button>
           </div>
         </div>
       </div>
@@ -180,6 +208,21 @@ const ChartOne = ({
           />
         </div>
       </div>
+
+
+      <Modal
+        open={editOpen}
+        onClose={handleEditClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          onClick={handleOverlayClick}
+          className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
+        >
+          <RegisterClearanceDuration  onCancel={handleEditClose} />
+        </div>
+      </Modal>
     </div>
   );
 };

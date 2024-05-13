@@ -30,7 +30,7 @@ const fetcher = async (url) => {
 
 
 const Status = ({ studentStepData, adminStepData, academicStepData, handleRequest }) => {
-
+const [day, setDay] = useState(0);
   const { data: userData, error } = useSWR(
     "/api/userStatus",
     fetcher,
@@ -45,6 +45,80 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
   const [requestStatus, setRequestStatus] = useState([]);
 
   useEffect(() => {
+    if (userData && userData.length > 0 && userData[0].status != "APPROVED") {
+      const currentDate = new Date();
+      const requestedDate = new Date(userData[0].dateRequested);
+      // const differenceInTime = currentDate.getTime() - requestedDate.getTime();
+      // const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      const date = currentDate.getDate();
+      const requested = requestedDate.getDate();
+      const dif=date-requested;
+      // console.log("currentDate", differenceInTime);
+      // console.log("differenceInTime",requested);
+       
+      // console.log("differenceInTime", differenceInTime);
+      // console.log("differenceInDays", differenceInDays);
+// first fetch the duration of the requested date from the API
+// Fetch the day from the API
+const fetchDay = async () => {
+  try {
+      const response = await fetch('/api/clearanceDate', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+
+      if (response.ok) {
+          const dayData = await response.json();
+          console.log('Day fetched successfully', dayData);
+          setDay(dayData[0].day);
+      } else {
+          console.error('Failed to fetch day');
+      }
+
+  } catch (error) {
+      console.error(error);
+  }
+};
+
+fetchDay();
+
+
+      const deleteRequest = async () => {
+      if (dif >= day) {
+        try {
+          const response = await fetch(`/api/staffRequest`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              objectId: userData[0]._id,
+              role: userData[0].role,
+            }),
+          });
+      
+          if (response.ok) {
+            // If the request is successful, show the success message using toast
+            toast.success("Sorry, your request has expired, and you can make a new request.");
+          } else {
+            // If there was an error, handle it accordingly
+            console.error("Failed to delete request:", response.statusText);
+          }
+        } catch (error) {
+          // If there was a network error, log it
+          console.error("Error deleting request:", error);
+        }
+      }
+       
+    };
+    if(day>0){
+    deleteRequest();
+    }
+      
+    }
+
     if (userData) {
       // fetch the steps
       if (userData && userData[0]?.staffType == "ACADEMIC") {
@@ -202,6 +276,30 @@ const Status = ({ studentStepData, adminStepData, academicStepData, handleReques
   };
   const handlePrintClearance = () => {
     // Navigate to the /user/PrintClearance route
+    // first by using the data of requested from userData if the requested Date is less than 7 days from now delete the userData from the requested table
+    if (userData && userData.length > 0) {
+      const currentDate = new Date();
+      const requestedDate = new Date(userData[0].dateRequested);
+      // const differenceInTime = currentDate.getTime() - requestedDate.getTime();
+      // const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+      const date = currentDate.getDate();
+      const requested = requestedDate.getDate();
+      const dif=date-requested;
+      // console.log("currentDate", differenceInTime);
+      // console.log("differenceInTime",requested);
+       
+      // console.log("differenceInTime", differenceInTime);
+      // console.log("differenceInDays", differenceInDays);
+      if (dif >=7) {
+        fetch(`/api/staffRequest`, {
+          method: "DELETE",
+          body: JSON.stringify({
+            objectId: userData[0]._id,
+            role: userData[0].role,
+          }),
+        });
+      }
+    }
     router.push(`/user/PrintClearance?clearanceId=${userData[0]?._id}`);
   };
 

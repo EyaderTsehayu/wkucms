@@ -68,7 +68,7 @@ const ManageAcademicStaffOffices = () => {
     fetchData();
 
     // No cleanup or dependency array needed as we only want to fetch data once
-  }, []);
+  }, [stepData]);
 
   
   // Render loading state
@@ -125,23 +125,48 @@ const ManageAcademicStaffOffices = () => {
   });
 
   const addItem = (key, value) => {
-    keyValuePairs[key].push(value);
+    if(key!="Select an office for adjusting its step") {
 
-    if (key !== value && key !== "Select a Step") {
+    keyValuePairs[key]?.push(value);
+
+    if (keyValuePairs[key] && key != value && key != "Select an office for adjusting its step") {
       setKeyValuePairs((prevKeyValuePairs) => {
         const updatedPairs = { ...prevKeyValuePairs };
         updatedPairs[key] = [...(updatedPairs[key] || []), value];
         return updatedPairs;
       });
     }
+  }
   };
 
+  // const removeItem = (key, value) => {
+  //   keyValuePairs[key].pop(value);
+  //   setSteps((prevSteps) => ({
+  //     ...prevSteps,
+  //     [key]: prevSteps[key]?.filter((item) => item !== value),
+  //   }));
+  // };
   const removeItem = (key, value) => {
-    keyValuePairs[key].pop(value);
-    setSteps((prevSteps) => ({
+
+    if (keyValuePairs[key]) {
+      const index = keyValuePairs[key].indexOf(value);
+      if (index !== -1) {
+        keyValuePairs[key].splice(index, 1);
+      }
+    }
+
+    const updatedArray = keyValuePairs[key].filter(item => item !== value);
+
+    // Update keyValuePairs with the new array
+    keyValuePairs[key] = updatedArray;
+
+
+    setSteps(prevSteps => ({
       ...prevSteps,
-      [key]: prevSteps[key]?.filter((item) => item !== value),
+      [key]: updatedArray
     }));
+
+
   };
 
   // Iterate over the key-value pairs of the object
@@ -222,7 +247,7 @@ const ManageAcademicStaffOffices = () => {
                           <div className="justify-center">{Approved.name}</div>
                           <button
                             className="flex flex-1 justify-end"
-                            onClick={() => addItem(selectedKey, Approved.name)}
+                            onClick={() =>selectedKey && addItem(selectedKey, Approved.name)}
                           >
                             {/* <ArrowCircleRightIcon /> */}
                             <AddIcon />
