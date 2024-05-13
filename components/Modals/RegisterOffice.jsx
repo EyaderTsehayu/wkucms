@@ -74,7 +74,7 @@ const RegisterOffice = ({ onCancel }) => {
         // Insert data.officeName at the specified index
         UpdatedSteps.splice(insertIndex, 0, data.officeName);
      
-       
+       console.log("data.officeName",data.officeName);
         const response = await fetch(`/api/steps`, {
           method: "POST",
           body: JSON.stringify({

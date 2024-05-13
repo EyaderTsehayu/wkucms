@@ -68,6 +68,55 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
     // const len = selectedRowsData.length;
 
   };
+ const handleDelete = async () => {
+    const len = selectedRows.length;
+    try {
+      const requests = selectedRows.map(async (eachData) => {
+        // console.log("log data", eachData.firstname);
+        console.log("log data", eachData._id);
+        try {
+          const response = await fetch(`/api/office`, {
+            method: "DELETE",
+            body: JSON.stringify({
+              objectId: eachData._id,
+              arrLength: len,
+            }),
+          });
+
+          if (response.ok) {
+            return await response.text();
+          }
+        } catch (error) {
+          console.log(error);
+          return null;
+        }
+      }
+      );
+
+      const responses = await Promise.all(requests);
+
+      let toastShown = false;
+
+      responses.forEach((responsedata, index) => {
+        if (responsedata) {
+          if (
+            selectedRows.length > 1 &&
+            !toastShown &&
+            index === responses.length - 1
+          ) {
+            toast.success("Selected Offices Deleted Successfully");
+            toastShown = true;
+          } else if (selectedRows.length === 1) {
+            toast.success("Deleted Successfully");
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
 
   // change the status
   const handleActivateAll = async (selectedRowsData) => {
@@ -185,7 +234,7 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
         </div>
 
         <div className="flex gap-4 flex-inline  items-center rounded-md  p-1.5 ">
-          {selectedRows[0]?.status == "active" && (
+          {selectedRows[0]?.status == "active" &&pathname != "/admin/offices"&& (
             <button
               onClick={() => handleActivateAll(selectedRows)}
               className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
@@ -225,6 +274,16 @@ const AdminContainer = ({ columns, rows, modal: OpenedModal }) => {
               className="rounded-lg  justify-center  bg-primary py-2 px-6 font-medium text-whiten hover:bg-opacity-95"
             >
               Edit
+            </button>
+          )}
+
+           {pathname == "/admin/offices" && selectedRows[0] && (
+            <button
+              onClick={handleDelete}
+              className="rounded-lg  justify-center  bg-gray hover:bg-meta-1 py-2 px-6 font-medium text-black dark:bg-meta-4 dark:text-white hover:text-whiten hover:bg-opacity-95 dark:hover:border-meta-1 dark:hover:bg-meta-1"
+             
+            >
+              Delete
             </button>
           )}
         </div>

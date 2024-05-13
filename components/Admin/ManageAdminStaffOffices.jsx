@@ -65,7 +65,7 @@ const ManageAdminStaffOffices = () => {
     fetchData();
 
     // No cleanup or dependency array needed as we only want to fetch data once
-  }, []);
+  }, [stepData]);
 
   
 
