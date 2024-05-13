@@ -187,10 +187,11 @@ const ChartOne = ({
           <div className="w-10 flex justify-end  2xsm:w-1/2">
             <button
               onClick={handleEditOpen}
-              className=" w-20 block rounded border border-stroke bg-gray p-3 text-center font-medium text-black transition hover:border-meta-1 hover:bg-meta-1 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-1 dark:hover:bg-meta-1"
+              className=" flex gap-2 rounded border border-stroke text-white p-3 text-center bg-primary font-medium  transition hover:border-meta-5 hover:bg-meta-5 hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-white dark:hover:border-meta-5 dark:hover:bg-meta-5"
             >
-              <CalendarTodayIcon className="mr-2" />
-              <span>Date</span>
+
+              <CalendarTodayIcon className="" />
+              <span>Manage clerance expiry date</span>
             </button>
           </div>
         </div>

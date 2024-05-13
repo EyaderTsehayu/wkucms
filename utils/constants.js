@@ -18,10 +18,13 @@ export const STAFFSTEPS=["HR", "BOOKCERCULATION", "FINANCE","APPROVED"];
 
 export const DepartmentData = [
   { id: "1", name: "Software Engineering" },
-  { id: "2", name: "English" },
-  { id: "3", name: "Psychology" },
-  { id: "4", name: "Nursing" },
-  { id: "4", name: "Electrical" },
+  { id: "2", name: "Comuter Science" },
+  { id: "3", name: "Information System" },
+  { id: "4", name: "Information Technology" },
+  { id: "5", name: "English" },
+  { id: "6", name: "Psychology" },
+  { id: "7", name: "Nursing" },
+  { id: "8", name: "Electrical Engineering" },
 ];
 
 //for privilege

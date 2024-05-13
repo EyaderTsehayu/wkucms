@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Poppins } from "next/font/google";
+// import { Poppins } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./provider";
@@ -8,10 +8,10 @@ import { AuthProvider } from "./provider";
 //   variable: "--montserrat-font",
 //   subsets: ["latin"],
 // });
-const poppins = Poppins({
-  weight: "400",
-  subsets: ["latin"],
-});
+// const poppins = Poppins({
+//   weight: "400",
+//   subsets: ["latin"],
+// });
 export const metadata = {
   title: "WKUCMS",
   description:
@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
     // <html lang="en" className={`${montserrat.variable} ${poppins.variable} `}>
     <html lang="en">
       <AuthProvider>
-        <body className={poppins.className}>
+        <body>
           {children}{" "}
           <ToastContainer
             position="top-right"

@@ -77,7 +77,11 @@ const DropdownUser = () => {
             {session?.user?.firstname}
             {/* {console.log("session user from dropdown", session?.user)} */}
           </span>
-          <span className="block text-xs"> {session?.user?.role}</span>
+          <span className="block text-xs">
+         {!userData.privilege&&session?.user?.role}
+         {userData.privilege && userData.privilege}
+         </span>
+
         </span>
 
         <span className="h-12 w-12 rounded-full overflow-hidden">
