@@ -290,7 +290,7 @@ fetchDay();
        
       // console.log("differenceInTime", differenceInTime);
       // console.log("differenceInDays", differenceInDays);
-      if (dif >=7) {
+      if (dif >=day) {
         fetch(`/api/staffRequest`, {
           method: "DELETE",
           body: JSON.stringify({
