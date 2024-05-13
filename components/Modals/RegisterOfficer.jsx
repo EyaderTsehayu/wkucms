@@ -131,7 +131,7 @@ const RegisterOfficer = ({ onCancel }) => {
               type="text"
               name="firstName"
               id="firstName"
-              placeholder="student's name"
+              placeholder="Staff's name"
               {...register("firstName")}
             />
             <p>{errors.firstName?.message}</p>
@@ -263,4 +263,3 @@ const RegisterOfficer = ({ onCancel }) => {
 };
 
 export default RegisterOfficer;
-

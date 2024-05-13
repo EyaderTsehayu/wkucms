@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import RegisterClearanceDuration from "@/components/Modals/RegisterClearanceDuration";
 import Modal from "@mui/material/Modal";
 
@@ -164,9 +164,8 @@ const ChartOne = ({
     // setUserId(selectedRowsData[0]._id)
     setEditOpen(true); // Assuming this state update is still needed
     // const len = selectedRowsData.length;
-
   };
- 
+
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       handleClose();
@@ -209,7 +208,6 @@ const ChartOne = ({
         </div>
       </div>
 
-
       <Modal
         open={editOpen}
         onClose={handleEditClose}
@@ -220,7 +218,7 @@ const ChartOne = ({
           onClick={handleOverlayClick}
           className="absolute top-0 left-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-gray/10 dark:bg-black/90 px-4 py-5 "
         >
-          <RegisterClearanceDuration  onCancel={handleEditClose} />
+          <RegisterClearanceDuration onCancel={handleEditClose} />
         </div>
       </Modal>
     </div>
