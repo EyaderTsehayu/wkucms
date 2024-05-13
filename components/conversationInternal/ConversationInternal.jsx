@@ -29,13 +29,23 @@ const ConversationInternal = ({ conversation, currentUser }) => {
       <div class="flex cursor-pointer items-center rounded px-4 py-2 hover:bg-gray-2 dark:hover:bg-strokedark">
         {/* <!-- Chat List Item --> */}
         <div class="relative mr-3.5 h-11 w-full max-w-11 rounded-full">
-          <Image
-            width={112}
-            height={112}
-            src={"/images/user/user-01.png"}
-            alt="profile"
-            class="h-full w-full object-cover object-center"
-          />
+          {user[0]?.profilePic ? (
+            <Image
+              src={user[0]?.profilePic} // Use the selected image URL
+              width={100}
+              height={100}
+              alt="User"
+              className="rounded-full h-full w-full object-cover object-center"
+            />
+          ) : (
+            <Image
+              src="/images/user/default.png"
+              width={100}
+              height={100}
+              alt="User"
+              className="rounded-full"
+            />
+          )}
           <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-2 border-gray-2 bg-success"></span>
         </div>
         <div class="w-full">
